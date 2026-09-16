@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Factory Reset</title>
+</head>
+<body style="padding: 40px; font-family: sans-serif;">
+  <h2 id="status">Wiping Browser Cache...</h2>
+  <script>
+    localStorage.clear();
+    sessionStorage.clear();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) { registration.unregister(); }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        for (let name of names) caches.delete(name);
+      });
+    }
+    setTimeout(() => {
+      document.getElementById('status').innerHTML = '<span style="color:green">Cache Cleared! Redirecting to Dashboard...</span>';
+      setTimeout(() => { window.location.href = '/?_t=' + Date.now(); }, 1500);
+    }, 500);
+  </script>
+</body>
+</html>
+

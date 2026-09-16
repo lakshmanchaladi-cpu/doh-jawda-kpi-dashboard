@@ -1,0 +1,2 @@
+Facility ID,Claim ID,MRN,Date of Service,Clinician License,ICD Code,CPT Code,LOINC Value,Insurance
+MF2222,CLM-1001,MRN-001,2026-01-15,D3080,E11.9;I10,99213,,THIQA

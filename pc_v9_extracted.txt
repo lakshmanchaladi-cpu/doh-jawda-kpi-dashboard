@@ -1,0 +1,1813 @@
+Primary Care (PC) Service JAWDA Performance Indicators
+Primary Care (PC)
+Service Jawda Guidance
+Version 9
+
+-- 1 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 2
+Table of Contents
+Percentage of Patients Completing the PHQ-9 Within 24 Hours After a Positive PHQ-2 Result ........ 6
+Percentage of patients diagnosed with depression that have Follow-Up visit with their physicians
+within 30 days of diagnosis. ................................................................................................................... 8
+Diabetes: Hemoglobin A1c (HbA1c) Poor Control Rate (> 9%) or no test result.................................. 9
+Diabetes: Hemoglobin A1c (HbA1c) Good Control Rate (≤8.0%)........................................................ 11
+Percentage of Diabetics Receiving Annual Foot Exams ...................................................................... 13
+Percentage of Diabetics Receiving Annual Eye Exams ........................................................................ 15
+Percentage of Diabetics Receiving Annual Nephropathy Exams ........................................................ 18
+Percentage of Patients with Controlled Hypertension (<130/80 mmHg) .......................................... 20
+Percentage of Hypertensive Patients Receiving Annual Nephropathy Exams .................................. 22
+Autism Screening in children between 18 to 24 months .................................................................... 24
+Percentage of Patients with Poorly Controlled Hypertension (≥130 mmHg or ≥80 mmHg) ............. 26
+Percentage of high-risk patients (18 years and above) who are screened for dyslipidemia............. 28
+Percentage of adult patients (18 years and above) who are overweight or obese ........................... 30
+Primary Care Depression Treatment Success Rate ............................................................................. 31
+APPENDIX – A ICD-10 CM CODES (O00- O9A) ....................................................................................... 33
+Appendix B – ICD-10 CM CODES (E10. E11, E13, O24 Series) ............................................................... 40
+Summary of Changes 2025 V8 .............................................................................................................. 41
+Summary of Changes 2025 V8.1 ........................................................................................................... 41
+Summary of Changes 2025 V8.2 ........................................................................................................... 42
+Summary of Changes 2025 V8.3 ........................................................................................................... 42
+Summary of Changes 2025 V8.4 ........................................................................................................... 42
+Summary of Changes 2025 V8.5 ........................................................................................................... 44
+Summary of Changes 2025 V8.6 ........................................................................................................... 44
+Summary of Changes 2026 V9 .............................................................................................................. 44
+
+-- 2 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 3
+Executive Summary
+The Department of Health– Abu Dhabi (DOH) is the regulatory body of the healthcare
+sector in the Emirate of Abu Dhabi and ensures excellence in healthcare for the
+community by monitoring the health status of its population.
+The Emirate of Abu Dhabi is experiencing a substantial growth in the number of
+hospitals, centers and clinics. This is ranging from school clinics and mobile units to
+internationally renowned specialist and tertiary academic centers. Although, access and
+quality of care has improved dramatically over the last couple of decades, mirroring the
+economic upturn and population boom of Emirate of Abu Dhabi, however challenges
+remain in addressing further improvements.
+The main challenges that are presented with increasingly dynamic population include
+an aging population with increased expectation for treatment, utilization of technology
+and diverse workforce leading to increased complexity of healthcare provision in Abu
+Dhabi. All of this results in an increased and inherent risk to quality and patient safety.
+DOH has developed dynamic and comprehensive quality framework in order to bring
+about improvements across the health sector. This guidance pertains to the quality
+indicators that the Department of Health (DOH) is requiring for quarterly reporting by all
+Primary healthcare providers in the Emirate of Abu Dhabi.
+The guidance sets out the full definition and method of calculation for patient safety and
+clinical effectiveness indicators. For enquiries about this guidance, please contact
+jawda@DoH.gov.ae
+This document is subjected for review and therefore it is advisable to utilize online
+versions available on the DOH at all times.
+Issued: Version 1 January 2021
+Published Updates Version 2: January 2022
+Version 3: July 2022
+Version 4: Oct 2022
+Version 5: Dec 2022
+Version 6: January 2023
+Version 7: July 2023
+Version 8: January 2025
+Version 8.1: February 2025
+Version 8.2: April 2025
+Version 8.3: April 2025
+Version 8.4: August 2025
+Version 8.5: October 2025
+Version 8.6: December 2025
+Version 9: December 2025
+Effective from: Version 9, Q1 2026
+
+-- 3 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 4
+About this Guidance
+The guidance sets out the definitions and reporting frequency of JAWDA Primary Care
+(PC) performance indicators. The Department of Health (DoH), with consultation from
+local and international expertise of chronic disease management has developed Primary
+Care facilities performance Indicators that are aimed for assessing the degree to which a
+provider competently and safely delivers the appropriate clinical services to the patient
+within the optimal period of time.
+The Jawda KPI for primary care in this guidance include measures to monitor i.e. how
+well primary care service providers care for their patients, how often they follow best
+practices and how effective they are at keeping patients healthy, and how patients feel
+about their experience at primary care service providers. Healthcare providers are the
+most qualified professionals to develop and evaluate quality of care for people with
+chronic conditions; therefore, it is crucial that clinicians retain a leadership position in
+defining performance among primary care healthcare service providers.
+Who is this guidance for?
+All healthcare facilities who are licensed by DoH as Primary healthcare service provider
+or who are providing Primary care Services as part of their portfolio in the Emirate of
+Abu Dhabi.
+All the Jawda KPIs are applicable to patient encounters* with the family medicine
+consultant or general practitioner. This is in alignment with the DOH primary care
+standard.
+*The KPI definitions are not applicable to other specialty physician encounters e.g. pediatrician,
+dental, homeopathic etc.
+For further details, kindly refer to the following available at
+https://www.doh.gov.ae/en/resources/standards and
+https://www.doh.gov.ae/en/resources/guidelines
+- DOH Standard for Primary Healthcare Services in Emirate of Abu Dhabi (September 2022)
+- Scope of Practice Guidelines for Licensed Healthcare Professionals (Family Medicine) (July
+2022)
+- Scope of Practice for General Practitioner (October 2022)
+How do I follow this guidance?
+Each provider will nominate one member of staff to coordinate, collect and monitor
+primary care quality indicators. Primary care provider is required to submit quarterly
+submission of data through Jawda e-notification system.
+Note: Jawda team may use centrally collected claim data submitted by healthcare
+providers through Shafafiya portal to validate the data submitted by the providers
+through Jawda portal.
+What is the Regulation related to this guidance?
+• Legislation establishing the Health Sector
+
+-- 4 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 5
+• Department of Health Standard for primary care issued March 2020
+https://www.doh.gov.ae/en/resources/standards
+• As per DoH Policy for Quality and Patient Safety issued January 15th 2017, this
+guidance applies to all DoH Licensed Hospital Healthcare Facilities in the Emirate of
+Abu Dhabi in accordance with the requirements set out in this Standard.
+
+-- 5 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 6
+Type: Mental Health Number: PC004
+KPI
+Description
+(title):
+Percentage of Patients Completing the PHQ-9 Within 24 Hours After a
+Positive PHQ-2 Result
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of patients aged 18 years and older at the beginning of the reporting
+quarter, who did PHQ-9 screening (Completed documentation) within 24 hrs. of
+being screened positive on PHQ2.
+Calculation Numerator:
+Total number of unique patients from the denominator who did PHQ-9 screening
+(Completed documentation) within 24 hrs of positive PHQ-2.
+Denominator:
+All patients aged 18 (completed) age in years and older at the beginning of the
+reporting quarter who were screened positive on PHQ-2.
+Denominator Guidance:
+o Calculate the number of patients who are covered through THIQA
+Insurance.
+o The intent of the measure is to screen for depression in patients who have never
+had a diagnosis of depression or bipolar disorder prior to the eligible encounter
+used to evaluate the numerator.
+o In case of multiple consultation visits within the reporting quarter, please
+consider any visit after applying the exclusion criteria (e.g. ABM mandate
+encounters excluded)
+o In the reporting quarter, if multiple positive PHQ2 screenings conducted
+consider first one only.
+Denominator Exclusions:
+o Documentation stating the patient has an active diagnosis of depression or
+has a diagnosed bipolar disorder, therefore screening or follow-up is not
+required
+o Patients who had an established diagnosis of depression prior to the index
+encounter in the reporting quarter:
+F01.51, F32.0, F32.1, F32.2, F32.3, F32.4, F32.5,
+F32.89, F32.9, F33.0, F33.1, F33.2, F33.3, F33.40, F33.41, F33.42, F33.8,
+F33.9, F34.1, F34.81, F34.89, F43.21, F43.23, F53, O90.6, O99.340, O99.341,
+O99.342, O99.343, O99.344, O99.345
+o Patients who had an established diagnosis of bipolar disorder prior to the
+index encounter in the reporting quarter:
+F31.10, F31.11, F31.12, F31.13, F31.2, F31.30, F31.31, F31.32, F31.4, F31.5,
+F31.60, F31.61, F31.62, F31.63, F31.64, F31.70, F31.71, F31.72, F31.73,
+F31.74, F31.75, F31.76, F31.77, F31.78, F31.81, F31.89, F31.9
+o Patients with a Documented Reason for not Screening for Depression
+(Patient refuses to participate for any reason)
+o Documentation of medical reason for not screening patient for depression
+(e.g., cognitive, functional, or motivational limitations that may impact
+accuracy of results; patient is in an urgent or emergent situation where time
+
+-- 6 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 7
+is of the essence and to delay treatment would jeopardize the patient’s health
+status)
+o All ABM Mandate encounters
+o Individuals receiving Dental, Ayurvedic, Homeopathic Services
+o Patients not assessed for vitals during the visit.
+Reporting
+Frequency
+Quarterly
+Unit Measure % depression screening
+International
+comparison if
+available
+Quality ID #134: Preventive Care and Screening: Screening for Depression and
+Follow-Up Plan (cms.gov)
+Standards | Department of Health Abu Dhabi-(Standard Of Care for Depression &
+Anxiety Disorders)
+Desire
+Direction
+90%
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 7 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 8
+Type: Disease management Number: PC005
+KPI
+Description
+(title):
+Percentage of patients diagnosed with depression that have Follow-Up
+visit with their physicians within 30 days of diagnosis.
+Domain Effectiveness
+Indicator Type Process
+Definition The percentage of mental health patients who are managed in primary care
+and have a follow-up visit within 30 days of positive depression diagnosis.
+Calculation Numerator: Total number of unique patients from the denominator who had
+a first follow-up visit within 30 days of diagnosis within the same primary
+care unit/facility/network.
+Denominator:
+Total number of unique patients aged ≥18 years of age (at the time of
+depression screening and diagnosed with depression) who was positive (5-14
+PHQ-9 score) for depression screening and diagnosed with depression during
+the reporting quarter.
+• ICD-10 CM code of depression:
+F01.51, F32.0, F32.1, F32.2, F32.3, F32.4, F32.5,
+F32.89, F32.9, F33.0, F33.1, F33.2, F33.3, F33.40, F33.41, F33.42,
+F33.8, F33.9, F34.1, F34.81, F34.89, F43.21, F43.23, F53, O90.6,
+O99.340, O99.341, O99.342, O99.343, O99.344, O99.345
+• ICD-10 CM code of bipolar disorder:
+F31.10, F31.11, F31.12, F31.13, F31.2, F31.30, F31.31, F31.32, F31.4,
+F31.5, F31.60, F31.61, F31.62, F31.63, F31.64, F31.70, F31.71, F31.72,
+F31.73, F31.74, F31.75, F31.76, F31.77, F31.78, F31.81, F31.89, F31.9
+Denominator Exclusions:
+• Patients with PHQ9 >=15 are expected to refer to Psychiatry
+• Established depression patients who are diagnosed in another
+healthcare facility prior.
+• Patients with a Documented Reason for not attending Follow-up
+appointments on Depression (Patient refuses to participate for any
+reason).
+• All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % Follow up Depression screening
+International
+comparison if
+available
+Mental health care Standard
+Desired
+Direction
+>90%
+Data Source • Patient medical record
+• Centrally collected claim data (KEH))
+
+-- 8 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 9
+Type: Chronic disease management Number: PC009
+KPI
+Description
+(title):
+Diabetes: Hemoglobin A1c (HbA1c) Poor Control Rate (> 9%) or no test
+result
+Domain Effectiveness
+Indicator Type Outcome
+Definition Percentage of diabetics ≥18 to ≤75 years of age whose most recent HbA1c
+level was >9.0% (poor control) or who had no test result within 12 months
+(prior to the end of reporting quarter)
+Calculation Numerator
+Patients in the denominator population whose most recent HbA1c level was
+> 9.0 % OR who had no test result can be performed in the same or different
+facility within 12 months prior to the end of the reporting quarter (The
+results from such visits may be entered into the facility or network EMR at
+any time up till one month after the quarter ends)
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+HbA1C – CPT – 83036 (Based on LOINC observation)
+Denominator
+Total number of unique outpatients (≥18 to ≤75 years of age), with a
+diagnosis of diabetes during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+diabetes with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance
+o Any outpatient face-to-face consultations for patients with an
+established Diabetes condition (with or without a primary or secondary
+diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212, 99213,
+99214, 99215 plus ICD 10 Codes: E10, E11, E13, O24 series (See
+Appendix – B)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g. ABM
+mandate encounters excluded)
+Denominator exclusions
+o Patient with diagnosis of polycystic ovaries, gestational diabetes, or
+steroid-induced diabetes (within the denominator time frame)
+
+-- 9 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 10
+ICD 10 Codes: Gestational Diabetes: O24.410, O24.414, O24.415,
+O24.419, O24.420, O24.424, O24.425, O24.429, O24.430, O24.434,
+O24.435, O24.439.
+Polycystic Ovaries: E28.2
+STERIOD INDUCED DIABETES: E09.00, E09.01, E09.10, E09.11,
+E09.21, E09.22, E09.29, E09.311, E09.319, E09.3211, E09.3212,
+E09.3213, E09.3219, E09.3291, E09.3292, E09.3293, E09.3299,
+E09.3311, E09.3312, E09.3313, E09.3319, E09.3391, E09.3392,
+E09.3393, E09.3399, E09.3411, E09.3412, E09.3413, E09.3419,
+E09.3491, E09.3492, E09.3493, E09.3499, E09.3511, E09.3512,
+E09.3513, E09.3519, E09.3521, E09.3522, E09.3523, E09.3529,
+E09.3531, E09.3532, E09.3533, E09.3539, E09.3541, E09.3542,
+E09.3543, E09.3549, E09.3551, E09.3552, E09.3553, E09.3559,
+E09.3591, E09.3592, E09.3593, E09.3599, E09.36, E09.37X1,
+E09.37X2, E09.37X3, E09.37X9, E09.39, E09.40, E09.41, E09.42,
+E09.43, E09.44, E09.49, E09.51, E09.52, E09.59, E09.610, E09.618,
+E09.620, E09.621, E09.622, E09.628, E09.630, E09.638, E09.641,
+E09.649, E09.65, E09.69, E09.8, E09.9.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % Hemoglobin A1c >9.0 or no test result
+Desired
+Direction
+<30%
+International
+comparison if
+available
+Quality Measures | CMS
+https://www.ncqa.org/hedis/measures/
+https://www.ahrq.gov/
+https://www.qualityforum.org/QPS/QPSTool
+Data Source • Centrally collected claim data (KEH))
+• Patient medical record
+
+-- 10 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 11
+Type: chronic disease management Number: PC010
+KPI Description
+(title): Diabetes: Hemoglobin A1c (HbA1c) Good Control Rate (≤8.0%)
+Domain Effectiveness
+Indicator Type Outcome
+Definition Percentage of diabetics ≥18 to ≤75 years of age whose most recent HbA1c
+level was ≤8.0% (good control) within 12 months (prior to the end of
+reporting quarter)
+Calculation Numerator
+Patients in the denominator population whose most recent HbA1c level was
+≤8.0% can be performed in the same or different facility within 12 months
+prior to the end of the reporting quarter. (The results from such visits may
+be entered into the facility or network EMR at any time up till one month
+after the quarter ends)
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+HbA1C – CPT – 83036 (Based on LOINC observation)
+Denominator
+Total number of unique outpatients (≥18 to ≤75 years of age), with a
+diagnosis of diabetes during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+diabetes with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance
+o Any outpatient face-to-face consultations for patients with an
+established Diabetes condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212, 99213,
+99214, 99215, plus ICD 10 Codes: E10, E11, E13, O24 series (See
+Appendix – B)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g. ABM
+mandate encounters excluded)
+Denominator Exclusions
+• Patient with diagnosis of polycystic ovaries, gestational diabetes, or
+steroid-induced diabetes (within the denominator time frame)
+
+-- 11 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 12
+ICD 10 Codes: Gestational Diabetes: O24.410, O24.414, O24.415,
+O24.419, O24.420, O24.424, O24.425, O24.429, O24.430,
+O24.434, O24.435, O24.439.
+Polycystic Ovaries: E28.2
+STERIOD INDUCED DIABETES: E09.00, E09.01, E09.10, E09.11,
+E09.21, E09.22, E09.29, E09.311, E09.319, E09.3211, E09.3212,
+E09.3213, E09.3219, E09.3291, E09.3292, E09.3293, E09.3299,
+E09.3311, E09.3312, E09.3313, E09.3319, E09.3391, E09.3392,
+E09.3393, E09.3399, E09.3411, E09.3412, E09.3413, E09.3419,
+E09.3491, E09.3492, E09.3493, E09.3499, E09.3511, E09.3512,
+E09.3513, E09.3519, E09.3521, E09.3522, E09.3523, E09.3529,
+E09.3531, E09.3532, E09.3533, E09.3539, E09.3541, E09.3542,
+E09.3543, E09.3549, E09.3551, E09.3552, E09.3553, E09.3559,
+E09.3591, E09.3592, E09.3593, E09.3599, E09.36, E09.37X1,
+E09.37X2, E09.37X3, E09.37X9, E09.39, E09.40, E09.41, E09.42,
+E09.43, E09.44, E09.49, E09.51, E09.52, E09.59, E09.610,
+E09.618, E09.620, E09.621, E09.622, E09.628, E09.630, E09.638,
+E09.641, E09.649, E09.65, E09.69, E09.8, E09.9.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % Hemoglobin A1C ≤8.0%
+Desired
+Direction
+>36%
+International
+comparison if
+available
+https://www.ncqa.org/hedis/measures/
+https://www.ahrq.gov/
+https://www.qualityforum.org/QPS/QPSTool
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 12 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 13
+Type: chronic disease management Number: PC011
+KPI Description
+(title): Percentage of Diabetics Receiving Annual Foot Exams
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of diabetics ≥18 to ≤75 years of age who received a Foot
+exam: visual inspection with either a sensory exam or a pulse exam
+within 12 months (prior to the end of reporting quarter)
+Calculation Numerator
+Patients in the denominator population with a diabetic foot exam (skin,
+soft tissue, musculoskeletal, vascular, neurological) performed in the same
+facility or network within 12 months. (prior to the end of reporting
+quarter)
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+Denominator
+Total number of unique outpatients (≥18 to ≤75 years of age), with a
+diagnosis of diabetes during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+diabetes with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance
+o Any outpatient face-to-face consultations for patients with an
+established Diabetes condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212,
+99213, 99214, 99215, plus ICD 10 Codes: E10, E11, E13, O24 series
+(See Appendix – B)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g.
+ABM mandate encounters excluded)
+Denominator Exclusions
+o Patient with diagnosis of polycystic ovaries, gestational diabetes,
+or steroid-induced diabetes, amputated lower limb before or
+during the measurement period. (within the denominator time
+frame)
+
+-- 13 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 14
+ICD 10 Codes: Gestational Diabetes: O24.410, O24.414,
+O24.415, O24.419, O24.420, O24.424, O24.425, O24.429,
+O24.430, O24.434, O24.435, O24.439.
+Polycystic Ovaries: E28.2
+STERIOD INDUCED DIABETES: E09.00, E09.01, E09.10, E09.11,
+E09.21, E09.22, E09.29, E09.311, E09.319, E09.3211,
+E09.3212, E09.3213, E09.3219, E09.3291, E09.3292,
+E09.3293, E09.3299, E09.3311, E09.3312, E09.3313,
+E09.3319, E09.3391, E09.3392, E09.3393, E09.3399,
+E09.3411, E09.3412, E09.3413, E09.3419, E09.3491,
+E09.3492, E09.3493, E09.3499, E09.3511, E09.3512,
+E09.3513, E09.3519, E09.3521, E09.3522, E09.3523,
+E09.3529, E09.3531, E09.3532, E09.3533, E09.3539,
+E09.3541, E09.3542, E09.3543, E09.3549, E09.3551,
+E09.3552, E09.3553, E09.3559, E09.3591, E09.3592,
+E09.3593, E09.3599, E09.36, E09.37X1, E09.37X2, E09.37X3,
+E09.37X9, E09.39, E09.40, E09.41, E09.42, E09.43, E09.44,
+E09.49, E09.51, E09.52, E09.59, E09.610, E09.618, E09.620,
+E09.621, E09.622, E09.628, E09.630, E09.638, E09.641,
+E09.649, E09.65, E09.69, E09.8, E09.9.
+AMPUTATED LOWER LIMB BEFORE OR DURING THE
+MEASUREMENT PERIOD - Z89.411, Z89.412, Z89.419,
+Z89.421, Z89.422, Z89.429, Z89.431, Z89.432, Z89.439,
+Z89.441, Z89.442, Z89.449, Z89.511, Z89.512, Z89.519,
+Z89.521, Z89.522, Z89.529, Z89.611, Z89.612, Z89.619,
+Z89.621, Z89.622, Z89.629.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % foot examination for diabetic patients
+International
+comparison if
+available
+https://www.ncqa.org/hedis/measures/
+https://www.ahrq.gov/
+https://www.qualityforum.org/QPS/QPSTool
+Desired
+Direction
+>76%
+Data Source Centrally collected claim data (KEH)
+Patient medical record
+
+-- 14 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 15
+Type: chronic disease management Number: PC012
+KPI
+Description
+(title):
+Percentage of Diabetics Receiving Annual Eye Exams
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of patients ≥18 to ≤75 years of age with diabetes and an active
+diagnosis of retinopathy in any part of the reporting quarter who had a
+retinal or dilated eye exam by an eye care professional during the
+reporting quarter OR diabetics with no diagnosis of retinopathy in any
+part of the reporting quarter who had a retinal or dilated eye exam by an
+eye care professional during the reporting quarter or in the 09 months
+prior to the reporting quarter
+Calculation Numerator
+Patients with eye screening for diabetic retinal disease performed in the
+same or different facility. This includes diabetics who had one of the
+following:
+o Diabetic with a diagnosis of retinopathy during the reporting
+quarter and a retinal image or dilated eye exam by an eye care
+professional during the reporting quarter (Procedure codes with
+ICD)
+o Diabetic with no diagnosis of retinopathy in the reporting quarter
+and a retinal image or dilated eye exam by an eye care professional
+during the measurement quarter or within 09 months prior to the
+reporting quarter (Procedure codes without ICD)
+The results from such visits may be entered into the facility or network EMR
+at any time up till one month after the quarter ends.
+Numerator Guidance:
+o Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+o The eye exam must be performed or reviewed by an ophthalmologist
+or optometrist, or there must be evidence that fundus photography
+results were read by a system that provides an artificial intelligence
+(AI) interpretation.
+Retinal or Dilated Eye Exam CPT Codes: 92134, 92132, 92133, 92136,
+92242, 92265, 92270, 92283, 92284, 92285, 92230, 92235, 92260,
+92499, 95060, 92240, 92250, 92260, 92227, 92228.
+SERVICE CODE: 60
+CPT Ophthalmological services: 92002, 92004, 92012, 92014, 92018,
+92019
+
+-- 15 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 16
+Denominator
+Total number of unique outpatients (≥18 to ≤75 years of age), with a
+diagnosis of diabetes during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+diabetes with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance
+o Any outpatient face-to-face consultations for patients with an
+established Diabetes condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212,
+99213, 99214, 99215, plus ICD 10 Codes: E10, E11, E13, O24 series
+(See Appendix – B)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g.
+ABM mandate encounters excluded)
+Denominator Exclusions:
+o Patient with diagnosis of polycystic ovaries, gestational diabetes, or
+steroid-induced diabetes (within the denominator time frame)
+ICD 10 Codes: Gestational Diabetes: O24.410, O24.414,
+O24.415, O24.419, O24.420, O24.424, O24.425, O24.429,
+O24.430, O24.434, O24.435, O24.439.
+Polycystic Ovaries: E28.2
+STERIOD INDUCED DIABETES: E09.00, E09.01, E09.10, E09.11,
+E09.21, E09.22, E09.29, E09.311, E09.319, E09.3211, E09.3212,
+E09.3213, E09.3219, E09.3291, E09.3292, E09.3293, E09.3299,
+E09.3311, E09.3312, E09.3313, E09.3319, E09.3391, E09.3392,
+E09.3393, E09.3399, E09.3411, E09.3412, E09.3413, E09.3419,
+E09.3491, E09.3492, E09.3493, E09.3499, E09.3511, E09.3512,
+E09.3513, E09.3519, E09.3521, E09.3522, E09.3523, E09.3529,
+E09.3531, E09.3532, E09.3533, E09.3539, E09.3541, E09.3542,
+E09.3543, E09.3549, E09.3551, E09.3552, E09.3553, E09.3559,
+E09.3591, E09.3592, E09.3593, E09.3599, E09.36, E09.37X1,
+E09.37X2, E09.37X3, E09.37X9, E09.39, E09.40, E09.41, E09.42,
+E09.43, E09.44, E09.49, E09.51, E09.52, E09.59, E09.610,
+E09.618, E09.620, E09.621, E09.622, E09.628, E09.630,
+E09.638, E09.641, E09.649, E09.65, E09.69, E09.8, E09.9.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % annual retinal or dilated eye examination
+
+-- 16 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 17
+Desired
+Direction
+>52%
+International
+comparison if
+available
+Quality ID #117 (NQF 0055): Diabetes: Eye Exam (2022)
+https://qpp.cms.gov/docs/QPP_quality_measure_specifications/CQM-
+Measures/2020_Measure_117_MIPSCQM.pdf
+https://ecqi.healthit.gov/ecqm/ec/2021/cms131v9
+Data Source • Centrally collected claim data (KEH)
+• Patient clinical record
+
+-- 17 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 18
+Type: Chronic disease management Number: PC013
+KPI Description
+(title): Percentage of Diabetics Receiving Annual Nephropathy Exams
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of patients ≥18 to ≤75 years of age with diabetes who had a
+nephropathy screening test or evidence of nephropathy during the
+reporting quarter or in the 09 months prior to the reporting quarter
+Calculation Numerator
+Patients in the denominator population with a screening for nephropathy
+or evidence of nephropathy can be performed in the same or different
+facility within 12 months prior to the end of the reporting quarter. (The
+results from such visits may be entered into the facility or network EMR
+at any time up till one month after the quarter ends)
+Codes:
+Any of the following conditions:
+o Microalbuminuria/ Macroalbuminuria test: 82043
+or
+o Estimated glomerular filtration rate (eGFR) and a urine
+albumin-creatinine ratio (uACR). Use any of the relevant
+CPT for calculation: 82570, 82042, 82044, 82565
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+Denominator
+Total number of unique outpatients (≥18 to ≤75 years of age), with a
+diagnosis of diabetes during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+diabetes with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance
+o Any outpatient face-to-face consultations for patients with an
+established Diabetes condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212,
+99213, 99214, 99215, plus ICD 10 Codes: E10, E11, E13, O24 series
+(See Appendix – B)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g.
+ABM mandate encounters excluded)
+
+-- 18 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 19
+Denominator Exclusions
+o Patient with diagnosis of polycystic ovaries, gestational diabetes, or
+steroid-induced diabetes (within the denominator time frame)
+ICD 10 Codes: Gestational Diabetes: O24.410, O24.414,
+O24.415, O24.419, O24.420, O24.424, O24.425, O24.429,
+O24.430, O24.434, O24.435, O24.439.
+Polycystic Ovaries: E28.2
+STERIOD INDUCED DIABETES: E09.00, E09.01, E09.10, E09.11,
+E09.21, E09.22, E09.29, E09.311, E09.319, E09.3211, E09.3212,
+E09.3213, E09.3219, E09.3291, E09.3292, E09.3293, E09.3299,
+E09.3311, E09.3312, E09.3313, E09.3319, E09.3391, E09.3392,
+E09.3393, E09.3399, E09.3411, E09.3412, E09.3413, E09.3419,
+E09.3491, E09.3492, E09.3493, E09.3499, E09.3511, E09.3512,
+E09.3513, E09.3519, E09.3521, E09.3522, E09.3523, E09.3529,
+E09.3531, E09.3532, E09.3533, E09.3539, E09.3541, E09.3542,
+E09.3543, E09.3549, E09.3551, E09.3552, E09.3553, E09.3559,
+E09.3591, E09.3592, E09.3593, E09.3599, E09.36, E09.37X1,
+E09.37X2, E09.37X3, E09.37X9, E09.39, E09.40, E09.41, E09.42,
+E09.43, E09.44, E09.49, E09.51, E09.52, E09.59, E09.610,
+E09.618, E09.620, E09.621, E09.622, E09.628, E09.630,
+E09.638, E09.641, E09.649, E09.65, E09.69, E09.8, E09.9.
+DOCUMENTATION OF KIDNEY TRANSPLANT: ICD10: T86.10,
+T86.11, T86.12, T86.13, T86.19, Z48.22, Z94.0.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % annual nephropathy screening test
+Desired
+Direction
+>92%
+International
+comparison if
+available
+https://qpp.cms.gov/docs/QPP_quality_measure_specifications/CQM-
+Measures/2020_Measure_119_MIPSCQM.pdf
+https://ecqi.healthit.gov/ecqm/ec/2022/cms134v10
+https://mdinteractive.com/mips_quality_measure/2022-mips-quality-
+measure-119
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 19 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 20
+Type: Chronic disease management Number: PC014
+KPI
+Description
+(title):
+Percentage of Patients with Controlled Hypertension (<130/80 mmHg)
+Domain Effectiveness
+Indicator Type Outcome
+Definition Percentage of patients ≥18 to ≤85 years of age who had a diagnosis of
+essential hypertension overlapping the measurement period and whose most
+recent blood pressure was adequately controlled (< 130/80 mmHg) during
+the reporting quarter
+Calculation Numerator:
+Patients whose most recent blood pressure, performed in the same facility or
+network, is adequately controlled (systolic blood pressure < 130 mmHg and
+diastolic blood pressure < 80 mmHg) during the reporting quarter.
+Numerator Guidance:
+o If no blood pressure is recorded during the measurement period, the
+patient's blood pressure is assumed "not controlled."
+o If there are multiple blood pressure readings on the same day, use the
+reading with both the systolic and diastolic being in the normal range
+(numerator values) as the most recent blood pressure reading.
+Denominator:
+Total number of unique outpatients (≥18 to ≤85 years of age), with a
+diagnosis of hypertension during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+hypertension with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance:
+o Any outpatient face-to-face consultations for patients with an
+established hypertension condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212, 99213,
+99214, 99215, plus with the essential hypertension diagnoses
+(applicable ICD-10 code: I10-I13)
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g. ABM
+mandate encounters excluded)
+Denominator Exclusions:
+o Documentation of End stage renal disease (ESRD): ICD10: N18.6
+(within the denominator time frame)
+o Renal transplant (before or during the reporting quarter)
+
+-- 20 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 21
+ICD codes: T86.10, T86.11, T86.12, T86.13, T86.19, Z48.22, Z94.0,
+CPT codes: 90935- 90999 (Dialysis Services and Procedures CPT®
+Code range) 90935, 90937, 90940, 90947, 90951, 90952, 90953,
+90954, 90955, 90956, 90957, 90958, 90959, 90960, 90961,
+90962, 90963, 90964, 90965, 90966, 90967, 90968, 90969,
+90970, 90989, 90993, 90997, 90999.
+o Pregnancy (during the reporting quarter) Appendix A (O00- O9A)
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure Percentage.
+International
+comparison if
+available
+https://mdinteractive.com/MIPS_Family_Practice
+Desired
+Direction
+>64%
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 21 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 22
+Type: Chronic disease management Number: PC016
+KPI Description
+(title): Percentage of Hypertensive Patients Receiving Annual Nephropathy
+Exams
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of patients ≥18 to ≤85 years of age with hypertension who
+had a nephropathy screening test or evidence of nephropathy exam
+during the reporting quarter or in the 09 months prior to the reporting
+quarter
+Calculation Numerator:
+Patients in the denominator population with a screening for nephropathy
+or evidence of nephropathy exam performed in the same or different
+facility within 12 months prior to the end of the reporting quarter. (The
+results from such visits may be entered into the facility or network EMR
+at any time up till one month after the quarter ends)
+Codes:
+Any of the following conditions:
+o Microalbuminuria/ Macroalbuminuria test: 82043
+or
+o Estimated glomerular filtration rate (eGFR) and a urine
+albumin-creatinine ratio (uACR). Use any of the relevant
+CPT for calculation: 82570, 82042, 82044, 82565
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+Denominator:
+Total number of unique outpatients (≥18 to ≤85 years of age), with a
+diagnosis of hypertension during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+hypertension with the same primary care unit/facility (prior to the
+reporting quarter)
+Denominator Guidance:
+o Any outpatient face-to-face consultations for patients with an
+established hypertension condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212,
+99213, 99214, 99215, plus with the essential hypertension diagnoses
+(ICD-10 code: I10-I13)
+
+-- 22 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 23
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g.
+ABM mandate encounters excluded)
+Denominator Exclusions:
+o DOCUMENTATION OF KIDNEY TRANSPLANT: ICD10: T86.10,
+T86.11, T86.12, T86.13, T86.19, Z48.22, Z94.0
+(within the denominator time frame)
+o Pregnancy (during the reporting quarter) Appendix B (O00- O9A)
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % annual nephropathy screening test
+International
+comparison if
+available
+https://www.ncqa.org/hedis/measures/
+https://www.ahrq.gov/
+https://www.qualityforum.org/QPS/QPSTool
+Desired
+Direction
+>90%
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 23 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 24
+Type: Child health Number: PC021
+KPI Description
+(title): Autism Screening in children between 18 to 24 months
+Domain Effectiveness
+Indicator Type Process
+Definition Percentage of children from (18 months to 24 months of age who
+received at least 1 autism screening using an evidence-based tool.
+Calculation Numerator:
+Children from the denominator who had the screening for Autism using
+evidence-based tool
+ICD-10CM: Z13.4
+CPT: 96110
+Performance Met Criteria:
+Up to 24 months age: at least 1
+Denominator:
+Total number of children (18 month to 24 months) with an outpatient
+visit during the reporting quarter.
+Denominator Guidance:
+o The age limit will apply to the patient's visit in the reporting
+facility within the reporting quarter.
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g.
+ABM mandate encounters excluded)
+CPT codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212,
+99213, 99214, 99215
+Denominator Exclusions:
+o Current diagnosed conditions (ICD-10 CM: F84.0 - Autistic
+disorder or other developmental disorders)
+o All ABM Mandate encounters, except Well Child and
+Immunization Mandate encounters.
+o Self-pay encounters.
+Reporting
+Frequency
+Quarterly
+Unit Measure Percentage
+International
+comparison if
+available
+DOH Standard Well Child visits (0-6 years)
+https://www.cdc.gov/ncbddd/autism/hcp-screening.html
+https://www.doh.gov.ae/-
+/media/256D066B50884B79ADF51238FABF2032.ashx
+
+-- 24 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 25
+Desired
+Direction
+Higher is better
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 25 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 26
+Type: Chronic disease management Number: PC023
+KPI
+Description
+(title):
+Percentage of Patients with Poorly Controlled Hypertension (≥130
+mmHg or ≥80 mmHg)
+Domain Effectiveness
+Indicator Type Outcome
+Definition Percentage of patients ≥18 to ≤85 years of age who had a diagnosis of
+essential hypertension overlapping the measurement period and whose 2
+abnormal readings in separate encounters in the last 3 months was (≥130
+mmHg or diastolic blood pressure ≥80 mmHg) during the reporting quarter.
+Calculation Numerator: Patients whose most recent 2 abnormal blood pressure readings
+in separate encounters, performed in the same facility or network, was
+(systolic blood pressure ≥ 130 mmHg or diastolic blood pressure ≥ 80 mmHg)
+during the reporting quarter.
+Numerator Guidance:
+o If no blood pressure is recorded during the measurement period, the
+patient's blood pressure is assumed "not controlled."
+o If there are multiple blood pressure readings on the same day, use the
+reading with either the systolic or diastolic being in the abnormal range
+(numerator values) as the most recent blood pressure readings.
+o The most recent blood pressure reading during the reporting quarter
+can be in the same primary care unit/facility.
+Denominator:
+Total number of unique outpatients (≥18 to ≤85 years of age), with a
+diagnosis of hypertension during the reporting quarter
+AND
+who had at least 2 outpatient visits within 09 months with a diagnosis of
+hypertension with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance:
+o Any outpatient face-to-face consultations for patients with an
+established hypertension condition (with or without a primary or
+secondary diagnosis code).
+CPT Codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212, 99213,
+99214, 99215 plus with the essential hypertension diagnoses (ICD-10
+code: I10-I13)
+
+-- 26 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 27
+o In case of multiple consultation visits within the reporting quarter,
+please consider any visit after applying the exclusion criteria (e.g. ABM
+mandate encounters excluded)
+Denominator Exclusions:
+o Documentation of End stage renal disease (ESRD): ICD10: N18.6
+(within the denominator time frame)
+o Renal transplant (before or during the reporting quarter)
+ICD codes: T86.10, T86.11, T86.12, T86.13, T86.19, Z48.22, Z94.0,
+CPT codes: 90935- 90999 (Dialysis Services and Procedures CPT®
+Code range) 90935, 90937, 90940, 90947, 90951, 90952, 90953,
+90954, 90955, 90956, 90957, 90958, 90959, 90960, 90961,
+90962, 90963, 90964, 90965, 90966, 90967, 90968, 90969,
+90970, 90989, 90993, 90997, 90999.
+o Pregnancy (during the reporting quarter) Appendix A (O00- O9A)
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure Percentage.
+International
+comparison if
+available
+https://mdinteractive.com/MIPS_Family_Practice
+Desired
+Direction
+Lower is better
+Data Source • Centrally collected claim data (KEH)
+• Patient medical record
+
+-- 27 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 28
+Type: Chronic disease management Number: PC024
+KPI
+Description
+(title):
+Percentage of high-risk patients (18 years and above) who are screened
+for dyslipidemia
+Domain Effectiveness
+Indicator Type Process
+Definition The percentage of high-risk patients ≥18 years who had a complete lipid profile
+performed for screening of dyslipidemia within 1 year prior to the end of
+reporting quarter. Dyslipidemia is diagnosed by measuring serum lipids.
+Routine measurements (lipid profile) include total cholesterol (TC), TGs, HDL-
+C, and LDL-C.
+Calculation Numerator:
+Number of patients (≥18 years of age) who had a complete lipid profile
+performed for screening of dyslipidemia by the same facility or network
+within 12 months prior to the end of the reporting quarter. (The results from
+such visits may be entered into the facility or network EMR at any time up till
+one month after the quarter ends)
+Numerator Guidance:
+Timeframe: 12 months (prior to the end of reporting quarter)
+= 3 months (quarter) + 09 months prior
+Denominator:
+Number of high-risk patients ≥18 years of age, with at least one encounter
+within the same primary healthcare provider during the reporting quarter
+AND
+having at least one encounter within the 9 months prior to the start of the
+reporting quarter
+Denominator Guidance:
+o High risk patients are:
+Diabetes (Appendix B)
+Hypertension (ICD-10 codes: I10-I13)
+Cardiovascular Disease (ICD-10 codes: I20-I25)
+Obesity with BMI >=30 (ICD-10 codes: E66)
+o Face- to-face consultations should be included
+o In case of multiple consultation visits within prior months, please
+consider the latest one.
+Denominator Exclusions:
+o Individuals with documented reason for not ordering dyslipidemia
+screening (e.g.: refusal).
+o Individuals who have limitation of insurance benefits.
+o Patients previously diagnosed with dyslipidemia (ICD-10 codes: E78
+series):
+
+-- 28 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 29
+o New patients in the reporting facility/network: Diagnosed prior
+to the first encounter in the reporting facility/network within
+the denominator time frame
+o Established patients in the reporting facility/network:
+▪ Diagnosed prior to the denominator timeframe in any
+facility/network
+▪ Diagnosed within the denominator timeframe by
+another facility/network
+o Patient is in an urgent or emergent situation where time is of the
+essence and to delay treatment would jeopardize the patient’s health
+Status
+o Pregnancy (during the reporting quarter) Appendix A (O00- O9A)
+o All ABM Mandate encounters.
+Reporting
+Frequency
+Quarterly
+Unit Measure % Dyslipidemia Screening
+International
+comparison if
+available
+• https://www.cdc.gov/mmwr/preview/mmwrhtml/su6102a5.Htm
+• DOH Standard for Obesity and Weight Diagnosis, Pharmacological and
+Surgical Management Interventions
+• DOH PROGRAM SERVICE REQUIREMENTS FOR THE PROVISION OF
+CARDIOVASCULAR RISK FACTORS SCREENING AND FOLLOW-UP
+• Standard for Diagnosis and Management of Diabetes Mellitus Type 1 and 2
+• HAAD Guidelines for The Provision of Cardiovascular Disease Management
+Programs
+Desired
+Direction
+Higher is better
+Data Source • Patient medical record
+
+-- 29 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 30
+Type: Disease management Number: PC025
+KPI
+Description
+(title):
+Percentage of adult patients (18 years and above) who are overweight
+or obese
+Domain Effectiveness
+Indicator Type Outcome
+Definition This measure addresses the importance of both obesity and overweight.
+Calculation Numerator: Number of adult patients from the denominator with a
+documented BMI range 25 and above performed in the same facility or
+network.
+Numerator Guidance:
+o If no height & weight, or BMI is recorded during the measurement
+period, the patient's assessment is assumed "overweight or obese."
+o If there are multiple visits in the reporting quarter, consider the visit
+with the abnormal BMI range (numerator values BMI range ≥25).
+Denominator:
+Total number of unique adult patients (≥18 years of age) who have at least
+one visit in the facility during the reporting quarter,
+Denominator Guidance:
+o The patient must be aged 18 and older on the date of visit.
+o Face-to-face consultations should be included
+Denominator Exclusions:
+o Patients who are not eligible for BMI Calculation or due to any of the
+following:
+• Patients receiving palliative care on the date of the current
+encounter or any time prior to the current encounter.
+• Patients who are pregnant on the date of the current encounter
+or any time during the reporting period prior to the current
+encounter.
+• Patients who refuse measurement of height and/or weight or
+refuse follow-up on the date of the current encounter or any
+time during the
+• Reporting period prior to the current encounter.
+• Patient is in an urgent or emergent medical situation where
+time is of the essence, and to delay treatment would jeopardize
+the patient’s health status.
+o All ABM Mandate encounters
+Reporting
+Frequency
+Quarterly
+Unit Measure % obesity Screening
+International
+comparison if
+available
+https://qpp.cms.gov/docs/QPP_quality_measure_specifications/CQM-
+Measures/2019_Measure_128_MIPSCQM.pdf
+
+-- 30 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 31
+Desired
+Direction
+Lower is better
+Data Source • Patient medical record
+Type: Mental Health Number: PC026
+KPI Description
+(title): Primary Care Depression Treatment Success Rate
+Domain Effectiveness
+Indicator Type Outcome
+Definition Percentage of patients treated for depression in primary care who show a
+% reduction in depression scores (PHQ9) between 14 days to 180 days
+Calculation Numerator: Total patients aged 18 years and older from the denominator
+with 50% improvement of PHQ-9 scores between 14 days to 180 days
+(follow-up) from initial PHQ-9 screening
+Numerator guidance:
+• At least one PHQ-9 score recorded between 14 days and 180 days
+after baseline / index event.
+• The best (i.e., lowest) PHQ-9 score observed between 14 days and
+180 days after index event date to be considered as response.
+Denominator: All adults aged 18 years and older patients who had a
+positive PHQ-9 screening and were treated in the same primary care
+center during the same measurement period of positive screening.
+Ex: Calculation of Time frame
+Reporting Period Submission Dates Denominator Numerator
+Q1 2025 1st May 2025 – June 13th 2025 Q3 2024 Q1 2025
+Q2 2025 1st Aug 2025 – 22nd Aug 2025 Q4 2024 Q2 2025
+Q3 2025 1st Nov 2025 – 22nd Nov 2025 Q1 2025 Q3 2025
+Q4 2025 1st Feb 2026 – 21st Feb 2026 Q2 2025 Q4 2025
+Denominator Exclusions:
+o Patients having procedure code for a psychotherapy visit or a
+depression psychotherapy code within the 180 days prior to the
+denominator identification period.
+o Patients who have ever been diagnosed with bipolar disorder
+
+-- 31 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 32
+F31.10, F31.11, F31.12, F31.13, F31.2, F31.30, F31.31, F31.32,
+F31.4, F31.5, F31.60, F31.61, F31.62, F31.63, F31.64, F31.70,
+F31.71, F31.72, F31.73, F31.74, F31.75, F31.76, F31.77, F31.78,
+F31.81, F31.89, F31.9
+o All ABM Mandate encounters
+Quarterly
+Unit Measure % of depression patients with treatment success in primary care
+International
+comparison if
+available
+https://pmc.ncbi.nlm.nih.gov/articles/PMC5496323/pdf/13643_2017_Art
+icle_530.pdf
+https://qpp.cms.gov/docs/QPP_quality_measure_specificatio
+ns/CQM-Measures/2019_Measure_411_MIPSCQM.pdf
+https://psychiatryonline.org/doi/epdf/10.1176/appi.ps.201900295
+Desire
+Direction
+>50%
+Data Source • Centrally collected claim data (KEH))
+• Patient medical record
+
+-- 32 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 33
+APPENDIX – A ICD-10 CM CODES (O00- O9A)
+O00.00 O00.01 O00.1 O00.201 O00.202 O00.209 O00.80 O00.81
+O00.90 O00.91 O01.0 O01.1 O01.9
+O02.0 O02.1 O02.81 O02.89 O02.9 O03.0 O03.1 O03.2
+O03.30 O03.31 O03.32 O03.33 O03.34 O03.35 O03.36 O03.37
+O03.38 O03.39 O03.4 O03.5 O03.6 O03.7 O03.80 O03.81
+O03.82 O03.83 O03.84 O03.85 O03.86 O03.87 O03.88 O03.89
+O03.9 O04.5 O04.6 O04.7 O04.80 O04.81 O04.82 O04.83
+O04.84 O04.85 O04.86 O04.87 O04.88 O04.89 O07.0 O07.1
+O07.2 O07.30 O07.31 O07.32 O07.33 O07.34 O07.35 O07.36
+O07.37 O07.38 O07.39 O07.4 O08.0 O08.1 O08.2 O08.3
+O08.4 O08.5 O08.6 O08.7 O08.81 O08.82 O08.83 O08.89
+O08.9 O09.00 O09.01 O09.02 O09.03 O09.10 O09.11 O09.12
+O09.13 O09.211 O09.212 O09.213 O09.219 O09.291 O09.292 O09.293
+O09.299 O09.30 O09.31 O09.32 O09.33 O09.40 O09.41 O09.42
+O09.43 O09.511 O09.512 O09.513 O09.519 O09.521 O09.522 O09.523
+O09.529 O09.611 O09.612 O09.613 O09.619 O09.621 O09.622 O09.623
+O09.629 O09.70 O09.71 O09.72 O09.73 O09.811 O09.812 O09.813
+O09.819 O09.821 O09.822 O09.823 O09.829 O09.891 O09.892 O09.893
+O09.899 O09.90 O09.91 O09.92 O09.93 O10.011 O10.012 O10.013
+O10.019 O10.02 O10.03 O10.111 O10.112 O10.113 O10.119 O10.12
+O10.13 O10.211 O10.212 O10.213 O10.219 O10.22 O10.23 O10.311
+O10.312 O10.313 O10.319 O10.32 O10.33 O10.411 O10.412 O10.413
+O10.419 O10.42 O10.43 O10.911 O10.912 O10.913 O10.919 O10.92
+O10.93 O11.1 O11.2 O11.3 O11.9 O12.00 O12.01 O12.02
+O12.03 O12.10 O12.11 O12.12 O12.13 O12.20 O12.21 O12.22
+O12.23 O13.1 O13.2 O13.3 O13.9 O14.00 O14.02 O14.03
+O14.10 O14.12 O14.13 O14.20 O14.22 O14.23 O14.90 O14.92
+O14.93 O15.00 O15.02 O15.03 O15.1 O15.2 O15.9 O16.1
+O16.2 O16.3 O16.9 O20.0 O20.8 O20.9 O21.0 O21.1
+O21.2 O21.8 O21.9 O22.00 O22.01 O22.02 O22.03 O22.10
+O22.11 O22.12 O22.13 O22.20 O22.21 O22.22 O22.23 O22.30
+O22.31 O22.32 O22.33 O22.40 O22.41 O22.42 O22.43 O22.50
+O22.51 O22.52 O22.53 O22.8X1 O22.8X2 O22.8X3 O22.8X9 O22.90
+O22.91 O22.92 O22.93 O23.00 O23.01 O23.02 O23.03 O23.10
+O23.11 O23.12 O23.13 O23.20 O23.21 O23.22 O23.23 O23.30
+O23.31 O23.32 O23.33 O23.40 O23.41 O23.42 O23.43 O23.511
+O23.512 O23.513 O23.519 O23.521 O23.522 O23.523 O23.529 O23.591
+O23.592 O23.593 O23.599 O23.90 O23.91 O23.92 O23.93 O24.011
+O24.012 O24.013 O24.019 O24.02 O24.03 O24.111 O24.112 O24.113
+O24.119 O24.12 O24.13 O24.311 O24.312 O24.313 O24.319 O24.32
+O24.33 O24.410 O24.414 O24.419 O24.420 O24.424 O24.429 O24.430
+O24.434 O24.439 O24.811 O24.812 O24.813 O24.819 O24.82 O24.83
+O24.911 O24.912 O24.913 O24.919 O24.92 O24.93 O25.10 O25.11
+O25.12 O25.13 O25.2 O25.3 O26.00 O26.01 O26.02 O26.03
+
+-- 33 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 34
+O26.10 O26.11 O26.12 O26.13 O26.20 O26.21 O26.22 O26.23
+O26.30 O26.31 O26.32 O26.33 O26.40 O26.41 O26.42 O26.43
+O26.50 O26.51 O26.52 O26.53 O26.611 O26.612 O26.613 O26.619
+O26.62 O26.63 O26.711 O26.712 O26.713 O26.719 O26.72 O26.73
+O26.811 O26.812 O26.813 O26.819 O26.821 O26.822 O26.823 O26.829
+O26.831 O26.832 O26.833 O26.839 O26.841 O26.842 O26.843 O26.849
+O26.851 O26.852 O26.853 O26.859 O26.86 O26.872 O26.873 O26.879
+O26.891 O26.892 O26.893 O26.899 O26.90 O26.91 O26.92 O26.93
+O28.0 O28.1 O28.2 O28.3 O28.4 O28.5 O28.8 O28.9
+O29.011 O29.012 O29.013 O29.019 O29.021 O29.022 O29.023 O29.029
+O29.091 O29.092 O29.093 O29.099 O29.111 O29.112 O29.113 O29.119
+O29.121 O29.122 O29.123 O29.129 O29.191 O29.192 O29.193 O29.199
+O29.211 O29.212 O29.213 O29.219 O29.291 O29.292 O29.293 O29.299
+O29.3X1 O29.3X2 O29.3X3 O29.3X9 O29.40 O29.41 O29.42 O29.43
+O29.5X1 O29.5X2 O29.5X3 O29.5X9 O29.60 O29.61 O29.62 O29.63
+O29.8X1 O29.8X2 O29.8X3 O29.8X9 O29.90 O29.91 O29.92 O29.93
+O30.001 O30.002 O30.003 O30.009 O30.011 O30.012 O30.013 O30.019
+O30.021 O30.022 O30.023 O30.029 O30.031 O30.032 O30.033 O30.039
+O30.041 O30.042 O30.043 O30.049 O30.091 O30.092 O30.093 O30.099
+O30.101 O30.102 O30.103 O30.109 O30.111 O30.112 O30.113 O30.119
+O30.121 O30.122 O30.123 O30.129 O30.191 O30.192 O30.193 O30.199
+O30.201 O30.202 O30.203 O30.209 O30.211 O30.212 O30.213 O30.219
+O30.221 O30.222 O30.223 O30.229 O30.291 O30.292 O30.293 O30.299
+O30.801 O30.802 O30.803 O30.809 O30.811 O30.812 O30.813 O30.819
+O30.821 O30.822 O30.823 O30.829 O30.891 O30.892 O30.893 O30.899
+O30.90 O30.91 O30.92 O30.93 O31.00X0 O31.00X1 O31.00X2 O31.00X3
+O31.00X4 O31.00X5 O31.00X9 O31.01X0 O31.01X1 O31.01X2 O31.01X3 O31.01X4
+O31.01X5 O31.01X9 O31.02X0 O31.02X1 O31.02X2 O31.02X3 O31.02X4 O31.02X5
+O31.02X9 O31.03X0 O31.03X1 O31.03X2 O31.03X3 O31.03X4 O31.03X5 O31.03X9
+O31.10X0 O31.10X1 O31.10X2 O31.10X3 O31.10X4 O31.10X5 O31.10X9 O31.11X0
+O31.11X1 O31.11X2 O31.11X3 O31.11X4 O31.11X5 O31.11X9 O31.12X0 O31.12X1
+O31.12X2 O31.12X3 O31.12X4 O31.12X5 O31.12X9 O31.13X0 O31.13X1 O31.13X2
+O31.13X3 O31.13X4 O31.13X5 O31.13X9 O31.20X0 O31.20X1 O31.20X2 O31.20X3
+O31.20X4 O31.20X5 O31.20X9 O31.21X0 O31.21X1 O31.21X2 O31.21X3 O31.21X4
+O31.21X5 O31.21X9 O31.22X0 O31.22X1 O31.22X2 O31.22X3 O31.22X4 O31.22X5
+O31.22X9 O31.23X0 O31.23X1 O31.23X2 O31.23X3 O31.23X4 O31.23X5 O31.23X9
+O31.30X0 O31.30X1 O31.30X2 O31.30X3 O31.30X4 O31.30X5 O31.30X9 O31.31X0
+O31.31X1 O31.31X2 O31.31X3 O31.31X4 O31.31X5 O31.31X9 O31.32X0 O31.32X1
+O31.32X2 O31.32X3 O31.32X4 O31.32X5 O31.32X9 O31.33X0 O31.33X1 O31.33X2
+O31.33X3 O31.33X4 O31.33X5 O31.33X9 O31.8X10 O31.8X11 O31.8X12 O31.8X13
+O31.8X14 O31.8X15 O31.8X19 O31.8X20 O31.8X21 O31.8X22 O31.8X23 O31.8X24
+O31.8X25 O31.8X29 O31.8X30 O31.8X31 O31.8X32 O31.8X33 O31.8X34 O31.8X35
+O31.8X39 O31.8X90 O31.8X91 O31.8X92 O31.8X93 O31.8X94 O31.8X95 O31.8X99
+O32.0XX0 O32.0XX1 O32.0XX2 O32.0XX3 O32.0XX4 O32.0XX5 O32.0XX9 O32.1XX0
+O24.434 O24.439 O24.811 O24.812 O24.813 O24.819 O24.82 O24.83
+
+-- 34 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 35
+O24.911 O24.912 O24.913 O24.919 O24.92 O24.93 O25.10 O25.11
+O25.12 O25.13 O25.2 O25.3 O26.00 O26.01 O26.02 O26.03
+O26.10 O26.11 O26.12 O26.13 O26.20 O26.21 O26.22 O26.23
+O26.30 O26.31 O26.32 O26.33 O26.40 O26.41 O26.42 O26.43
+O26.50 O26.51 O26.52 O26.53 O26.611 O26.612 O26.613 O26.619
+O26.62 O26.63 O26.711 O26.712 O26.713 O26.719 O26.72 O26.73
+O26.811 O26.812 O26.813 O26.819 O26.821 O26.822 O26.823 O26.829
+O26.831 O26.832 O26.833 O26.839 O26.841 O26.842 O26.843 O26.849
+O26.851 O26.852 O26.853 O26.859 O26.86 O26.872 O26.873 O26.879
+O26.891 O26.892 O26.893 O26.899 O26.90 O26.91 O26.92 O26.93
+O28.0 O28.1 O28.2 O28.3 O28.4 O28.5 O28.8 O28.9
+O29.011 O29.012 O29.013 O29.019 O29.021 O29.022 O29.023 O29.029
+O29.091 O29.092 O29.093 O29.099 O29.111 O29.112 O29.113 O29.119
+O29.121 O29.122 O29.123 O29.129 O29.191 O29.192 O29.193 O29.199
+O29.211 O29.212 O29.213 O29.219 O29.291 O29.292 O29.293 O29.299
+O29.3X1 O29.3X2 O29.3X3 O29.3X9 O29.40 O29.41 O29.42 O29.43
+O29.5X1 O29.5X2 O29.5X3 O29.5X9 O29.60 O29.61 O29.62 O29.63
+O29.8X1 O29.8X2 O29.8X3 O29.8X9 O29.90 O29.91 O29.92 O29.93
+O30.001 O30.002 O30.003 O30.009 O30.011 O30.012 O30.013 O30.019
+O30.021 O30.022 O30.023 O30.029 O30.031 O30.032 O30.033 O30.039
+O30.041 O30.042 O30.043 O30.049 O30.091 O30.092 O30.093 O30.099
+O30.101 O30.102 O30.103 O30.109 O30.111 O30.112 O30.113 O30.119
+O30.121 O30.122 O30.123 O30.129 O30.191 O30.192 O30.193 O30.199
+O30.201 O30.202 O30.203 O30.209 O30.211 O30.212 O30.213 O30.219
+O30.221 O30.222 O30.223 O30.229 O30.291 O30.292 O30.293 O30.299
+O30.801 O30.802 O30.803 O30.809 O30.811 O30.812 O30.813 O30.819
+O30.821 O30.822 O30.823 O30.829 O30.891 O30.892 O30.893 O30.899
+O30.90 O30.91 O30.92 O30.93 O31.00X0 O31.00X1 O31.00X2 O31.00X3
+O31.00X4 O31.00X5 O31.00X9 O31.01X0 O31.01X1 O31.01X2 O31.01X3 O31.01X4
+O31.01X5 O31.01X9 O31.02X0 O31.02X1 O31.02X2 O31.02X3 O31.02X4 O31.02X5
+O31.02X9 O31.03X0 O31.03X1 O31.03X2 O31.03X3 O31.03X4 O31.03X5 O31.03X9
+O31.10X0 O31.10X1 O31.10X2 O31.10X3 O31.10X4 O31.10X5 O31.10X9 O31.11X0
+O31.11X1 O31.11X2 O31.11X3 O31.11X4 O31.11X5 O31.11X9 O31.12X0 O31.12X1
+O31.12X2 O31.12X3 O31.12X4 O31.12X5 O31.12X9 O31.13X0 O31.13X1 O31.13X2
+O31.13X3 O31.13X4 O31.13X5 O31.13X9 O31.20X0 O31.20X1 O31.20X2 O31.20X3
+O31.20X4 O31.20X5 O31.20X9 O31.21X0 O31.21X1 O31.21X2 O31.21X3 O31.21X4
+O31.21X5 O31.21X9 O31.22X0 O31.22X1 O31.22X2 O31.22X3 O31.22X4 O31.22X5
+O31.22X9 O31.23X0 O31.23X1 O31.23X2 O31.23X3 O31.23X4 O31.23X5 O31.23X9
+O31.30X0 O31.30X1 O31.30X2 O31.30X3 O31.30X4 O31.30X5 O31.30X9 O31.31X0
+O31.31X1 O31.31X2 O31.31X3 O31.31X4 O31.31X5 O31.31X9 O31.32X0 O31.32X1
+O31.32X2 O31.32X3 O31.32X4 O31.32X5 O31.32X9 O31.33X0 O31.33X1 O31.33X2
+O31.33X3 O31.33X4 O31.33X5 O31.33X9 O31.8X10 O31.8X11 O31.8X12 O31.8X13
+O31.8X14 O31.8X15 O31.8X19 O31.8X20 O31.8X21 O31.8X22 O31.8X23 O31.8X24
+O31.8X25 O31.8X29 O31.8X30 O31.8X31 O31.8X32 O31.8X33 O31.8X34 O31.8X35
+O31.8X39 O31.8X90 O31.8X91 O31.8X92 O31.8X93 O31.8X94 O31.8X95 O31.8X99
+
+-- 35 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 36
+O32.0XX0 O32.0XX1 O32.0XX2 O32.0XX3 O32.0XX4 O32.0XX5 O32.0XX9 O32.1XX0
+O32.1XX1 O32.1XX2 O32.1XX3 O32.1XX4 O32.1XX5 O32.1XX9 O32.2XX0 O32.2XX1
+O32.2XX2 O32.2XX3 O32.2XX4 O32.2XX5 O32.2XX9 O32.3XX0 O32.3XX1 O32.3XX2
+O32.3XX3 O32.3XX4 O32.3XX5 O32.3XX9 O32.4XX0 O32.4XX1 O32.4XX2 O32.4XX3
+O32.4XX4 O32.4XX5 O32.4XX9 O32.6XX0 O32.6XX1 O32.6XX2 O32.6XX3 O32.6XX4
+O32.6XX5 O32.6XX9 O32.8XX0 O32.8XX1 O32.8XX2 O32.8XX3 O32.8XX4 O32.8XX5
+O32.8XX9 O32.9XX0 O32.9XX1 O32.9XX2 O32.9XX3 O32.9XX4 O32.9XX5 O32.9XX9
+O33.0 O33.1 O33.2 O33.3XX0 O33.3XX1 O33.3XX2 O33.3XX3 O33.3XX4
+O33.3XX5 O33.3XX9 O33.4XX0 O33.4XX1 O33.4XX2 O33.4XX3 O33.4XX4 O33.4XX5
+O33.4XX9 O33.5XX0 O33.5XX1 O33.5XX2 O33.5XX3 O33.5XX4 O33.5XX5 O33.5XX9
+O33.6XX0 O33.6XX1 O33.6XX2 O33.6XX3 O33.6XX4 O33.6XX5 O33.6XX9 O33.7XX0
+O33.7XX1 O33.7XX2 O33.7XX3 O33.7XX4 O33.7XX5 O33.7XX9 O33.8 O33.9
+O34.00 O34.01 O34.02 O34.03 O34.10 O34.11 O34.12 O34.13
+O34.211 O34.212 O34.219 O34.29 O34.30 O34.31 O34.32 O34.33
+O34.40 O34.41 O34.42 O34.43 O34.511 O34.512 O34.513 O34.519
+O34.521 O34.522 O34.523 O34.529 O34.531 O34.532 O34.533 O34.539
+O34.591 O34.592 O34.593 O34.599 O34.60 O34.61 O34.62 O34.63
+O34.70 O34.71 O34.72 O34.73 O34.80 O34.81 O34.82 O34.83
+O34.90 O34.91 O34.92 O34.93 O35.0XX0 O35.0XX1 O35.0XX2 O35.0XX3
+O35.0XX4 O35.0XX5 O35.0XX9 O35.1XX0 O35.1XX1 O35.1XX2 O35.1XX3 O35.1XX4
+O35.1XX5 O35.1XX9 O35.2XX0 O35.2XX1 O35.2XX2 O35.2XX3 O35.2XX4 O35.2XX5
+O35.2XX9 O35.3XX0 O35.3XX1 O35.3XX2 O35.3XX3 O35.3XX4 O35.3XX5 O35.3XX9
+O35.4XX0 O35.4XX1 O35.4XX2 O35.4XX3 O35.4XX4 O35.4XX5 O35.4XX9 O35.5XX0
+O35.5XX1 O35.5XX2 O35.5XX3 O35.5XX4 O35.5XX5 O35.5XX9 O35.6XX0 O35.6XX1
+O35.6XX2 O35.6XX3 O35.6XX4 O35.6XX5 O35.6XX9 O35.7XX0 O35.7XX1 O35.7XX2
+O35.7XX3 O35.7XX4 O35.7XX5 O35.7XX9 O35.8XX0 O35.8XX1 O35.8XX2 O35.8XX3
+O35.8XX4 O35.8XX5 O35.8XX9 O35.9XX0 O35.9XX1 O35.9XX2 O35.9XX3 O35.9XX4
+O35.9XX5 O35.9XX9 O36.0110 O36.0111 O36.0112 O36.0113 O36.0114 O36.0115
+O36.0119 O36.0120 O36.0121 O36.0122 O36.0123 O36.0124 O36.0125 O36.0129
+O36.0130 O36.0131 O36.0132 O36.0133 O36.0134 O36.0135 O36.0139 O36.0190
+O36.0191 O36.0192 O36.0193 O36.0194 O36.0195 O36.0199 O36.0910 O36.0911
+O36.0912 O36.0913 O36.0914 O36.0915 O36.0919 O36.0920 O36.0921 O36.0922
+O36.0923 O36.0924 O36.0925 O36.0929 O36.0930 O36.0931 O36.0932 O36.0933
+O36.0934 O36.0935 O36.0939 O36.0990 O36.0991 O36.0992 O36.0993 O36.0994
+O36.0995 O36.0999 O36.1110 O36.1111 O36.1112 O36.1113 O36.1114 O36.1115
+O36.1119 O36.1120 O36.1121 O36.1122 O36.1123 O36.1124 O36.1125 O36.1129
+O36.1130 O36.1131 O36.1132 O36.1133 O36.1134 O36.1135 O36.1139 O36.1190
+O36.1191 O36.1192 O36.1193 O36.1194 O36.1195 O36.1199 O36.1910 O36.1911
+O36.1912 O36.1913 O36.1914 O36.1915 O36.1919 O36.1920 O36.1921 O36.1922
+O36.1923 O36.1924 O36.1925 O36.1929 O36.1930 O36.1931 O36.1932 O36.1933
+O36.1934 O36.1935 O36.1939 O36.1990 O36.1991 O36.1992 O36.1993 O36.1994
+O36.1995 O36.1999 O36.20X0 O36.20X1 O36.20X2 O36.20X3 O36.20X4 O36.20X5
+O36.20X9 O36.21X0 O36.21X1 O36.21X2 O36.21X3 O36.21X4 O36.21X5 O36.21X9
+O36.22X0 O36.22X1 O36.22X2 O36.22X3 O36.22X4 O36.22X5 O36.22X9 O36.23X0
+O36.23X1 O36.23X2 O36.23X3 O36.23X4 O36.23X5 O36.23X9 O36.4XX0 O36.4XX1
+O36.4XX2 O36.4XX3 O36.4XX4 O36.4XX5 O36.4XX9 O36.5110 O36.5111 O36.5112
+
+-- 36 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 37
+O36.5113 O36.5114 O36.5115 O36.5119 O36.5120 O36.5121 O36.5122 O36.5123
+O36.5124 O36.5125 O36.5129 O36.5130 O36.5131 O36.5132 O36.5133 O36.5134
+O36.5135 O36.5139 O36.5190 O36.5191 O36.5192 O36.5193 O36.5194 O36.5195
+O36.5199 O36.5910 O36.5911 O36.5912 O36.5913 O36.5914 O36.5915 O36.5919
+O36.5920 O36.5921 O36.5922 O36.5923 O36.5924 O36.5925 O36.5929 O36.5930
+O36.5931 O36.5932 O36.5933 O36.5934 O36.5935 O36.5939 O36.5990 O36.5991
+O36.5992 O36.5993 O36.5994 O36.5995 O36.5999 O36.60X0 O36.60X1 O36.60X2
+O36.60X3 O36.60X4 O36.60X5 O36.60X9 O36.61X0 O36.61X1 O36.61X2 O36.61X3
+O36.61X4 O36.61X5 O36.61X9 O36.62X0 O36.62X1 O36.62X2 O36.62X3 O36.62X4
+O36.62X5 O36.62X9 O36.63X0 O36.63X1 O36.63X2 O36.63X3 O36.63X4 O36.63X5
+O36.63X9 O36.70X0 O36.70X1 O36.70X2 O36.70X3 O36.70X4 O36.70X5 O36.70X9
+O36.71X0 O36.71X1 O36.71X2 O36.71X3 O36.71X4 O36.71X5 O36.71X9 O36.72X0
+O36.72X1 O36.72X2 O36.72X3 O36.72X4 O36.72X5 O36.72X9 O36.73X0 O36.73X1
+O36.73X2 O36.73X3 O36.73X4 O36.73X5 O36.73X9 O36.80X0 O36.80X1 O36.80X2
+O36.80X3 O36.80X4 O36.80X5 O36.80X9 O36.8120 O36.8121 O36.8122 O36.8123
+O36.8124 O36.8125 O36.8129 O36.8130 O36.8131 O36.8132 O36.8133 O36.8134
+O36.8135 O36.8139 O36.8190 O36.8191 O36.8192 O36.8193 O36.8194 O36.8195
+O36.8199 O36.8210 O36.8211 O36.8212 O36.8213 O36.8214 O36.8215 O36.8219
+O36.8220 O36.8221 O36.8222 O36.8223 O36.8224 O36.8225 O36.8229 O36.8230
+O36.8231 O36.8232 O36.8233 O36.8234 O36.8235 O36.8239 O36.8290 O36.8291
+O36.8292 O36.8293 O36.8294 O36.8295 O36.8299 O36.8910 O36.8911 O36.8912
+O36.8913 O36.8914 O36.8915 O36.8919 O36.8920 O36.8921 O36.8922 O36.8923
+O36.8924 O36.8925 O36.8929 O36.8930 O36.8931 O36.8932 O36.8933 O36.8934
+O36.8935 O36.8939 O36.8990 O36.8991 O36.8992 O36.8993 O36.8994 O36.8995
+O36.8999 O36.90X0 O36.90X1 O36.90X2 O36.90X3 O36.90X4 O36.90X5 O36.90X9
+O36.91X0 O36.91X1 O36.91X2 O36.91X3 O36.91X4 O36.91X5 O36.91X9 O36.92X0
+O36.92X1 O36.92X2 O36.92X3 O36.92X4 O36.92X5 O36.92X9 O36.93X0 O36.93X1
+O36.93X2 O36.93X3 O36.93X4 O36.93X5 O36.93X9 O40.1XX0 O40.1XX1 O40.1XX2
+O40.1XX3 O40.1XX4 O40.1XX5 O40.1XX9 O40.2XX0 O40.2XX1 O40.2XX2 O40.2XX3
+O40.2XX4 O40.2XX5 O40.2XX9 O40.3XX0 O40.3XX1 O40.3XX2 O40.3XX3 O40.3XX4
+O40.3XX5 O40.3XX9 O40.9XX0 O40.9XX1 O40.9XX2 O40.9XX3 O40.9XX4 O40.9XX5
+O40.9XX9 O41.00X0 O41.00X1 O41.00X2 O41.00X3 O41.00X4 O41.00X5 O41.00X9
+O41.01X0 O41.01X1 O41.01X2 O41.01X3 O41.01X4 O41.01X5 O41.01X9 O41.02X0
+O41.02X1 O41.02X2 O41.02X3 O41.02X4 O41.02X5 O41.02X9 O41.03X0 O41.03X1
+O41.03X2 O41.03X3 O41.03X4 O41.03X5 O41.03X9 O41.1010 O41.1011 O41.1012
+O41.1013 O41.1014 O41.1015 O41.1019 O41.1020 O41.1021 O41.1022 O41.1023
+O41.1024 O41.1025 O41.1029 O41.1030 O41.1031 O41.1032 O41.1033 O41.1034
+O41.1035 O41.1039 O41.1090 O41.1091 O41.1092 O41.1093 O41.1094 O41.1095
+O41.1099 O41.1210 O41.1211 O41.1212 O41.1213 O41.1214 O41.1215 O41.1219
+O41.1220 O41.1221 O41.1222 O41.1223 O41.1224 O41.1225 O41.1229 O41.1230
+O41.1231 O41.1232 O41.1233 O41.1234 O41.1235 O41.1239 O41.1290 O41.1291
+O41.1292 O41.1293 O41.1294 O41.1295 O41.1299 O41.1410 O41.1411 O41.1412
+O41.1413 O41.1414 O41.1415 O41.1419 O41.1420 O41.1421 O41.1422 O41.1423
+O41.1424 O41.1425 O41.1429 O41.1430 O41.1431 O41.1432 O41.1433 O41.1434
+O41.1435 O41.1439 O41.1490 O41.1491 O41.1492 O41.1493 O41.1494 O41.1495
+
+-- 37 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 38
+O41.1499 O41.8X10 O41.8X11 O41.8X12 O41.8X13 O41.8X14 O41.8X15 O41.8X19
+O41.8X20 O41.8X21 O41.8X22 O41.8X23 O41.8X24 O41.8X25 O41.8X29 O41.8X30
+O41.8X31 O41.8X32 O41.8X33 O41.8X34 O41.8X35 O41.8X39 O41.8X90 O41.8X91
+O41.8X92 O41.8X93 O41.8X94 O41.8X95 O41.8X99 O41.90X0 O41.90X1 O41.90X2
+O41.90X3 O41.90X4 O41.90X5 O41.90X9 O41.91X0 O41.91X1 O41.91X2 O41.91X3
+O41.91X4 O41.91X5 O41.91X9 O41.92X0 O41.92X1 O41.92X2 O41.92X3 O41.92X4
+O41.92X5 O41.92X9 O41.93X0 O41.93X1 O41.93X2 O41.93X3 O41.93X4 O41.93X5
+O41.93X9 O42.00 O42.011 O42.012 O42.013 O42.019 O42.02 O42.10
+O42.111 O42.112 O42.113 O42.119 O42.12 O42.90 O42.911 O42.912
+O42.913 O42.919 O42.92 O43.011 O43.012 O43.013 O43.019 O43.021
+O43.022 O43.023 O43.029 O43.101 O43.102 O43.103 O43.109 O43.111
+O43.112 O43.113 O43.119 O43.121 O43.122 O43.123 O43.129 O43.191
+O43.192 O43.193 O43.199 O43.211 O43.212 O43.213 O43.219 O43.221
+O43.222 O43.223 O43.229 O43.231 O43.232 O43.233 O43.239 O43.811
+O43.812 O43.813 O43.819 O43.891 O43.892 O43.893 O43.899 O43.90
+O43.91 O43.92 O43.93 O44.00 O44.01 O44.02 O44.03 O44.10
+O44.11 O44.12 O44.13 O45.001 O45.002 O45.003 O45.009 O45.011
+O45.012 O45.013 O45.019 O45.021 O45.022 O45.023 O45.029 O45.091
+O45.092 O45.093 O45.099 O45.8X1 O45.8X2 O45.8X3 O45.8X9 O45.90
+O45.91 O45.92 O45.93 O46.001 O46.002 O46.003 O46.009 O46.011
+O46.012 O46.013 O46.019 O46.021 O46.022 O46.023 O46.029 O46.091
+O46.092 O46.093 O46.099 O46.8X1 O46.8X2 O46.8X3 O46.8X9 O46.90
+O46.91 O46.92 O46.93 O47.00 O47.02 O47.03 O47.1 O47.9
+O48.0 O48.1 O60.00 O60.02 O60.03 O60.10X0 O60.10X1 O60.10X2
+O60.10X3 O60.10X4 O60.10X5 O60.10X9 O60.12X0 O60.12X1 O60.12X2 O60.12X3
+O60.12X4 O60.12X5 O60.12X9 O60.13X0 O60.13X1 O60.13X2 O60.13X3 O60.13X4
+O60.13X5 O60.13X9 O60.14X0 O60.14X1 O60.14X2 O60.14X3 O60.14X4 O60.14X5
+O60.14X9 O60.20X0 O60.20X1 O60.20X2 O60.20X3 O60.20X4 O60.20X5 O60.20X9
+O60.22X0 O60.22X1 O60.22X2 O60.22X3 O60.22X4 O60.22X5 O60.22X9 O60.23X0
+O60.23X1 O60.23X2 O60.23X3 O60.23X4 O60.23X5 O60.23X9 O61.0 O61.1
+O61.8 O61.9 O62.0 O62.1 O62.2 O62.3 O62.4 O62.8
+O62.9 O63.0 O63.1 O63.2 O63.9 O64.0XX0 O64.0XX1 O64.0XX2
+O64.0XX3 O64.0XX4 O64.0XX5 O64.0XX9 O64.1XX0 O64.1XX1 O64.1XX2 O64.1XX3
+O64.1XX4 O64.1XX5 O64.1XX9 O64.2XX0 O64.2XX1 O64.2XX2 O64.2XX3 O64.2XX4
+O64.2XX5 O64.2XX9 O64.3XX0 O64.3XX1 O64.3XX2 O64.3XX3 O64.3XX4 O64.3XX5
+O64.3XX9 O64.4XX0 O64.4XX1 O64.4XX2 O64.4XX3 O64.4XX4 O64.4XX5 O64.4XX9
+O64.5XX0 O64.5XX1 O64.5XX2 O64.5XX3 O64.5XX4 O64.5XX5 O64.5XX9 O64.8XX0
+O64.8XX1 O64.8XX2 O64.8XX3 O64.8XX4 O64.8XX5 O64.8XX9 O64.9XX0 O64.9XX1
+O64.9XX2 O64.9XX3 O64.9XX4 O64.9XX5 O64.9XX9 O65.0 O65.1 O65.2
+O65.3 O65.4 O65.5 O65.8 O65.9 O66.0 O66.1 O66.2
+O66.3 O66.40 O66.41 O66.5 O66.6 O66.8 O66.9 O67.0
+O67.8 O67.9 O68 O69.0XX0 O69.0XX1 O69.0XX2 O69.0XX3 O69.0XX4
+O69.0XX5 O69.0XX9 O69.1XX0 O69.1XX1 O69.1XX2 O69.1XX3 O69.1XX4 O69.1XX5
+O69.1XX9 O69.2XX0 O69.2XX1 O69.2XX2 O69.2XX3 O69.2XX4 O69.2XX5 O69.2XX9
+O69.3XX0 O69.3XX1 O69.3XX2 O69.3XX3 O69.3XX4 O69.3XX5 O69.3XX9 O69.4XX0
+
+-- 38 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 39
+O69.4XX1 O69.4XX2 O69.4XX3 O69.4XX4 O69.4XX5 O69.4XX9 O69.5XX0 O69.5XX1
+O69.5XX2 O69.5XX3 O69.5XX4 O69.5XX5 O69.5XX9 O69.81X0 O69.81X1 O69.81X2
+O69.81X3 O69.81X4 O69.81X5 O69.81X9 O69.82X0 O69.82X1 O69.82X2 O69.82X3
+O69.82X4 O69.82X5 O69.82X9 O69.89X0 O69.89X1 O69.89X2 O69.89X3 O69.89X4
+O69.89X5 O69.89X9 O69.9XX0 O69.9XX1 O69.9XX2 O69.9XX3 O69.9XX4 O69.9XX5
+O69.9XX9 O70.0 O70.1 O70.20 O70.21 O70.22 O70.23 O70.3
+O71.02 O71.03 O71.1 O71.2 O71.3 O71.4 O71.5 O71.6
+O71.7 O71.81 O71.82 O71.89 O71.9 O72.0 O72.1 O72.2
+O72.3 O73.0 O73.1 O74.0 O74.1 O74.2 O74.3 O74.4
+O74.5 O74.6 O74.7 O74.8 O74.9 O75.0 O75.1 O75.2
+O75.3 O75.4 O75.5 O75.81 O75.82 O75.89 O75.9 O76
+O77.0 O77.1 O77.8 O77.9 O80 O82 O85 O86.0
+O86.11 O86.12 O86.13 O86.19 O86.20 O86.21 O86.22 O86.29
+O86.4 O86.81 O86.89 O87.0 O87.1 O87.2 O87.3 O87.4
+O87.8 O87.9 O88.011 O88.012 O88.013 O88.019 O88.02 O88.03
+O88.111 O88.112 O88.113 O88.119 O88.12 O88.13 O88.211 O88.212
+O88.213 O88.219 O88.22 O88.23 O88.311 O88.312 O88.313 O88.319
+O88.32 O88.33 O88.811 O88.812 O88.813 O88.819 O88.82 O88.83
+O89.01 O89.09 O89.1 O89.2 O89.3 O89.4 O89.5 O89.6
+O89.8 O89.9 O90.0 O90.1 O90.2 O90.3 O90.4 O90.5
+O90.6 O90.81 O90.89 O90.9 O91.011 O91.012 O91.013 O91.019
+O91.02 O91.03 O91.111 O91.112 O91.113 O91.119 O91.12 O91.13
+O91.211 O91.212 O91.213 O91.219 O91.22 O91.23 O92.011 O92.012
+O92.013 O92.019 O92.02 O92.03 O92.111 O92.112 O92.113 O92.119
+O92.12 O92.13 O92.20 O92.29 O92.3 O92.4 O92.5 O92.6
+O92.70 O92.79 O94 O98.011 O98.012 O98.013 O98.019 O98.02
+O98.03 O98.111 O98.112 O98.113 O98.119 O98.12 O98.13 O98.211
+O98.212 O98.213 O98.219 O98.22 O98.23 O98.311 O98.312 O98.313
+O98.319 O98.32 O98.33 O98.411 O98.412 O98.413 O98.419 O98.42
+O98.43 O98.511 O98.512 O98.513 O98.519 O98.52 O98.53 O98.611
+O98.612 O98.613 O98.619 O98.62 O98.63 O98.711 O98.712 O98.713
+O98.719 O98.72 O98.73 O98.811 O98.812 O98.813 O98.819 O98.82
+O98.83 O98.911 O98.912 O98.913 O98.919 O98.92 O98.93 O99.011
+O99.012 O99.013 O99.019 O99.02 O99.03 O99.111 O99.112 O99.113
+O99.119 O99.12 O99.13 O99.210 O99.211 O99.212 O99.213 O99.214
+O99.215 O99.280 O99.281 O99.282 O99.283 O99.284 O99.285 O99.310
+O99.311 O99.312 O99.313 O99.314 O99.315 O99.320 O99.321 O99.322
+O99.323 O99.324 O99.325 O99.330 O99.331 O99.332 O99.333 O99.334
+O99.335 O99.340 O99.341 O99.342 O99.343 O99.344 O99.345 O99.350
+O99.351 O99.352 O99.353 O99.354 O99.355 O99.411 O99.412 O99.413
+O99.419 O99.42 O99.43 O99.511 O99.512 O99.513 O99.519 O99.52
+O99.53 O99.611 O99.612 O99.613 O99.619 O99.62 O99.63 O99.711
+O99.712 O99.713 O99.719 O99.72 O99.73 O99.810 O99.814 O99.815
+O99.820 O99.824 O99.825 O99.830 O99.834 O99.835 O99.840 O99.841
+O99.842 O99.843 O99.844 O99.845 O99.89 O9A.111 O9A.112 O9A.113
+
+-- 39 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 40
+O9A.119 O9A.12 O9A.13 O9A.211 O9A.212 O9A.213 O9A.219 O9A.22
+O9A.23 O9A.311 O9A.312 O9A.313 O9A.319 O9A.32 O9A.33 O9A.411
+O9A.412 O9A.413 O9A.419 O9A.42 O9A.43 O9A.511 O9A.512 O9A.513
+O9A.519 O9A.52 O9A.53 O70.4 O70.9 O71.00
+Appendix B – ICD-10 CM CODES (E10. E11, E13, O24 Series)
+E10.10 E10.11 E10.21 E10.22 E10.29 E10.311 E10.319 E10.3211
+E10.3212 E10.3213 E10.3219 E10.3291 E10.3292 E10.3293 E10.3299 E10.3311
+E10.3312 E10.3313 E10.3319 E10.3391 E10.3392 E10.3393 E10.3399 E10.3411
+E10.3412 E10.3413 E10.3419 E10.3491 E10.3492 E10.3493 E10.3499 E10.3511
+E10.3512 E10.3513 E10.3519 E10.3521 E10.3522 E10.3523 E10.3529 E10.3531
+E10.3532 E10.3533 E10.3539 E10.3541 E10.3542 E10.3543 E10.3549 E10.3551
+E10.3552 E10.3553 E10.3559 E10.3591 E10.3592 E10.3593 E10.3599 E10.36
+E10.37X1 E10.37X2 E10.37X3 E10.37X9 E10.39 E10.40 E10.41 E10.42
+E10.43 E10.44 E10.49 E10.51 E10.52 E10.59 E10.610 E10.618
+E10.620 E10.621 E10.622 E10.628 E10.630 E10.638 E10.641 E10.649
+E10.65 E10.69 E10.8 E10.9 E11.00 E11.01 E11.21 E11.22
+E11.29 E11.311 E11.319 E11.3211 E11.3212 E11.3213 E11.3219 E11.3291
+E11.3292 E11.3293 E11.3299 E11.3311 E11.3312 E11.3313 E11.3319 E11.3391
+E11.3392 E11.3393 E11.3399 E11.3411 E11.3412 E11.3413 E11.3419 E11.3491
+E11.3492 E11.3493 E11.3499 E11.3511 E11.3512 E11.3513 E11.3519 E11.3521
+E11.3522 E11.3523 E11.3529 E11.3531 E11.3532 E11.3533 E11.3539 E11.3541
+E11.3542 E11.3543 E11.3549 E11.3551 E11.3552 E11.3553 E11.3559 E11.3591
+E11.3592 E11.3593 E11.3599 E11.36 E11.37X1 E11.37X2 E11.37X3 E11.37X9
+E11.39 E11.40 E11.41 E11.42 E11.43 E11.44 E11.49 E11.51
+E11.52 E11.59 E11.610 E11.618 E11.620 E11.621 E11.622 E11.628
+E11.630 E11.638 E11.641 E11.649 E11.65 E11.69 E11.8 E11.9
+E13.00 E13.01 E13.10 E13.11 E13.21 E13.22 E13.29 E13.311
+E13.319 E13.3211 E13.3212 E13.3213 E13.3219 E13.3291 E13.3292 E13.3293
+E13.3299 E13.3311 E13.3312 E13.3313 E13.3319 E13.3391 E13.3392 E13.3393
+E13.3399 E13.3411 E13.3412 E13.3413 E13.3419 E13.3491 E13.3492 E13.3493
+E13.3499 E13.3511 E13.3512 E13.3513 E13.3519 E13.3521 E13.3522 E13.3523
+E13.3529 E13.3531 E13.3532 E13.3533 E13.3539 E13.3541 E13.3542 E13.3543
+E13.3549 E13.3551 E13.3552 E13.3553 E13.3559 E13.3591 E13.3592 E13.3593
+E13.3599 E13.36 E13.37X1 E13.37X2 E13.37X3 E13.37X9 E13.39 E13.40
+E13.41 E13.42 E13.43 E13.44 E13.49 E13.51 E13.52 E13.59
+E13.610 E13.618 E13.620 E13.621 E13.622 E13.628 E13.630 E13.638
+E13.641 E13.649 E13.65 E13.69 E13.8 E13.9 O24.011 O24.012
+O24.013 O24.019 O24.02 O24.03 O24.111 O24.112 O24.113 O24.119
+O24.12 O24.13 O24.311 O24.312 O24.313 O24.319 O24.32 O24.33
+O24.811 O24.812 O24.813 O24.819 O24.82 O24.83
+
+-- 40 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 41
+Summary of Changes 2025 V8
+KPI # Changes
+PC001 – PC003,
+PC006 - PC008, PC015,
+PC017 - PC020, PC022
+Retired the KPIs
+PC004 – PC005 Revised Title, definition, and KPI content (Numerator & Denominator)
+PC009 - PC014, PC016 Revised Denominator & Denominator Guidance: Added “As per DOH adjudication rule,
+7-day follow-up from the last visit is NOT considered a separate visit”
+PC021 Revised Title, definition, and KPI content (Numerator & Denominator)
+PC023 - PC026 Added new KPI
+Summary of Changes 2025 V8.1
+KPI # Changes
+PC004
+o Rephrase Denominator: All patients aged 18 (completed) age in years and older at the
+beginning of the reporting quarter who did a PHQ-9 within 24 hours of positive PHQ2
+o Added in Denominator Exclusions:
+o Patients with a Documented Reason for not Screening for Depression (Patient
+refuses to participate for any reason)
+o Individuals who do not qualify for insurance benefits of psychiatric treatment
+PC005
+• Moved phrase “within the same primary care unit/facility/network” from Denominator
+to numerator
+• Added in Denominator Exclusions:
+o Patients with a Documented Reason for not Screening for Depression (Patient
+refuses to participate for any reason)
+o Individuals who do not qualify for insurance benefits of psychiatric treatment
+PC009 - PC014,
+PC016
+• Removed Denominator Guidance: Added “As per DOH adjudication rule, 7-day follow-
+up from the last visit is NOT considered a separate visit”
+PC009, PC010,
+PC012, PC016,
+PC024
+• Added in Numerator: performed in the same or different facility within 12 months prior
+to the end of the reporting quarter (The results from such visits may be entered into
+the facility or network EMR at any time up till one month after the quarter ends)
+PC011, PC014 • Added in Numerator: performed in the same facility or network
+PC023 • Revised Numerator: Patients whose most recent 2 abnormal blood pressure readings
+in separate encounters, performed in the same facility or network, was (systolic blood
+pressure ≥ 130 mmHg or diastolic blood pressure ≥ 80 mmHg) during the reporting
+quarter.
+PC024 • Added in Denominator Exclusion: Individuals who have limitation of insurance
+benefits.
+PC025 • Revised Numerator: Number of adult patients from the denominator with a
+documented BMI (BMI range 25 and above) performed in the same facility or network.
+Numerator Guidance:
+If there are multiple visits in the reporting quarter, consider the visit with the abnormal
+BMI range (numerator values BMI range ≥25).
+• Denominator: Total number of unique adult patients (≥18 years of age) who have at
+least one visit in the facility during the reporting quarter,
+Denominator Guidance:
+The patient must be aged 18 and older on the date of visit.
+
+-- 41 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 42
+Summary of Changes 2025 V8.2
+KPI # Changes
+PC004 - PC005
+o Removed Denominator Exclusions: Individuals who do not qualify for insurance
+benefits of psychiatric treatment
+PC005
+• Rephrased Denominator Exclusions: Patients with a Documented Reason for not
+attending Follow-up appointments on Depression (Patient refuses to participate for any
+reason)
+PC026 • Rephrased Denominator: All adults aged 18 years and older patients who had a
+positive PHQ-9 screening and were treated in the same primary care center during the
+same measurement period of positive screening
+Summary of Changes 2025 V8.3
+KPI # Changes
+PC025
+o Added Numerator Inclusions: If no height & weight, or BMI is recorded during the
+measurement period, the patient's assessment is assumed "overweight or obese."
+Summary of Changes 2025 V8.4
+KPI # Changes
+PC09 to PC013
+Denominator: Rephrased the denominator definition.
+Total number of unique patients (≥18 to ≤75 years of age), with diabetes related outpatient
+visit/s during the reporting quarter AND who had at least 2 diabetes related outpatient visits
+within 09 months, by the same primary care unit/facility (prior to the reporting quarter)
+To
+Total number of unique outpatients (≥18 to ≤75 years of age), with a diagnosis of diabetes
+during the reporting quarter AND who had at least 2 outpatient visits within 09 months with a
+diagnosis of diabetes with the same primary care unit/facility (prior to the reporting quarter)
+Denominator guidance: Removed the word related and rephrased
+Diabetes related outpatient visit is face-to-face visits with primary or secondary diagnosis
+To
+Outpatient face-to-face visits with a primary or secondary diagnosis of diabetes.
+PC014, PC016,
+PC023
+Denominator: Rephrased the denominator definition
+Total number of unique patients ≥18 to ≤85 years of age, with hypertension related outpatient
+visit/s during the reporting quarter AND who had at least 2 hypertension related outpatient
+face-to-face visits (primary or secondary diagnosis) within 09 months, by the same primary
+care unit/facility (prior to the reporting quarter)
+TO
+
+-- 42 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 43
+Total number of unique outpatients (≥18 to ≤85 years of age), with a diagnosis of hypertension
+during the reporting quarter AND who had at least 2 outpatient visits within 09 months with a
+diagnosis of hypertension with the same primary care unit/facility (prior to the reporting
+quarter)
+Denominator Guidance: Removed the word related and rephrased
+Hypertension related outpatient visit is face-to-face visits with primary or secondary diagnosis
+TO
+Outpatient face-to-face visits with a primary or secondary diagnosis of hypertension
+PC021
+Denominator: Rephrased the denominator definition
+Total number of children (18 month to 24 months) who received well child vaccination during
+the reporting quarter.
+To
+Total number of children (18 month to 24 months) with an outpatient visit during the reporting
+quarter.
+Denominator Guidance: Rephrased the guidance.
+o The age limit will apply to the patient's visit in the reporting facility within the reporting
+quarter. However, the vaccination may be done in the same or different facility in the reporting
+quarter or prior to it
+To
+o The age limit will apply to the patient's visit in the reporting facility within the
+reporting quarter.
+Denominator Guidance: Removed the second bullet:
+The consultations should be by the same provider, however, can be by the same primary care
+unit/facility.
+Added consultation codes: 99201, 99202, 99203, 99204, 99205, 99211, 99212, 99213,
+99214, 99215
+PC024
+Denominator Exclusion: Rephrased the sentence
+Patients with known diagnosis of dyslipidemia (ICD-10 codes: E78 series) prior to the first
+encounter in the same facility within the measurement time frame i.e. 12 months prior to the
+end of the reporting quarter.
+TO
+Patients who were diagnosed of dyslipidemia (ICD-10 codes: E78 series) prior to the first
+encounter in the reporting facility.
+
+-- 43 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 44
+Summary of Changes 2025 V8.5
+KPI # Changes
+PC004
+Changed the title-
+Percentage of patients diagnosed with depression after positive screening
+To
+Percentage of Patients Completing the PHQ-9 Within 24 Hours After a Positive PHQ-2
+Result
+Definition: Rephrased: Percentage of patients aged 18 years and older at the beginning of the
+reporting quarter, who did PHQ-9 screening (Completed documentation) within 24 hrs. of being
+screened positive on PHQ2.
+Denominator Rephrased the sentence: All patients aged 18 (completed) age in years and
+older at the beginning of the reporting quarter who did a PHQ-9 within 24 hours of positive
+PHQ2.
+To
+All patients aged 18 (completed) age in years and older at the beginning of the reporting
+quarter who were screened positive on PHQ-2.
+Denominator guidance: Added- In the reporting quarter, if multiple positive PHQ2 screenings
+conducted consider first one only.
+Numerator Rephrased the sentence: Total number of unique patients from the denominator
+who had a positive PHQ-9 >=5 within 24 hours.
+To
+Total number of unique patients from the denominator who did PHQ-9 screening (Completed
+documentation) within 24 hrs of positive PHQ-2.
+Summary of Changes 2025 V8.6
+KPI # Changes
+PC004 Added in Denominator Guidance the patient requirement:
+Calculate the number of patients who are covered through THIQA Insurance.
+Summary of Changes 2026 V9
+KPI # Changes
+PC005 & PC025 o Added Denominator Exclusion: All ABM Mandate encounters
+PC010 o Changed the Good control rate target from (≤7.0%) to (≤8.0%)
+PC024 Added in the Denominator Exclusion:
+
+-- 44 of 45 --
+
+Primary Care (PC) Service JAWDA Performance Indicators
+Page | 45
+o Pregnancy (during the reporting quarter) Appendix A (O00- O9A)
+o Patients previously diagnosed with dyslipidemia (ICD-10 codes: E78 series):
+o New patients in the reporting facility/network: Diagnosed prior to the
+first encounter in the reporting facility/network within the
+denominator time frame
+o Established patients in the reporting facility/network:
+▪ Diagnosed prior to the denominator timeframe in any
+facility/network
+▪ Diagnosed within the denominator timeframe by another
+facility/network
+PC026 Added Example Table for Calculation of Timeframe
+PC09 to PC013
+Denominator Guidance: rephrased
+Any outpatient face-to-face consultations for patients with an established Diabetes
+condition (with or without a primary or secondary diagnosis code).
+PC014,
+PC016,
+PC023
+Denominator Guidance: rephrased
+Any outpatient face-to-face consultations for patients with an established hypertension
+condition (with or without a primary or secondary diagnosis code).
+
+-- 45 of 45 --
+

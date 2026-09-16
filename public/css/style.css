@@ -1,0 +1,113 @@
+:root {
+  --doh-teal: #006B6B;
+  --doh-gold: #C8A951;
+  --doh-dark: #1A3B3B;
+  --bg-light: #f8f9fa;
+  --met-color: #198754;
+  --near-color: #ffc107;
+  --not-met-color: #dc3545;
+  --no-data-color: #6c757d;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-light);
+}
+
+.top-nav {
+  background-color: var(--doh-teal);
+  color: white;
+  z-index: 1030;
+}
+
+.top-nav .navbar-brand {
+  color: white !important;
+}
+
+.app-container {
+  height: calc(100vh - 56px);
+}
+
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  z-index: 1020;
+}
+
+.nav-btn {
+  color: #495057;
+  border-radius: 6px;
+  margin: 2px 10px;
+  padding: 8px 15px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.nav-btn:hover {
+  background-color: #f1f3f5;
+  color: var(--doh-teal);
+}
+
+.nav-btn.active {
+  background-color: #e6f0f0;
+  color: var(--doh-teal);
+  font-weight: 600;
+}
+
+.nav-btn i {
+  margin-right: 8px;
+  width: 20px;
+  text-align: center;
+}
+
+.kpi-card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+  height: 100%;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.status-met { border-left: 5px solid var(--met-color); }
+.status-near { border-left: 5px solid var(--near-color); }
+.status-not-met { border-left: 5px solid var(--not-met-color); }
+.status-no-data { border-left: 5px solid var(--no-data-color); }
+
+.badge-met { background-color: var(--met-color); color: white; }
+.badge-near { background-color: var(--near-color); color: #000; }
+.badge-not-met { background-color: var(--not-met-color); color: white; }
+.badge-no-data { background-color: var(--no-data-color); color: white; }
+
+.table-row-met { background-color: rgba(25, 135, 84, 0.05); }
+.table-row-not-met { background-color: rgba(220, 53, 69, 0.05); }
+
+/* Print styles for reports */
+@media print {
+  .sidebar, .top-nav, .btn { display: none !important; }
+  .app-container { height: auto; }
+  .main-content { margin: 0; padding: 0 !important; background: white !important; }
+  .card { box-shadow: none !important; border: 1px solid #ddd; }
+}
+
+.badge-not-applicable { background-color: #6c757d; color: white; }
+.status-not-applicable { border-top-color: #6c757d; border-top-width: 4px; }
+

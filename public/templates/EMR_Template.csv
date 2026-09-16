@@ -1,0 +1,2 @@
+Facility ID,Visit Date,MRN,Visit No,Patient Name,Age,Physician,Company,Speciality,DOB,Mobile,Gender,Weight(kg),Height(cm),BMI,Temp(C),Pulse,Respiration,BP,SPO2,Chief Complaints,Physician Plan,Narrative Diagnosis,Procedure Notes,PHQ2,PHQ9,ICD,CPT,Procedure Remarks
+MFXXXX,01-01-2026,12345,999,Jane Doe,45,Dr. Smith,Daman,General,01-01-1981,555-1234,Female,70,165,25.7,37,80,18,120/80,98,Patient c/o headache HBA1c=7.5,Medications,Migraine,Routine foot exam done,0,,R51,99212,

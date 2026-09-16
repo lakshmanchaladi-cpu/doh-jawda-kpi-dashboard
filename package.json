@@ -1,0 +1,29 @@
+{
+  "name": "doh-primary-care-kpi",
+  "version": "1.0.0",
+  "description": "DOH Abu Dhabi JAWDA Primary Care KPI Dashboard - Local Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "DOH",
+    "JAWDA",
+    "KPI",
+    "primary care",
+    "Abu Dhabi"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^9.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^2.3.0",
+    "pdf-parse": "^2.4.5",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1",
+    "xlsx": "^0.18.5"
+  }
+}
