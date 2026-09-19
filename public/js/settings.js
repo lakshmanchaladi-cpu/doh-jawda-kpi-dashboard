@@ -182,8 +182,8 @@ export const Settings = {
       let html = `
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <h2 class="h4 mb-0 fw-bold text-dark">System Settings: ${activeTab === 'guidelines' ? 'DOH Guidelines' : activeTab === 'engine' ? 'Engine Logic' : activeTab === 'clinical' ? 'KPI Mappings' : 'DOH Dictionaries'}</h2>
-            <p class="text-muted mb-0">DOH Abu Dhabi Primary Care & Medical Center Guidance, Engine Rules & Code Reference</p>
+              <h2 class="h4 mb-0 fw-bold text-dark">System Settings: ${activeTab === 'database' ? 'Database Backup & Recovery' : activeTab === 'guidelines' ? 'DOH Guidelines' : activeTab === 'engine' ? 'Engine Logic' : activeTab === 'clinical' ? 'KPI Mappings' : 'DOH Dictionaries'}</h2>
+              <p class="text-muted mb-0">DOH Abu Dhabi Primary Care & Medical Center Guidance, Engine Rules, Code Reference & Database Management</p>
           </div>
           <div class="d-flex gap-2">
             <span class="badge bg-primary px-3 py-2"><i class="bi bi-award me-1"></i> Core Standard: PC Guidance V9 (2026)</span>
@@ -193,6 +193,27 @@ export const Settings = {
 
         <div class="tab-content" id="settingsTabsContent">
           
+          <!-- ========================================== -->
+          <!-- 0. DATABASE BACKUP TAB                     -->
+          <!-- ========================================== -->
+          <div class="tab-pane fade ${activeTab === 'database' ? 'show active' : ''}" id="database" role="tabpanel">
+            <div class="card shadow-sm mb-4 border-0">
+              <div class="card-header bg-white fw-bold py-3">
+                <i class="bi bi-hdd-network text-primary me-2"></i> Database Backup & Recovery
+              </div>
+              <div class="card-body">
+                <p class="text-muted">Download a complete snapshot of the SQLite database containing all EMR records, RCM claims, calculated KPIs, and audit trails. Keep these backups secure as they contain sensitive PHI data.</p>
+                
+                <div class="d-flex gap-3 align-items-center mt-4">
+                  <button class="btn btn-primary btn-lg" onclick="window.location.href='/api/settings/database/backup'">
+                    <i class="bi bi-cloud-arrow-down me-2"></i> Download Database Backup
+                  </button>
+                  <span class="text-muted small"><i class="bi bi-shield-lock text-success me-1"></i> Data is encrypted in transit</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- ========================================== -->
           <!-- 1. GUIDELINES & VERSION GUIDE TAB          -->
           <!-- ========================================== -->

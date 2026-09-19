@@ -354,7 +354,7 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 ## Phase 9: Production Hardening (Week 5-6)
 
 ### 9.1 Backup & Recovery
-- [ ] "Backup Database" button in Settings
+- [x] "Backup Database" button in Settings
 - [ ] Automated daily backup (cron/task scheduler)
 - [ ] Restore procedure documentation
 
