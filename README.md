@@ -38,7 +38,7 @@ curl http://localhost:3000/api/health
 |------|------|-------|
 | Project structure & basic server | - | Express + SQLite + Vanilla JS |
 | Database schema (core tables) | - | 20+ tables, WAL mode |
-| 9/18 KPIs implemented | - | PC004, 005, 009, 010, 011, 012, 013, 014, 016 |
+| 18/18 KPIs implemented | - | 14 PC+MC, 4 MC-only (PC027–PC030) |
 | EMR + Shafafiya import | - | Excel/CSV with validation |
 | Data Audit & Reconciliation | - | Monthly summary, gap analysis |
 | Quarter Lock workflow | - | Generates locked_audit_records |
@@ -49,22 +49,39 @@ curl http://localhost:3000/api/health
 | **Dependency updates** | 2026-09-17 | Helmet, rate-limit, JWT, better-sqlite3 |
 | **Security middleware** | 2026-09-17 | Helmet, express-rate-limit, jsonwebtoken |
 | **Vite bundling setup** | 2026-09-17 | ES modules, dev/build scripts |
-| **Migration system** | 2026-09-17 | 3 migrations created, custom runner |
+| **Migration system** | 2026-09-17 | 4 migrations, node-pg-migrate |
 | **Schema cleanup** | 2026-09-17 | audit_log, kpi_registry_versions added |
 | **Redundant tables removed** | 2026-09-17 | kpi_data, facility, patient_measurements dropped |
-| **9 missing KPIs added** | 2026-09-17 | PC021, 023, 024, 025, 026, 027, 028, 029, 030 |
-| **Code mappings complete** | 2026-09-17 | 830 mappings: Insurance, Physician, ICD-10, CPT, LOINC |
 | **KPI definitions synced** | 2026-09-17 | All 18 KPIs upserted with targets/facility_type/age ranges |
 
 ### 🔄 In Progress
 | Item | Target | Blockers |
 |------|--------|----------|
-| **JDC Export (Phase 6)** | ✅ Done | Official Excel with CEO sign-off + submission workflow |
+| **UI Modernization (Phase 7)** | In Progress | Code-split, reusable components, virtual scrolling |
 
 ### 📋 Next Up (Priority Order)
-1. **Phase 7**: Code-split routes (lazy load), shared UI components, virtual scrolling
-2. **Phase 8**: Tests + Documentation
-3. **Phase 9**: Production hardening
+
+**🥇 Sprint 1 — Foundation**
+1. **Unit Tests** — KPI calculators, edge cases, version switching, facility filtering (`tests/kpi-calculator.test.js` exists as start)
+2. **ESLint + Prettier** — config & rules (eslint in deps, no config yet)
+3. **Import Validation** — date ranges, facility ID match, required fields
+4. **Database Indexes** — verify all query columns with EXPLAIN
+
+**🥈 Sprint 2 — Testing & Docs**
+5. **Integration Tests** — import → lock → calculate → export flow
+6. **Documentation** — setup instructions, KPI logic per DOH spec, JDC format
+7. **User Guide** — for consultants
+
+**🥉 Sprint 3 — Production**
+8. **Backup/Restore** — button in Settings + automated daily backup
+9. **Structured Logging** — pino
+10. **Error Tracking** — local file or Sentry
+11. **Deployment** — Windows service, auto-start, port config via env
+
+**🧹 Sprint 4 — Polish**
+12. **UI** — code-split routes, reusable components, virtual scrolling
+13. **Usability** — keyboard nav, responsive design
+14. **Future** — dark mode, Arabic RTL
 
 ---
 
@@ -100,12 +117,12 @@ curl http://localhost:3000/api/health
 |---------|--------|-------------|
 | **Multi-Version KPI Support** | ✅ Done | V9 (Q1 2026) + V1 (Q3 2026) + UI version selector with Auto |
 | **Facility-Type Aware** | ✅ Done | Primary Care vs Medical Center |
-| **18/18 KPIs** | 18/18 ✅ | All DOH JAWDA Primary Care KPIs |
+| **18/18 KPIs** | 18/18 ✅ | 14 PC+MC, 4 MC-only (PC027–PC030) |
 | **JDC Export** | ✅ Done | 4-sheet Excel: Certification (CEO sign-off), KPIs, Validation, Audit Trail |
 | **Audit Trail** | ✅ Done | Full traceability for JDC audit |
 | **Local-First** | ✅ Done | SQLite file, no cloud deps |
 | **Offline Assets** | ✅ Done | Bootstrap + Icons bundled locally (no CDN) |
-| **Backup/Restore** | 📋 Planned | One-click DB backup |
+| **Backup/Restore** | 🟡 Partial | `npm run db:backup` works; UI button pending |
 
 ---
 
@@ -131,14 +148,18 @@ curl http://localhost:3000/api/health
 # Development
 npm run dev              # Start Express API + Vite frontend; open http://localhost:5173
 npm run build            # Build frontend with Vite
-npm start                # Build frontend and serve it from Express on port 3000
+npm start                # Build frontend and serve from Express on port 3000
 npm run preview          # Preview production build
-npm run lint             # Run ESLint
-npm run typecheck        # Run TypeScript check (when added)
-npm test                 # Run unit tests (smoke test)
+
+# Code Quality (⚠️ ESLint in deps, no config yet; TypeScript not added)
+npm run lint             # ESLint — ⚠️ no config file, will fail
+npm run typecheck        # TypeScript — ⚠️ no tsconfig, will fail
+
+# Tests (⚠️ manual, no framework)
+npm test                 # Smoke test — requires server running (npm run dev first)
 
 # Database
-npm run db:migrate       # Run pending migrations
+npm run db:migrate       # Run pending migrations (node-pg-migrate)
 npm run db:seed          # Seed code mappings + KPI definitions
 npm run db:seed:mappings # Seed code mappings only
 npm run db:seed:kpis     # Upsert KPI definitions only
@@ -159,17 +180,20 @@ curl -X POST http://localhost:3000/api/auth/login \
 ├── package.json
 ├── IMPLEMENTATION_PLAN.md    # 📋 Full roadmap (READ THIS)
 ├── README.md                 # This file
-├── vite.config.js            # Vite config (when added)
+├── vite.config.js            # Vite config
 ├── database/
 │   ├── db.js                 # SQLite init + schema
 │   ├── kpi_data.db           # SQLite database (gitignored)
-│   └── migrations/           # Migration files (when added)
+│   └── migrations/           # 4 migration files
 ├── engine/
 │   ├── kpi-calculator.js     # KPI calculation logic
 │   ├── kpi-definitions.js    # KPI metadata (V9)
 │   └── kpi-registry.js       # Versioned registry (NEW)
 ├── routes/
+│   ├── kpi.js                # KPI data API
 │   ├── kpi-engine.js         # Calculate, results, waterfall
+│   ├── patients.js           # Patient management
+│   ├── auth.js               # Authentication
 │   ├── import.js             # EMR/Shafafiya import
 │   ├── audit.js              # Reconciliation, gaps
 │   ├── facilities.js         # Facility CRUD
@@ -191,7 +215,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 │   │   ├── comparison.js     # Quarterly comparison
 │   │   └── settings.js       # Settings tabs
 │   └── templates/            # Excel/CSV templates
-└── tests/                    # Unit/integration tests (when added)
+└── tests/                    # Unit tests (manual, no framework)
 ```
 
 ---
@@ -266,14 +290,13 @@ curl -X POST http://localhost:3000/api/auth/login \
 
 **Start here every time:**
 
-1. **Read** `IMPLEMENTATION_PLAN.md` - Full context & roadmap
-2. **Read** this `README.md` - Current progress status
-3. **Run** `npm test` - Verify working state
-4. **Check** `package.json` scripts - Available commands
-5. **Look at** `database/db.js` - Current schema
-6. **Look at** `engine/kpi-calculator.js` - Current KPI logic
-
-Then continue from the **"Next Up"** section above.
+1. **Read** `IMPLEMENTATION_PLAN.md` — Full context & roadmap by phase (Phases 0–9)
+2. **Read** this `README.md` — Current progress status + prioritized Sprint roadmap (Sprint 1–4)
+3. **Start with Sprint 1** — see 📋 Next Up section below
+4. **Run** `npm test` - Verify working state
+5. **Check** `package.json` scripts - Available commands
+6. **Look at** `database/db.js` - Current schema
+7. **Look at** `engine/kpi-calculator.js` - Current KPI logic
 
 ---
 

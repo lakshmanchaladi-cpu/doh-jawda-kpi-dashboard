@@ -27,11 +27,11 @@
 - [x] Add `helmet`, `express-rate-limit`, `jsonwebtoken`
 
 ### 0.3 Developer Experience
-- [x] Add Vite for frontend bundling (replace CDN loads)
+- [x] Add Vite for frontend bundling (replace CDN loads) — ✅ `vite.config.js` exists
 - [x] Convert all frontend JS to ES modules
-- [ ] Add TypeScript (gradual migration)
-- [ ] Add ESLint + Prettier
-- [ ] Add Jest/Vitest for unit tests
+- [ ] Add TypeScript (gradual migration) — not started (no `tsconfig.json`)
+- [ ] Add ESLint + Prettier — ESLint in devDeps, **no config**; Prettier not in deps
+- [ ] Add Jest/Vitest for unit tests — `tests/kpi-calculator.test.js` exists (manual), no test framework configured
 - [ ] Create `.github/workflows/ci.yml` for automated testing
 
 ---
@@ -107,6 +107,7 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
     effectiveTo: null,
     facilityTypes: ["Primary Care", "Medical Center"],
     kpis: [...] // May have additions/changes
+    // Note: PC027–PC030 are Medical Center only (facility_type: 'Medical Center')
   }
 }
 ```
@@ -198,71 +199,71 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 
 ---
 
-## Phase 4: Complete Code Mappings (Week 3)
+## Phase 4: Complete Code Mappings (Week 3) ✅ COMPLETED 2026-09-17
 
-### 4.1 Insurance Mappings (from DOH Appendix)
-- [ ] D001 → THIQA
-- [ ] D002, D003 → ABM Mandate
-- [ ] D* → Commercial
-- [ ] A*, B*, C* → Commercial
-- [ ] E001, E002 → Government
-- [ ] E* → Government
-- [ ] Fallback: text matching (THIQA, MANDATE, SELF, etc.)
+### 4.1 Insurance Mappings (from DOH Appendix) ✅ DONE
+- [x] D001 → THIQA
+- [x] D002, D003 → ABM Mandate
+- [x] D* → Commercial
+- [x] A*, B*, C* → Commercial
+- [x] E001, E002 → Government
+- [x] E* → Government
+- [x] Fallback: text matching (THIQA, MANDATE, SELF, etc.)
 
-### 4.2 Physician Type Mappings
-- [ ] GP, FM, IM, FMED, INT, GEN, GENERAL PRACTITIONER, FAMILY MEDICINE, INTERNAL MEDICINE, FAMILY PHYSICIAN, GP PHYSICIAN, INT MED, INTMED, GENERAL PRACTICE, GP/FM, GENERALIST, PRIMARY CARE, FAMILY PRACTICE → PC_Valid
-- [ ] PAEDIATRICIAN, PEDIATRICIAN, PED, PAED, PEDS, PAEDIATRIC, PEDIATRIC → PC_Paed
-- [ ] OPH, OPHTHALMOLOGIST, EYE → Specialist_Eye
-- [ ] NEPH, NEPHROLOGIST → Specialist_Neph
-- [ ] clinician_licenses table integration
+### 4.2 Physician Type Mappings ✅ DONE
+- [x] GP, FM, IM, FMED, INT, GEN, GENERAL PRACTITIONER, FAMILY MEDICINE, INTERNAL MEDICINE, FAMILY PHYSICIAN, GP PHYSICIAN, INT MED, INTMED, GENERAL PRACTICE, GP/FM, GENERALIST, PRIMARY CARE, FAMILY PRACTICE → PC_Valid
+- [x] PAEDIATRICIAN, PEDIATRICIAN, PED, PAED, PEDS, PAEDIATRIC, PEDIATRIC → PC_Paed
+- [x] OPH, OPHTHALMOLOGIST, EYE → Specialist_Eye
+- [x] NEPH, NEPHROLOGIST → Specialist_Neph
+- [x] clinician_licenses table integration
 
-### 4.3 ICD-10 Mappings (Complete from DOH Appendix B)
-- [ ] Diabetes: E10, E11, E13, O24 series (full list)
-- [ ] Gestational DM exclusions: O24.410-O24.439
-- [ ] HTN: I10, I11, I12, I13
-- [ ] ESRD: N18.6
-- [ ] Depression: F01.51, F32.x, F33.x, F34.x, F43.21, F43.23, F53, O90.6, O99.34x
-- [ ] Bipolar: F31.x
-- [ ] PCOS: E28.2
-- [ ] Pregnancy: O00-O99 (relevant codes)
-- [ ] Asthma: J45.40-J45.52 (persistent), exclusions J43, J44, E84, J96
-- [ ] CVD: I20-I25
-- [ ] Obesity: E66
-- [ ] Autism: Z13.4
+### 4.3 ICD-10 Mappings (Complete from DOH Appendix B) ✅ DONE
+- [x] Diabetes: E10, E11, E13, O24 series (full list)
+- [x] Gestational DM exclusions: O24.410-O24.439
+- [x] HTN: I10, I11, I12, I13
+- [x] ESRD: N18.6
+- [x] Depression: F01.51, F32.x, F33.x, F34.x, F43.21, F43.23, F53, O90.6, O99.34x
+- [x] Bipolar: F31.x
+- [x] PCOS: E28.2
+- [x] Pregnancy: O00-O99 (relevant codes)
+- [x] Asthma: J45.40-J45.52 (persistent), exclusions J43, J44, E84, J96
+- [x] CVD: I20-I25
+- [x] Obesity: E66
+- [x] Autism: Z13.4
 
-### 4.4 CPT/LOINC Mappings
-- [ ] Consultation: 99201-99215
-- [ ] HbA1c: 83036 (LOINC: 4548-4, 4549-2)
-- [ ] Foot Exam: CPT codes for visual + sensory/pulse
-- [ ] Eye Exam: 92134, 92132, 92133, 92136, 92242, 92250, 92227, 92228, 92002, 92004, 92012, 92014
-- [ ] Nephropathy: 82043, 82570, 82042, 82044, 82565
-- [ ] Autism: 96110
-- [ ] Lipid Profile: 80061, 82465, 83718, 83721, 84478
-- [ ] eGFR: 82565
-- [ ] uACR: 82043
-- [ ] Antipsychotic monitoring: ECG, metabolic panel
+### 4.4 CPT/LOINC Mappings ✅ DONE
+- [x] Consultation: 99201-99215
+- [x] HbA1c: 83036 (LOINC: 4548-4, 4549-2)
+- [x] Foot Exam: CPT codes for visual + sensory/pulse
+- [x] Eye Exam: 92134, 92132, 92133, 92136, 92242, 92250, 92227, 92228, 92002, 92004, 92012, 92014
+- [x] Nephropathy: 82043, 82570, 82042, 82044, 82565
+- [x] Autism: 96110
+- [x] Lipid Profile: 80061, 82465, 83718, 83721, 84478
+- [x] eGFR: 82565
+- [x] uACR: 82043
+- [x] Antipsychotic monitoring: ECG, metabolic panel
 
 ---
 
-## Phase 5: Exclusions & Edge Cases (Week 3-4)
+## Phase 5: Exclusions & Edge Cases (Week 3-4) ✅ COMPLETED 2026-09-17
 
-### 5.1 Standard Exclusions (Apply to ALL Chronic Disease KPIs)
-- [ ] **ABM Mandate**: `is_abm_mandate = 1` → EXCLUDE
-- [ ] **Pregnancy**: ICD O00-O9A → EXCLUDE (except O24 for DM)
-- [ ] **ESRD**: N18.6 → EXCLUDE from HTN (PC014, PC016, PC023)
-- [ ] **Renal Transplant**: Z94.0 → EXCLUDE from HTN
-- [ ] **Gestational DM**: O24.410-O24.439 → EXCLUDE from DM
-- [ ] **PCOS**: E28.2 → EXCLUDE from DM
-- [ ] **Steroid-induced DM**: E09 → EXCLUDE from DM
-- [ ] **Bipolar**: F31.x → EXCLUDE from Depression (PC004, PC005)
-- [ ] **Palliative**: `is_palliative = 1` → EXCLUDE
-- [ ] **Patient Refused**: `patient_refused = 1` → EXCLUDE
+### 5.1 Standard Exclusions (Apply to ALL Chronic Disease KPIs) ✅ DONE
+- [x] **ABM Mandate**: `is_abm_mandate = 1` → EXCLUDE
+- [x] **Pregnancy**: ICD O00-O9A → EXCLUDE (except O24 for DM)
+- [x] **ESRD**: N18.6 → EXCLUDE from HTN (PC014, PC016, PC023)
+- [x] **Renal Transplant**: Z94.0 → EXCLUDE from HTN
+- [x] **Gestational DM**: O24.410-O24.439 → EXCLUDE from DM
+- [x] **PCOS**: E28.2 → EXCLUDE from DM
+- [x] **Steroid-induced DM**: E09 → EXCLUDE from DM
+- [x] **Bipolar**: F31.x → EXCLUDE from Depression (PC004, PC005)
+- [x] **Palliative**: `is_palliative = 1` → EXCLUDE
+- [x] **Patient Refused**: `patient_refused = 1` → EXCLUDE
 
-### 5.2 KPI-Specific Exclusions
-- [ ] PC009/010/011/012/013: Apply all DM exclusions
-- [ ] PC014/016/023: Apply all HTN exclusions
-- [ ] PC021: Only Well-Child vs Other facility logic
-- [ ] PC027: Asthma exclusions (COPD, CF, etc.)
+### 5.2 KPI-Specific Exclusions ✅ DONE
+- [x] PC009/010/011/012/013: Apply all DM exclusions
+- [x] PC014/016/023: Apply all HTN exclusions
+- [x] PC021: Only Well-Child vs Other facility logic
+- [x] PC027: Asthma exclusions (COPD, CF, etc.)
 
 ---
 
@@ -422,7 +423,7 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 
 ## Notes for Model Switching
 
-**Next Model**: Read `README.md` first - it tracks completion status.
-Then read this `IMPLEMENTATION_PLAN.md` for full context.
+**Next Model**: Read `README.md` first — it tracks completion status and has a **prioritized Sprint roadmap** (Sprint 1–4) derived from this plan.
+Then read this `IMPLEMENTATION_PLAN.md` for full context per phase.
 Check `package.json` scripts for current commands.
 Run `npm test` to verify current state.
