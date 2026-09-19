@@ -119,3 +119,5 @@ export const Reports = {
     }
   }
 };
+
+window.Reports = Reports;

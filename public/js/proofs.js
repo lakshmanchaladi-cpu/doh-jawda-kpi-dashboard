@@ -368,3 +368,4 @@ export const Proofs = {
     }
   }
 };
+window.Proofs = Proofs;

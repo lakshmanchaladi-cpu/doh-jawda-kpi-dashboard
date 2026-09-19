@@ -1132,3 +1132,5 @@ export const Settings = {
     }
   }
 };
+
+window.Settings = Settings;

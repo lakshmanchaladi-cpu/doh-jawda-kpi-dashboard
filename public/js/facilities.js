@@ -199,3 +199,5 @@ export const Facilities = {
     }
   }
 };
+
+window.Facilities = Facilities;

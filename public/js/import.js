@@ -267,3 +267,5 @@ export const Import = {
     }, 2000);
   }
 };
+
+window.Import = Import;

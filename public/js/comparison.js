@@ -94,3 +94,5 @@ export const Comparison = {
     }
   }
 };
+
+window.Comparison = Comparison;

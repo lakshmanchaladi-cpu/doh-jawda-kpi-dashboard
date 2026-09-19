@@ -750,3 +750,5 @@ export const Audit = {
     App.toast('Audit CSV exported', 'success');
   }
 };
+
+window.Audit = Audit;

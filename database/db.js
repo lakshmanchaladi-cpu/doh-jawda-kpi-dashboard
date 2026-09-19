@@ -302,6 +302,10 @@ async function initDb() {
       is_abm_mandate INTEGER
     );
 
+    CREATE INDEX IF NOT EXISTS idx_locked_audit_quarter ON locked_audit_records(facility_id, year, quarter);
+    CREATE INDEX IF NOT EXISTS idx_locked_audit_mrn ON locked_audit_records(facility_id, mrn);
+    CREATE INDEX IF NOT EXISTS idx_locked_audit_dates ON locked_audit_records(encounter_date);
+
     CREATE TABLE IF NOT EXISTS kpi_results (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       facility_id INTEGER NOT NULL,

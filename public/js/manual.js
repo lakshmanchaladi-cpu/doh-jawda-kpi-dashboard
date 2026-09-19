@@ -101,3 +101,5 @@ export const ManualEntry = {
     }
   }
 };
+
+window.ManualEntry = ManualEntry;

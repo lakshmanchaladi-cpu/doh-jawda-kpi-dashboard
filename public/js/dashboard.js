@@ -187,3 +187,5 @@ export const Dashboard = {
   },
 
   };
+
+window.Dashboard = Dashboard;

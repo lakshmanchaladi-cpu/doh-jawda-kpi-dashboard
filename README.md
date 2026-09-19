@@ -59,18 +59,18 @@ curl http://localhost:3000/api/health
 |------|--------|----------|
 | **UI Modernization (Phase 7)** | In Progress | Code-split, reusable components, virtual scrolling |
 
-### 📋 Next Up (Priority Order)
+### 🚀 Next Up (Priority Order)
 
-**🥇 Sprint 1 — Foundation**
-1. **Unit Tests** — KPI calculators, edge cases, version switching, facility filtering (`tests/kpi-calculator.test.js` exists as start)
-2. **ESLint + Prettier** — config & rules (eslint in deps, no config yet)
-3. **Import Validation** — date ranges, facility ID match, required fields
-4. **Database Indexes** — verify all query columns with EXPLAIN
+**✅ Sprint 1 – Foundation (COMPLETED)**
+1. **Unit Tests** – KPI calculators, edge cases, version switching, facility filtering 
+2. **ESLint + Prettier** – Configured and enforced
+3. **Import Validation** – Date ranges, facility ID match, required fields
+4. **Database Indexes** – Added indexes for locked_audit_records to massively boost KPI engine performance
 
-**🥈 Sprint 2 — Testing & Docs**
-5. **Integration Tests** — import → lock → calculate → export flow
-6. **Documentation** — setup instructions, KPI logic per DOH spec, JDC format
-7. **User Guide** — for consultants
+**✅ Sprint 2 – Testing & Docs (COMPLETED)**
+5. **Integration Tests** – End-to-end pipeline tested (Import → Lock → Calculate → Export)
+6. **Documentation** – Implementation plan and DOH KPI logic documented
+7. **User Guide** – Official consultant user guide generated (USER_GUIDE.md)
 
 **🥉 Sprint 3 — Production**
 8. **Backup/Restore** — button in Settings + automated daily backup

@@ -333,21 +333,21 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 ## Phase 8: Testing & Documentation (Week 5)
 
 ### 8.1 Unit Tests
-- [ ] Test each KPI calculator with known inputs/outputs
-- [ ] Test edge cases: empty data, exclusions, boundary ages
-- [ ] Test version switching (V9 vs V1)
-- [ ] Test facility type filtering
+- [x] Test each KPI calculator with known inputs/outputs
+- [x] Test edge cases: empty data, exclusions, boundary ages
+- [x] Test version switching (V9 vs V1)
+- [x] Test facility type filtering
 
 ### 8.2 Integration Tests
-- [ ] Full import → lock → calculate → export flow
-- [ ] Multi-facility, multi-quarter scenarios
-- [ ] JDC export validation
+- [x] Full import → lock → calculate → export flow
+- [x] Multi-facility, multi-quarter scenarios
+- [x] JDC export validation
 
 ### 8.3 Documentation
-- [ ] Update README with setup instructions
-- [ ] Document KPI calculation logic per DOH spec
-- [ ] Document JDC export format
-- [ ] Create user guide for consultants
+- [x] Update README with setup instructions
+- [x] Document KPI calculation logic per DOH spec
+- [x] Document JDC export format
+- [x] Create user guide for consultants (USER_GUIDE.md)
 
 ---
 
@@ -379,7 +379,7 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 - [ ] Data completeness dashboard (already exists, enhance)
 
 ### Performance
-- [ ] Indexes on all query columns (verify with EXPLAIN)
+- [x] Indexes on all query columns (verify with EXPLAIN)
 - [ ] Pagination for large result sets
 - [ ] Caching for dynamic filters (already partial)
 
