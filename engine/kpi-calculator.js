@@ -592,8 +592,10 @@ try {
       let status = 'no-data';
       if (den === 0) {
         status = 'met'; // User explicitly requested N/A to be treated as 'pass'
-      } else if (value != null && kpi.target) {
-        if (kpi.target_dir === 'gte') {
+      } else if (value != null) {
+        if (!kpi.target) {
+          status = 'monitor';
+        } else if (kpi.target_dir === 'gte') {
             status = value >= kpi.target ? 'met' : (value >= kpi.target * 0.9 ? 'near' : 'not-met');
         } else {
             status = value <= kpi.target ? 'met' : (value <= kpi.target * 1.1 ? 'near' : 'not-met');

@@ -11,7 +11,7 @@ export const Import = {
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="h4 mb-0">${facility.name} <span class="badge bg-secondary fs-6 ms-2">${facility.mf_no}</span></h2>
-          <p class="text-muted mb-0">Data Import — Q${App.state.quarter} ${App.state.year}</p>
+          <p class="text-muted mb-0">Data Import &mdash; Auto-Detect Quarter</p>
         </div>
       </div>
 
@@ -172,8 +172,6 @@ export const Import = {
     formData.append('file', file);
     formData.append('facility_id', App.state.facilityId);
     formData.append('file_type', type);
-    formData.append('year', App.state.year);
-    formData.append('quarter', App.state.quarter);
 
     document.getElementById('importProgressContainer').classList.remove('d-none');
     document.getElementById('importStatusText').innerText = `Uploading ${file.name}...`;

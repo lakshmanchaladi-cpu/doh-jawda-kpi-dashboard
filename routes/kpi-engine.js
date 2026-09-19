@@ -69,20 +69,56 @@ router.post('/calculate', async (req, res) => {
 
   try {
     const db = await initDb();
-    const lockRow = await db.get('SELECT is_locked FROM quarter_locks WHERE facility_id=? AND year=? AND quarter=?', [facility, year, quarter]);
-    if (!lockRow || !lockRow.is_locked) {
-      return res.status(403).json({ error: 'Data Audit is not locked! You must review and Save & Lock the Data Audit for this quarter before the KPI Engine can recalculate.' });
+    const emrCount = await db.get(
+      'SELECT COUNT(*) as cnt FROM emr_data WHERE facility_id=? AND year=? AND quarter=?',
+      [facility, year, quarter]
+    );
+    if (!emrCount || emrCount.cnt === 0) {
+      return res.status(400).json({
+        error: `No EMR data found for Q${quarter} ${year}. Please upload your data first via Data Manager.`
+      });
     }
 
-    const results = await engine.calculateAllKPIs(facility, year, quarter, version);
-    
-    // Audit log each KPI calculation
-    const userId = req.user?.id || 'local';
-    for (const result of results) {
-      await logKPICalculation(facility, year, quarter, result.code, result, userId);
-    }
-    
-    res.json({ success: true, results });
+    // Insert job and respond immediately
+    const job = await db.run(
+      "INSERT INTO job_queue (type, payload, status) VALUES ('calculate_kpi', ?, 'pending')",
+      [JSON.stringify({ facility_id: facility, year, quarter, version })]
+    );
+    const jobId = job.lastID;
+    res.json({ success: true, job_id: jobId, status: 'processing' });
+
+    // Run engine in background — does NOT block the response above
+    setImmediate(async () => {
+      try {
+        await db.run("UPDATE job_queue SET status='running', updated_at=CURRENT_TIMESTAMP WHERE id=?", [jobId]);
+        const results = await engine.calculateAllKPIs(facility, year, quarter, version);
+        
+        // Audit log each KPI calculation
+        const userId = req.user?.id || 'local';
+        for (const result of results) {
+          await logKPICalculation(facility, year, quarter, result.code, result, userId);
+        }
+
+        await db.run("UPDATE job_queue SET status='done', result=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+          [JSON.stringify({ kpi_count: results.length }), jobId]);
+      } catch (err) {
+        await db.run("UPDATE job_queue SET status='error', result=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+          [JSON.stringify({ error: err.message }), jobId]);
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/job-status', async (req, res) => {
+  const jobId = parseInt(req.query.job_id);
+  if (!jobId) return res.status(400).json({ error: 'job_id is required' });
+  try {
+    const db = await initDb();
+    const job = await db.get('SELECT status, result, updated_at FROM job_queue WHERE id=?', [jobId]);
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+    res.json({ status: job.status, result: job.result ? JSON.parse(job.result) : null, updated_at: job.updated_at });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

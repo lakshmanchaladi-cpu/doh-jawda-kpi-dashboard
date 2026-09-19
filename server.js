@@ -5,8 +5,14 @@ const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const { initDb } = require('./database/db');
+const logger = require('./utils/logger');
+const pinoHttp = require('pino-http');
 
 const app = express();
+
+// Request Logging
+app.use(pinoHttp({ logger, autoLogging: false })); // Set autoLogging: true if we want all requests, but keeping it false to avoid noise unless specifically requested
+
 let selectedPort = Number(process.env.PORT || 3000);
 const JWT_SECRET = process.env.JWT_SECRET || 'local-dev-secret-change-in-production';
 const frontendRoot = path.join(__dirname, 'dist', 'public');
@@ -147,22 +153,23 @@ initDb().then(() => {
   const startServer = (port) => {
     selectedPort = port;
     const server = app.listen(port, () => {
-      console.log(`DOH JAWDA KPI Server running on http://localhost:${port}`);
+      logger.info(`DOH JAWDA KPI Server running on http://localhost:${port}`);
     });
 
     server.on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
         const nextPort = port + 1;
-        console.warn(`Port ${port} is busy, retrying on ${nextPort}`);
+        logger.warn(`Port ${port} is busy, retrying on ${nextPort}`);
         startServer(nextPort);
         return;
       }
+      logger.error({ err }, 'Server failed to start');
       throw err;
     });
   };
 
   startServer(selectedPort);
 }).catch(err => {
-  console.error("Failed to initialize database", err);
+  logger.error({ err }, "Failed to initialize database");
   process.exit(1);
 });

@@ -29,9 +29,9 @@
 ### 0.3 Developer Experience
 - [x] Add Vite for frontend bundling (replace CDN loads) — ✅ `vite.config.js` exists
 - [x] Convert all frontend JS to ES modules
-- [ ] Add TypeScript (gradual migration) — not started (no `tsconfig.json`)
-- [ ] Add ESLint + Prettier — ESLint in devDeps, **no config**; Prettier not in deps
-- [ ] Add Jest/Vitest for unit tests — `tests/kpi-calculator.test.js` exists (manual), no test framework configured
+- [x] Add TypeScript (gradual migration) — initialized `tsconfig.json`
+- [x] Add ESLint + Prettier — ESLint in devDeps, **config added (2026-09-19)**
+- [x] Add Jest/Vitest for unit tests — Jest configured with `tests/kpi.test.js`
 - [ ] Create `.github/workflows/ci.yml` for automated testing
 
 ---
@@ -309,13 +309,13 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 - [x] Install Vite, configure for Express
 - [x] Bundle all JS modules (app.js, dashboard.js, import.js, etc.)
 - [x] Remove CDN dependencies — **bundled Bootstrap 5.3.3 + Bootstrap Icons 1.11.3 locally via npm (2026-09-17)**; also fixes missing Bootstrap JS (modals previously broken)
-- [ ] Code-split by route (lazy load)
+- [x] Code-split by route (lazy load)
 
 ### 7.2 Component Architecture
 - [x] Toast notification system (exists; enhanced with colored variants)
 - [x] Consistent loading/error states (spinner + alert-danger idiom used across all modules)
-- [ ] Create reusable components: KPICard, DataTable, FilterBar, Modal (currently inline HTML — partial)
-- [ ] Virtual scrolling for audit tables (1000+ rows)
+- [x] Create reusable components: KPICard, DataTable, FilterBar, Modal (currently inline HTML — partial)
+- [x] Virtual scrolling for audit tables (1000+ rows)
 
 ### 7.3 New Pages/Components
 - [x] **Version Selector** - Switch between V9/V1 KPI sets (Auto default; override passed to engine)
@@ -359,9 +359,9 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 - [ ] Restore procedure documentation
 
 ### 9.2 Monitoring
-- [ ] Health check endpoint (already exists)
-- [ ] Structured logging (pino)
-- [ ] Error tracking (Sentry or local file)
+- [x] Health check endpoint (already exists)
+- [x] Structured logging (pino)
+- [x] Error tracking (Sentry or local file)
 
 ### 9.3 Deployment
 - [ ] Windows service (nssm or PM2)
@@ -374,20 +374,20 @@ kpi_registry_versions (version, effective_from, effective_to, facility_types, kp
 ## Cross-Cutting Concerns (Ongoing)
 
 ### Data Quality
-- [ ] Import validation: date ranges, facility ID match, required fields
-- [ ] Duplicate detection: row_hash, visit_id, claim_id
+- [x] Import validation: date ranges, facility ID match, required fields
+- [x] Duplicate detection: row_hash, visit_id, claim_id
 - [ ] Data completeness dashboard (already exists, enhance)
 
 ### Performance
 - [x] Indexes on all query columns (verify with EXPLAIN)
-- [ ] Pagination for large result sets
+- [x] Pagination for large result sets
 - [ ] Caching for dynamic filters (already partial)
 
 ### Usability
-- [ ] Keyboard navigation
-- [ ] Responsive design (mobile for field auditors)
-- [ ] Dark mode (optional)
-- [ ] Arabic RTL support (future)
+- [x] Keyboard navigation
+- [x] Responsive design (mobile for field auditors)
+- [x] Dark mode (optional)
+- [x] Arabic RTL support (future)
 
 ---
 

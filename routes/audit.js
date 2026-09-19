@@ -129,6 +129,70 @@ async function getPhysicianCaseSql(db, expression) {
 }
 
 // ─── GET /api/audit/summary ───────────────────────────────────────────────────
+router.get('/vault-summary', async (req, res) => {
+  const facilityId = parseInt(req.query.facility_id);
+  if (!facilityId) return res.status(400).json({ error: 'facility_id required' });
+  try {
+    const db = await initDb();
+    const rows = await db.all(`
+      SELECT
+        e.year,
+        e.quarter,
+        COUNT(e.id)  AS emr_count,
+        COUNT(s.id)  AS rcm_count,
+        SUM(CASE WHEN s.mrn IS NOT NULL THEN 1 ELSE 0 END) AS match_count,
+        ROUND(SUM(CASE WHEN s.mrn IS NOT NULL THEN 1.0 ELSE 0 END) / COUNT(e.id) * 100, 1) AS match_rate,
+        MAX(kr.calculated_at) AS last_calculated_at,
+        MAX(ql.is_locked)     AS is_reviewed
+      FROM emr_data e
+      LEFT JOIN shafafiya_data s
+        ON e.facility_id = s.facility_id AND e.mrn = s.mrn AND e.encounter_date = s.encounter_date
+      LEFT JOIN kpi_results kr
+        ON e.facility_id = kr.facility_id AND e.year = kr.year AND e.quarter = kr.quarter
+      LEFT JOIN quarter_locks ql
+        ON e.facility_id = ql.facility_id AND e.year = ql.year AND e.quarter = ql.quarter
+      WHERE e.facility_id = ?
+      GROUP BY e.year, e.quarter
+      ORDER BY e.year DESC, e.quarter DESC
+    `, [facilityId]);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/exceptions', async (req, res) => {
+  const facilityId = parseInt(req.query.facility_id);
+  const year       = parseInt(req.query.year);
+  const quarter    = parseInt(req.query.quarter);
+  if (!facilityId || !year || !quarter) return res.status(400).json({ error: 'facility_id, year, quarter required' });
+  try {
+    const db = await initDb();
+    const rows = await db.all(`
+      SELECT e.mrn, e.encounter_date, e.icd10_primary, e.physician_type,
+             'No Matching RCM Claim' AS reason
+      FROM emr_data e
+      WHERE e.facility_id=? AND e.year=? AND e.quarter=?
+      AND NOT EXISTS (
+        SELECT 1 FROM shafafiya_data s
+        WHERE s.facility_id=e.facility_id AND s.mrn=e.mrn AND s.encounter_date=e.encounter_date
+      )
+      ORDER BY e.encounter_date
+    `, [facilityId, year, quarter]);
+
+    const headers = 'MRN,Encounter Date,ICD10 Primary,Physician Type,Reason\n';
+    const csvBody = rows.map(r =>
+      `${r.mrn},${r.encounter_date},${r.icd10_primary || ''},${r.physician_type || ''},${r.reason}`
+    ).join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="exceptions_Q${quarter}_${year}.csv"`);
+    res.send(headers + csvBody);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/summary', async (req, res) => {
   try {
     const db = await initDb();
@@ -249,208 +313,12 @@ router.get('/summary', async (req, res) => {
 
 // ─── GET /api/audit/monthly ───────────────────────────────────────────────────
 router.get('/monthly', async (req, res) => {
-  try {
-    const db = await initDb();
-    const { facility_id } = req.query;
-    const fid = parsePositiveInt(facility_id);
-    if (!fid) return res.status(400).json({ error: 'Valid facility_id is required' });
-
-    const bounds = await db.get(`
-      SELECT 
-        MIN(year * 100 + month) as min_ym,
-        MAX(year * 100 + month) as max_ym
-      FROM (
-        SELECT year, month FROM emr_data WHERE facility_id=?
-        UNION ALL
-        SELECT year, month FROM shafafiya_data WHERE facility_id=?
-      )
-    `, [fid, fid]);
-
-    const months = [];
-    if (bounds && bounds.min_ym && bounds.max_ym) {
-      let currentYear = Math.floor(bounds.max_ym / 100);
-      let currentMonth = bounds.max_ym % 100;
-      const minYear = Math.floor(bounds.min_ym / 100);
-      const minMonth = bounds.min_ym % 100;
-      
-      let offset = 0;
-      while ((currentYear > minYear) || (currentYear === minYear && currentMonth >= minMonth)) {
-        const d = new Date(currentYear, currentMonth - 1, 1);
-        months.push({
-          offset: offset++,
-          label: d.toLocaleString('en-US', { month: 'short', year: 'numeric' }),
-          year: currentYear,
-          month: currentMonth
-        });
-        currentMonth--;
-        if (currentMonth < 1) {
-          currentMonth = 12;
-          currentYear--;
-        }
-      }
-    } else {
-      // Fallback if no data
-      const now = new Date();
-      for (let i = 0; i < 12; i++) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        months.push({
-          offset: i,
-          label: d.toLocaleString('en-US', { month: 'short', year: 'numeric' }),
-          year: d.getFullYear(),
-          month: d.getMonth() + 1
-        });
-      }
-    }
-
-    // Bulk query EMR by month
-    const emrByMonth = await db.all(
-      `SELECT year, month, COUNT(*) as cnt FROM emr_data
-       WHERE facility_id=?
-       GROUP BY year, month`,
-      [fid]
-    );
-
-    // Bulk query RCM by month with insurance breakdown
-    const rcmCaseSql = await getRcmCaseSql(db);
-    
-    const rcmByMonth = await db.all(
-      `SELECT year, month,
-         COUNT(*) as total,
-         SUM(CASE WHEN (${rcmCaseSql})='THIQA' THEN 1 ELSE 0 END) as thiqa,
-         SUM(CASE WHEN (${rcmCaseSql})='ABM_Mandate' THEN 1 ELSE 0 END) as abm,
-         SUM(CASE WHEN (${rcmCaseSql})='Self-Pay' THEN 1 ELSE 0 END) as selfpay,
-         SUM(CASE WHEN (${rcmCaseSql}) NOT IN ('THIQA', 'ABM_Mandate', 'Self-Pay') THEN 1 ELSE 0 END) as commercial
-       FROM shafafiya_data
-       WHERE facility_id=?
-       GROUP BY year, month`,
-      [fid]
-    );
-
-    // Bulk query matched
-    const matchedByMonth = await db.all(
-      `SELECT e.year, e.month, COUNT(*) as cnt
-       FROM emr_data e
-       WHERE e.facility_id=? AND EXISTS (
-         SELECT 1 FROM shafafiya_data s
-         WHERE s.facility_id=e.facility_id AND s.mrn=e.mrn AND s.encounter_date=e.encounter_date
-       )
-       GROUP BY e.year, e.month`,
-      [fid]
-    );
-
-    const emrMap = {};
-    emrByMonth.forEach(r => { emrMap[`${r.year}-${r.month}`] = r.cnt; });
-
-    const rcmMap = {};
-    rcmByMonth.forEach(r => { rcmMap[`${r.year}-${r.month}`] = r; });
-
-    const matchMap = {};
-    matchedByMonth.forEach(r => { matchMap[`${r.year}-${r.month}`] = r.cnt; });
-
-    const result = months.map(m => {
-      const key = `${m.year}-${m.month}`;
-      const emrCnt = emrMap[key] || 0;
-      const rcm = rcmMap[key] || {};
-      const rcmCnt = rcm.total || 0;
-      const matchedCnt = matchMap[key] || 0;
-      const maxCnt = Math.max(emrCnt, rcmCnt);
-      const matchRate = maxCnt > 0 ? Math.round((matchedCnt / maxCnt) * 100) : null;
-
-      return {
-        offset: m.offset,
-        label: m.label,
-        year: m.year,
-        month: m.month,
-        emrVisits: emrCnt,
-        rcmClaims: rcmCnt,
-        matched: matchedCnt,
-        thiqa: rcm.thiqa || 0,
-        abm: rcm.abm || 0,
-        selfPay: rcm.selfpay || 0,
-        commercial: rcm.commercial || 0,
-        emrStatus: emrCnt > 0 ? 'received' : 'missing',
-        rcmStatus: rcmCnt > 0 ? 'received' : 'missing',
-        matchRate
-      };
-    });
-
-    res.json(result);
-  } catch (e) {
-    console.error('Audit monthly error:', e);
-    res.status(500).json({ error: e.message });
-  }
+  res.json({ deprecated: true, message: 'This endpoint is deprecated in V2.0. Use /vault-summary instead.' });
 });
 
 // ─── GET /api/audit/reconciliation ───────────────────────────────────────────
 router.get('/reconciliation', async (req, res) => {
-  try {
-    const db = await initDb();
-    const { facility_id, year, quarter } = req.query;
-    const fid = parsePositiveInt(facility_id);
-    const y = year ? parsePositiveInt(year) : new Date().getFullYear();
-    const q = quarter ? parseQuarter(quarter) : Math.ceil((new Date().getMonth() + 1) / 3);
-    if (!fid || !y || !q) return res.status(400).json({ error: 'Valid facility_id, year, and quarter are required' });
-
-      const emrPhysicianCaseSql = await getPhysicianCaseSql(db, 'e.physician_type');
-      const rcmPhysicianCaseSql = await getPhysicianCaseSql(db, 'COALESCE(s.physician_id, s.physician_type)');
-
-      // EMR-only records (no RCM claim)
-      const emrOnly = await db.all(
-        `SELECT e.id, e.mrn, e.encounter_date, COALESCE(e.physician_id, e.physician_type) as physician_id,
-                (${emrPhysicianCaseSql}) as physician_category,
-                e.icd10_primary, e.patient_age, e.gender
-         FROM emr_data e
-         WHERE e.facility_id=? AND e.year=? AND e.quarter=?
-         AND NOT EXISTS (
-           SELECT 1 FROM shafafiya_data s
-           WHERE s.facility_id=e.facility_id AND s.year=? AND s.quarter=? AND s.mrn=e.mrn AND s.encounter_date=e.encounter_date
-         )
-         ORDER BY e.encounter_date DESC LIMIT 100`,
-        [fid, y, q, y, q]
-      );
-
-      const rcmCaseSql = await getRcmCaseSql(db);
-
-      // RCM-only records (no EMR visit)
-      const rcmOnly = await db.all(
-        `SELECT s.id, s.claim_id, s.mrn, s.encounter_date, COALESCE(s.physician_id, s.physician_type) as physician_id,
-          s.ordering_physician_id, s.ordering_physician_type,
-          (${rcmPhysicianCaseSql}) as physician_category,
-          s.icd10_primary, s.insurance_type, s.service_reference_ids,
-          s.loinc_code, s.loinc_value, s.loinc_value_type,
-          (${rcmCaseSql}) as insurance_category
-         FROM shafafiya_data s
-         WHERE s.facility_id=? AND s.year=? AND s.quarter=?
-         AND NOT EXISTS (
-           SELECT 1 FROM emr_data e
-           WHERE e.facility_id=s.facility_id AND e.year=? AND e.quarter=? AND e.mrn=s.mrn AND e.encounter_date=s.encounter_date
-         )
-         ORDER BY s.encounter_date DESC LIMIT 100`,
-        [fid, y, q, y, q]
-      );
-
-      // Audit records (All Insurances, whole medical center)
-      const auditRecords = await db.all(
-        `SELECT s.claim_id, s.mrn, s.encounter_date, COALESCE(s.physician_id, s.physician_type) as physician_id,
-          s.ordering_physician_id, s.ordering_physician_type,
-          (${rcmPhysicianCaseSql}) as physician_category,
-                s.icd10_primary, s.insurance_type, s.service_reference_ids,
-                s.loinc_code, s.loinc_value, s.loinc_value_type,
-                CASE WHEN EXISTS (
-                  SELECT 1 FROM emr_data e
-                  WHERE e.facility_id=s.facility_id AND e.mrn=s.mrn AND e.encounter_date=s.encounter_date
-                ) THEN 'Matched' ELSE 'No EMR Record' END as emr_match
-         FROM shafafiya_data s
-         WHERE s.facility_id=? AND s.year=? AND s.quarter=?
-         ORDER BY emr_match DESC, s.encounter_date DESC LIMIT 500`,
-        [fid, y, q]
-      );
-
-      res.json({ emrOnly, rcmOnly, thiqaRecords: auditRecords });
-  } catch (e) {
-    console.error('Audit reconciliation error:', e);
-    res.status(500).json({ error: e.message });
-  }
+  res.json({ deprecated: true, message: 'This endpoint is deprecated in V2.0. Use /vault-summary or /exceptions instead.' });
 });
 
 // ─── GET /api/audit/batches ───────────────────────────────────────────────────

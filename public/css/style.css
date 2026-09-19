@@ -10,7 +10,8 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  letter-spacing: -0.01em;
   height: 100vh;
   overflow: hidden;
   background-color: var(--bg-light);
@@ -134,3 +135,123 @@ body {
   color: white;
 }
 
+
+
+/* --- PREMIUM UI UPGRADES (v1.1) --- */
+
+/* Top Nav: Gradient & Glassmorphism */
+.top-nav {
+  background: linear-gradient(135deg, rgba(0, 107, 107, 0.95) 0%, rgba(0, 51, 51, 0.98) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Global Cards: Soft Shadows, Rounded Corners */
+.card, .modal-content {
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05), 0 2px 5px rgba(0, 0, 0, 0.03) !important;
+}
+.card-header {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid rgba(0,0,0,0.03) !important;
+}
+
+/* Sidebar: Elegant Active State */
+.nav-btn.active {
+  background: linear-gradient(90deg, rgba(0, 107, 107, 0.08) 0%, transparent 100%) !important;
+  border-left: 4px solid var(--doh-teal);
+  border-radius: 0 6px 6px 0 !important;
+  padding-left: 11px !important; /* Compensate for the 4px border */
+}
+
+/* Sidebar Hover Polish */
+.nav-btn:hover:not(.active) {
+  background-color: rgba(0, 107, 107, 0.04) !important;
+}
+
+/* Icons: Softened Opacity for Elegance */
+.bi {
+  opacity: 0.85;
+}
+.nav-btn.active .bi, .navbar .bi, .btn .bi {
+  opacity: 1; /* Keep active, navbar, and button icons sharp */
+}
+
+/* Dark Mode Specific Overrides */
+[data-bs-theme="dark"] .card {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+[data-bs-theme="dark"] .top-nav {
+  background: linear-gradient(135deg, rgba(15, 25, 25, 0.95) 0%, rgba(5, 10, 10, 0.98) 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+[data-bs-theme="dark"] .nav-btn.active {
+  background: linear-gradient(90deg, rgba(0, 150, 150, 0.15) 0%, transparent 100%) !important;
+  border-left-color: #00d2d2;
+}
+
+/* KPI Card Custom Radius */
+.kpi-icon {
+  border-radius: 12px !important;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    height: 100%;
+    z-index: 1050;
+    background: white;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2) !important;
+  }
+  .sidebar.show-mobile {
+    left: 0;
+  }
+  .app-container {
+    height: calc(100vh - 60px);
+  }
+  .top-nav .form-select {
+    width: 100px !important;
+  }
+  #globalFacilitySelect {
+    max-width: 120px !important;
+  }
+  /* Hide text labels on mobile to save space */
+  .d-sm-none { display: inline-block; }
+  .d-sm-inline { display: none; }
+}
+
+[data-bs-theme="dark"] .sidebar {
+  background-color: #121212 !important;
+}
+
+/* --- ARABIC RTL SUPPORT (SCAFFOLDING) --- */
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] .sidebar {
+  border-right: none !important;
+  border-left: 1px solid #dee2e6;
+  right: 0;
+  left: auto;
+}
+html[dir="rtl"] .nav-btn.active {
+  border-left: none !important;
+  border-right: 4px solid var(--doh-teal);
+  border-radius: 6px 0 0 6px !important;
+  padding-left: 15px !important;
+  padding-right: 11px !important;
+}
+html[dir="rtl"] .ms-auto { margin-left: 0 !important; margin-right: auto !important; }
+html[dir="rtl"] .me-3 { margin-right: 0 !important; margin-left: 1rem !important; }

@@ -114,10 +114,8 @@ function splitCodes(value) {
 }
 
 router.post('/', upload.single('file'), async (req, res) => {
-  const { facility_id, file_type, year, quarter } = req.body;
+  const { facility_id, file_type } = req.body;
   const facilityId = Number(facility_id);
-  const yearNum = Number(year);
-  const quarterNum = Number(quarter);
 
   if (!req.file) {
     return res.status(400).json({ error: 'File is required' });
@@ -131,14 +129,6 @@ router.post('/', upload.single('file'), async (req, res) => {
     return res.status(400).json({ error: 'file_type must be either emr or shafafiya' });
   }
 
-  if (!Number.isInteger(yearNum) || yearNum < 2000) {
-    return res.status(400).json({ error: 'Valid year is required' });
-  }
-
-  if (!Number.isInteger(quarterNum) || quarterNum < 1 || quarterNum > 4) {
-    return res.status(400).json({ error: 'quarter must be between 1 and 4' });
-  }
-
   try {
     const db = await initDb();
     const facilityExists = await db.get('SELECT id FROM facilities WHERE id = ?', [facilityId]);
@@ -147,14 +137,13 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
 
     const result = await db.run(`
-      INSERT INTO import_batches (facility_id, file_name, file_type, year, quarter, status)
-      VALUES (?, ?, ?, ?, ?, 'processing')
-    `, [facilityId, req.file.originalname, file_type, yearNum, quarterNum]);
+      INSERT INTO import_batches (facility_id, file_name, file_type, status)
+      VALUES (?, ?, ?, 'processing')
+    `, [facilityId, req.file.originalname, file_type]);
     
     const batchId = result.lastID;
     
-    await db.run('UPDATE quarter_locks SET is_locked = 0 WHERE facility_id=? AND year=? AND quarter=?', [facilityId, yearNum, quarterNum]);
-    processFile(req.file.path, batchId, facilityId, file_type, yearNum, quarterNum).catch(console.error);
+    processFile(req.file.path, batchId, facilityId, file_type).catch(console.error);
 
     res.json({ success: true, batch_id: batchId });
   } catch (err) {
@@ -162,7 +151,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
-async function processFile(filePath, batchId, facilityId, fileType, year, quarter) {
+async function processFile(filePath, batchId, facilityId, fileType) {
   const db = await initDb();
   try {
     // 1. Get Target Facility MF Number
@@ -179,13 +168,25 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
     const sheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(sheet, { raw: false, dateNF: 'yyyy-mm-dd' });
     
-    let importedCount = 0;
+    if (!data.length) throw new Error('File is empty.');
+
+    const headers = Object.keys(data[0] || {}).map(h => h.toLowerCase().replace(/\s+/g,'_'));
+    const emrRequired  = ['mrn', 'encounter_date'];
+    const rcmRequired  = ['mrn', 'encounter_date'];
+    const required = fileType === 'emr' ? emrRequired : rcmRequired;
+    const missing = required.find(col => !headers.some(h => h.includes(col.replace('_',''))));
+    if (missing) throw new Error(`Invalid file: Missing required column "${missing}". Check your file format.`);
+
+    let insertedCount = 0;
+    let replacedCount = 0;
+    let skippedCount  = 0;
+    const quartersDetected = new Set();
     
     await db.run('BEGIN TRANSACTION');
 
     if (fileType === 'emr') {
       const stmt = await db.prepare(`
-        INSERT INTO emr_data (
+        INSERT OR REPLACE INTO emr_data (
           facility_id, batch_id, mrn, patient_age, patient_age_months, patient_dob, gender,
           encounter_date, year, quarter, month, physician_id, physician_type, icd10_primary, icd10_secondary, icd10_all, cpt_all,
           wait_time_mins, hba1c_value, hba1c_date, bp_systolic, bp_diastolic, bp_date,
@@ -218,14 +219,13 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
         
         const encDate = parseExcelDate(rawEncDate);
         if (!encDate) {
-          throw new Error(`Data Validation Failed at Row ${index + 2}: Invalid date format for Visit Date '${rawEncDate}'. Please use DD-MM-YYYY or DD-MMM-YYYY.`);
+          skippedCount++; continue;
         }
         const encMonth = new Date(encDate).getMonth() + 1;
         const rowYear = new Date(encDate).getFullYear();
         const rowQuarter = Math.ceil(encMonth / 3);
-        if (rowYear !== year || rowQuarter !== quarter) {
-          throw new Error(`Import period mismatch at row ${index + 2}: encounter date ${encDate} belongs to Q${rowQuarter} ${rowYear}, not Q${quarter} ${year}.`);
-        }
+        if (rowYear < 2015 || rowYear > new Date().getUTCFullYear() + 1) { skippedCount++; continue; }
+        quartersDetected.add(`${rowYear}-Q${rowQuarter}`);
         
         const dob = parseExcelDate(row['DOB']);
         
@@ -281,7 +281,7 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
           await db.run('DELETE FROM emr_data WHERE facility_id=? AND visit_id=?', [facilityId, String(visitId).trim()]);
         }
 
-        await stmt.run([
+        const result = await stmt.run([
           facilityId, batchId, mrn, ageYears, ageMonths, dob, row['Gender'],
           encDate, rowYear, rowQuarter, encMonth, phyId, phyType || 'Unknown', icdPrimary, row['ICD10_Secondary'], row['ICD'] || row['ICD10_All'] || row['ICD_Codes'], row['CPT'] || row['CPT_Codes'],
           parseFloat(row['Wait_Time_Mins']) || null, parseFloat(row['HbA1c_Value']) || null, parseExcelDate(row['HbA1c_Date']) || null, bpSys, bpDia, parseExcelDate(row['BP_Date']) || null,
@@ -304,7 +304,12 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
             row['Physician'] || null, row['Company'] || null, rowHash
           ]
         );
-        importedCount++;
+        
+        if (result && result.changes > 1) {
+          replacedCount++;
+        } else {
+          insertedCount++;
+        }
       }
       await stmt.finalize();
 
@@ -317,13 +322,12 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
         const mrn = row['MRN'] ? String(row['MRN']) : 'UNK';
         const rawEncDate = row['Date of Service'] || row['Encounter_Date'] || row['Visit Date'];
         const encDate = parseExcelDate(rawEncDate);
-        if (!encDate) continue;
+        if (!encDate) { skippedCount++; continue; }
         const encMonth = new Date(encDate).getMonth() + 1;
         const rowYear = new Date(encDate).getFullYear();
         const rowQuarter = Math.ceil(encMonth / 3);
-        if (rowYear !== year || rowQuarter !== quarter) {
-          throw new Error(`Import period mismatch at row ${index + 2}: encounter date ${encDate} belongs to Q${rowQuarter} ${rowYear}, not Q${quarter} ${year}.`);
-        }
+        if (rowYear < 2015 || rowYear > new Date().getUTCFullYear() + 1) { skippedCount++; continue; }
+        quartersDetected.add(`${rowYear}-Q${rowQuarter}`);
         
         const key = claimId ? claimId : mrn + '_' + encDate;
         
@@ -419,7 +423,7 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
       }
       
       const stmt = await db.prepare(`
-        INSERT INTO shafafiya_data (
+        INSERT OR REPLACE INTO shafafiya_data (
           facility_id, batch_id, claim_id, mrn, encounter_date, year, quarter, month,
           physician_id, physician_type, icd10_primary, icd10_secondary, icd10_all, cpt_all, insurance_type, hba1c_value, row_hash
         ) VALUES (
@@ -442,7 +446,7 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
         const allStr = Array.from(c.icdAll).join(',') || null;
         const cptStr = Array.from(c.cpts).join(',') || null;
         
-        await stmt.run([
+        const result = await stmt.run([
           c.facility, batchId, c.claimId, c.mrn, c.encDate, c.rowYear, c.rowQuarter, c.encMonth,
           c.physicianId, c.physicianType, primary, secondaryStr, allStr, cptStr, c.insurance, c.hba1cValue, rowHash
         ]);
@@ -450,12 +454,17 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
           'UPDATE shafafiya_data SET ordering_physician_id=?, ordering_physician_type=?, service_reference_ids=?, insurance_company=?, loinc_code=?, loinc_value=?, loinc_value_type=? WHERE row_hash=?',
           [c.orderingPhysicianId, c.orderingPhysicianType, Array.from(c.serviceReferences).join(','), c.insuranceCompany, Array.from(c.loincCodes).join(','), c.loincValues.join(' | '), Array.from(c.loincTypes).join(' | '), rowHash]
         );
-        importedCount++;
+        
+        if (result && result.changes > 1) {
+          replacedCount++;
+        } else {
+          insertedCount++;
+        }
       }
       await stmt.finalize();
 
       const lineStmt = await db.prepare(`
-        INSERT INTO shafafiya_claim_lines (
+        INSERT OR REPLACE INTO shafafiya_claim_lines (
           facility_id, batch_id, claim_id, mrn, encounter_date, service_line_no,
           cpt_code, service_reference_id, icd10_codes, ordering_physician_id,
           ordering_physician_type, rendering_physician_id, rendering_physician_type,
@@ -473,8 +482,16 @@ async function processFile(filePath, batchId, facilityId, fileType, year, quarte
       await lineStmt.finalize();
     }
 
+    for (const q of quartersDetected) {
+      const [y, qtr] = q.split('-Q');
+      await db.run('UPDATE quarter_locks SET is_locked=0 WHERE facility_id=? AND year=? AND quarter=?', [facilityId, y, qtr]);
+    }
+    
     await db.run('COMMIT');
-    await db.run('UPDATE import_batches SET status = ?, row_count = ? WHERE id = ?', ['done', importedCount, batchId]);
+    await db.run(
+      'UPDATE import_batches SET status=?, row_count=?, replaced_count=?, skipped_count=?, quarters_json=? WHERE id=?',
+      ['done', insertedCount, replacedCount, skippedCount, JSON.stringify([...quartersDetected].sort()), batchId]
+    );
 
   } catch (err) {
     await db.run('ROLLBACK');

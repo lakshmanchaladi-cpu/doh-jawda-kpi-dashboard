@@ -302,6 +302,16 @@ async function initDb() {
       is_abm_mandate INTEGER
     );
 
+    CREATE TABLE IF NOT EXISTS job_queue (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL DEFAULT 'calculate_kpi',
+      payload TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending',
+      result TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
     CREATE INDEX IF NOT EXISTS idx_locked_audit_quarter ON locked_audit_records(facility_id, year, quarter);
     CREATE INDEX IF NOT EXISTS idx_locked_audit_mrn ON locked_audit_records(facility_id, mrn);
     CREATE INDEX IF NOT EXISTS idx_locked_audit_dates ON locked_audit_records(encounter_date);
@@ -363,6 +373,11 @@ async function initDb() {
       active_facility_id INTEGER
     );
   `);
+
+  // V2 Additions for import_batches
+  await db.run("ALTER TABLE import_batches ADD COLUMN replaced_count INTEGER DEFAULT 0").catch(()=>{});
+  await db.run("ALTER TABLE import_batches ADD COLUMN skipped_count INTEGER DEFAULT 0").catch(()=>{});
+  await db.run("ALTER TABLE import_batches ADD COLUMN quarters_json TEXT").catch(()=>{});
 
   // Seed KPI Definitions
   const kpiCount = await db.get('SELECT COUNT(*) as c FROM kpi_definitions');

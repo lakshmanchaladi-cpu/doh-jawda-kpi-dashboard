@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "resolveJsonModule": true
+  },
+  "include": ["public/js/**/*", "engine/**/*", "routes/**/*", "server.ts", "utils/**/*"],
+  "exclude": ["node_modules", "dist", "tests"]
+}

@@ -1,6 +1,5 @@
 import { App } from './app.js';
 
-// Export sort function for use in inline handlers
 export function sortAuditTable(th, colIndex) {
   const table = th.closest('table');
   const tbody = table.querySelector('tbody');
@@ -15,36 +14,31 @@ export function sortAuditTable(th, colIndex) {
 
   th.dataset.dir = dir === 'asc' ? 'desc' : 'asc';
   rows.forEach(r => tbody.appendChild(r));
-  
-  // Add arrows for UI feedback
   table.querySelectorAll('th span').forEach(s => s.textContent = '');
-  if (!th.querySelector('span')) th.innerHTML += ' <span class="ms-1"></span>';
-  th.querySelector('span').innerHTML = dir === 'asc' ? '&uarr;' : '&darr;';
 }
-
-// Make globally available for inline onclick handlers
 window.sortAuditTable = sortAuditTable;
 
 export const Audit = {
+  state: { monthlyData: [], activeTab: 'monthly', reconciliation: null, thiqaPage: 1, thiqaPageSize: 50 },
+  isLocked: false,
 
-  state: { monthlyData: [], activeTab: 'monthly', reconciliation: null },
-
-  async render(container) {
-    const fid = App.state.facilityId;
-    const year = App.state.year;
-    const quarter = App.state.quarter;
-
+  render(container) {
+    if (!App.state.facilityId) {
+      container.innerHTML = `<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> Please select a facility first.</div>`;
+      return;
+    }
+    
     container.innerHTML = `
-      <div class="d-flex align-items-center justify-content-between mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 class="mb-0 fw-bold"><i class="bi bi-clipboard2-data text-primary me-2"></i>Data Audit & Reconciliation</h4>
-          <small class="text-muted">EMR vs RCM completeness &mdash; Whole Facility History</small>
+          <h2 class="h4 mb-0 fw-bold">Data Audit & Locking <span class="badge bg-secondary fs-6 ms-2">Q${App.state.quarter} ${App.state.year}</span></h2>
+          <p class="text-muted mb-0">Reconcile EMR clinical data with RCM claims data before calculating KPIs.</p>
         </div>
         <div>
           <button class="btn btn-success btn-sm me-2 d-none" id="audit-calc-kpi-btn" onclick="Audit.calculateKPIs()">
-     <i class="bi bi-play-circle me-1"></i>Calculate KPIs
-   </button>
-   <button class="btn btn-outline-danger btn-sm me-2" id="audit-lock-btn" onclick="Audit.toggleLock()">
+            <i class="bi bi-play-circle me-1"></i>Calculate KPIs
+          </button>
+          <button class="btn btn-outline-danger btn-sm me-2" id="audit-lock-btn" onclick="Audit.toggleLock()">
             <i class="bi bi-lock me-1"></i>Save & Lock Audit
           </button>
           <button class="btn btn-outline-primary btn-sm me-2" onclick="Audit.refreshData()">
@@ -55,12 +49,8 @@ export const Audit = {
           </button>
         </div>
       </div>
-      <div id="audit-alert-banner"></div>
-      <div id="audit-summary-cards" class="row g-3 mb-4">
-        ${this._loadingCards()}
-      </div>
-      <div id="audit-score-row" class="mb-4"></div>
-      <ul class="nav nav-tabs mb-3" id="auditTabs">
+
+      <ul class="nav nav-tabs mb-4 border-bottom-0 gap-2">
         <li class="nav-item">
           <a class="nav-link active" href="#" data-audit-tab="monthly" onclick="Audit.switchTab('monthly',this)">
             <i class="bi bi-calendar3 me-1"></i>Monthly Coverage Grid
@@ -82,154 +72,16 @@ export const Audit = {
           </a>
         </li>
       </ul>
-      <div id="audit-tab-content">
-        <div class="text-center py-5 text-muted"><i class="bi bi-hourglass-split fs-2"></i><p class="mt-2">Loading...</p></div>
-      </div>`;
+      <div id="audit-tab-content"></div>
+    `;
 
-    await Promise.all([
-      this._loadSummary(fid, year, quarter),
-      this._loadMonthly(fid)
-    ]);
-    this.switchTab('monthly', document.querySelector('[data-audit-tab="monthly"]'));
     this.checkLock();
-  },
-
-  _loadingCards() {
-    return Array(6).fill(0).map(() =>
-      `<div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body text-center py-3">
-            <div class="placeholder-glow"><span class="placeholder col-8 mb-2"></span><span class="placeholder col-5"></span></div>
-          </div>
-        </div>
-      </div>`
-    ).join('');
-  },
-
-  async _loadSummary(fid, year, quarter) {
-    try {
-      const r = await fetch(`/api/audit/summary?facility_id=${fid}&year=${year}&quarter=${quarter}&_t=${Date.now()}`);
-      const d = await r.json();
-      if (!r.ok || d.error) throw new Error(d.error || 'Audit summary request failed');
-      this._renderSummaryCards(d);
-      this._renderScoreRow(d);
-      this._renderAlertBanner(d, quarter, year);
-    } catch (e) {
-      document.getElementById('audit-summary-cards').innerHTML =
-        `<div class="col-12"><div class="alert alert-danger">Failed to load audit summary: ${e.message}</div></div>`;
-    }
-  },
-
-  _renderAlertBanner(d, quarter, year) {
-    const banner = document.getElementById('audit-alert-banner');
-    const msgs = [];
-    if (d.emrMonths < d.rcmMonths) msgs.push(`⚠️ EMR data only covers <strong>${d.emrMonths}</strong> months compared to <strong>${d.rcmMonths}</strong> months of RCM data.`);
-    if (d.rcmMonths < d.emrMonths) msgs.push(`⚠️ RCM/Claims data only covers <strong>${d.rcmMonths}</strong> months compared to <strong>${d.emrMonths}</strong> months of EMR data.`);
-    if (d.matchRate !== null && d.matchRate < 50 && (d.emr > 0 || d.rcm > 0)) msgs.push(`⚠️ Match rate is only <strong>${d.matchRate}%</strong> — significant EMR/RCM mismatch detected.`);
-    banner.innerHTML = msgs.length
-      ? `<div class="alert alert-danger border-danger fw-semibold mb-3">${msgs.join('<br>')}</div>`
-      : `<div class="alert alert-success border-success mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Data audit complete — displaying matches and gaps across the entire facility history.</div>`;
-  },
-
-  _renderSummaryCards(d) {
-    const matchColor = d.matchRate >= 80 ? 'success' : d.matchRate >= 50 ? 'warning' : 'danger';
-    const cards = [
-      { label: 'EMR Records', value: d.emr.toLocaleString(), icon: 'bi-hospital', color: d.emr > 0 ? 'primary' : 'danger', sub: `${d.emrMonths} months` },
-      { label: 'RCM Claims', value: d.rcm.toLocaleString(), icon: 'bi-receipt', color: d.rcm > 0 ? 'info' : 'danger', sub: `${d.rcmMonths} months` },
-      { label: 'Matched', value: d.matched.toLocaleString(), icon: 'bi-check2-circle', color: matchColor, sub: `${d.matchRate}% match rate` },
-      { label: 'EMR-Only', value: d.emrOnly.toLocaleString(), icon: 'bi-exclamation-triangle', color: d.emrOnly > 0 ? 'warning' : 'secondary', sub: 'No claim found' },
-      { label: 'RCM-Only', value: d.rcmOnly.toLocaleString(), icon: 'bi-exclamation-diamond', color: d.rcmOnly > 0 ? 'warning' : 'secondary', sub: 'No EMR record' },
-      { label: 'THIQA', value: d.thiqa.toLocaleString(), icon: 'bi-shield-check', color: 'primary', sub: 'Verified claims' }
-    ];
-
-    document.getElementById('audit-summary-cards').innerHTML = cards.map(c => `
-      <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 border-top border-${c.color} border-3">
-          <div class="card-body text-center py-3">
-            <i class="bi ${c.icon} fs-2 text-${c.color} mb-1"></i>
-            <div class="fw-bold fs-5">${c.value}</div>
-            <div class="small text-muted">${c.label}</div>
-            <div class="text-${c.color} small fw-semibold">${c.sub}</div>
-          </div>
-        </div>
-      </div>`).join('');
-  },
-
-  _renderScoreRow(d) {
-    const s = d.completenessScore;
-    const color = s >= 80 ? '#198754' : s >= 50 ? '#fd7e14' : '#dc3545';
-    
-    const maxMonths = Math.max(d.emrMonths, d.rcmMonths, 1);
-    
-    const breakdown = [
-      { label: 'EMR Coverage', pts: Math.round((d.emrMonths / maxMonths) * 50), max: 50 },
-      { label: 'RCM Coverage', pts: Math.round((d.rcmMonths / maxMonths) * 25), max: 25 },
-      { label: 'Match Rate ≥80%', pts: d.matchRate >= 80 ? 25 : Math.round((d.matchRate / 80) * 25), max: 25 }
-    ];
-
-    const insRows = [
-      { label: '🔵 THIQA', val: d.thiqa },
-      { label: '🏛️ ABM Mandate', val: d.abm },
-      { label: '🏥 Commercial', val: d.commercial },
-      { label: '💳 Self-Pay', val: d.selfPay }
-    ];
-
-    document.getElementById('audit-score-row').innerHTML = `
-      <div class="row g-3">
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-              <div class="fw-bold text-muted mb-2 small text-uppercase">Data Completeness Score</div>
-              <svg width="120" height="120" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#e9ecef" stroke-width="12"/>
-                <circle cx="60" cy="60" r="50" fill="none" stroke="${color}" stroke-width="12"
-                  stroke-dasharray="${2 * Math.PI * 50}"
-                  stroke-dashoffset="${2 * Math.PI * 50 * (1 - s / 100)}"
-                  stroke-linecap="round" transform="rotate(-90 60 60)"/>
-                <text x="60" y="55" text-anchor="middle" font-size="22" font-weight="bold" fill="${color}">${s}</text>
-                <text x="60" y="72" text-anchor="middle" font-size="11" fill="#6c757d">/ 100</text>
-              </svg>
-              <div class="mt-2">
-                ${breakdown.map(b => `
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-muted">${b.label}</span>
-                    <span class="fw-bold">${b.pts}/${b.max} pts</span>
-                  </div>`).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <div class="fw-bold text-muted mb-3 small text-uppercase">
-                <i class="bi bi-pie-chart me-1"></i>Insurance Breakdown (Whole Facility)
-              </div>
-              <div class="row g-2">
-                ${insRows.map(r => {
-                  const total = d.rcm || 1;
-                  const pct = Math.round((r.val / total) * 100);
-                  return `<div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <small class="fw-semibold">${r.label}</small>
-                      <small class="text-muted">${r.val.toLocaleString()} (${pct}%)</small>
-                    </div>
-                    <div class="progress" style="height:8px;">
-                      <div class="progress-bar" style="width:${pct}%"></div>
-                    </div>
-                  </div>`;
-                }).join('')}
-              </div>
-              <hr class="my-2">
-                <div class="row text-center mt-1">
-                  <div class="col"><small class="text-muted d-block">Match Key</small><small class="fw-semibold">MRN + Encounter Date</small></div>
-                  <div class="col"><small class="text-muted d-block">Insurance Map</small><small class="fw-semibold">DOH Dictionary</small></div>
-                  <div class="col"><small class="text-muted d-block">Scope</small><small class="fw-semibold">All Claims</small></div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    this.switchTab('monthly');
+    this._loadMonthly(App.state.facilityId).then(() => {
+      if (this.state.activeTab === 'monthly') {
+        this._renderMonthly(document.getElementById('audit-tab-content'));
+      }
+    });
   },
 
   async _loadMonthly(fid) {
@@ -247,6 +99,7 @@ export const Audit = {
     this.state.activeTab = tab;
     document.querySelectorAll('[data-audit-tab]').forEach(a => a.classList.remove('active'));
     if (el) el.classList.add('active');
+    else document.querySelector(`[data-audit-tab="${tab}"]`).classList.add('active');
     const content = document.getElementById('audit-tab-content');
     if (tab === 'monthly') this._renderMonthly(content);
     else if (tab === 'reconcile') this._loadAndRenderReconciliation(content);
@@ -260,7 +113,7 @@ export const Audit = {
   },
 
   _matchRateBadge(rate) {
-    if (rate === null) return '<span class="text-muted">—</span>';
+    if (rate === null) return '<span class="text-muted">?"</span>';
     const color = rate >= 80 ? 'success' : rate >= 50 ? 'warning' : 'danger';
     return `<span class="badge bg-${color}">${rate}%</span>`;
   },
@@ -277,7 +130,7 @@ export const Audit = {
         ? '' : m.emrStatus === 'received' || m.rcmStatus === 'received'
         ? 'table-warning bg-warning-subtle' : 'table-danger bg-danger-subtle';
       return `<tr class="${rowClass}">
-                <td class="fw-semibold">${m.label}</td>
+        <td class="fw-semibold">${m.label}</td>
         <td class="text-center">${m.emrVisits.toLocaleString()}</td>
         <td class="text-center">${m.rcmClaims.toLocaleString()}</td>
         <td class="text-center">${m.matched.toLocaleString()}</td>
@@ -303,7 +156,7 @@ export const Audit = {
           <table class="table table-sm table-bordered table-hover mb-0 align-middle" style="font-size:0.82rem;">
             <thead class="table-dark">
               <tr>
-                                <th>Month</th>
+                <th>Month</th>
                 <th class="text-center">EMR<br>Visits</th>
                 <th class="text-center">RCM<br>Claims</th>
                 <th class="text-center">Matched</th>
@@ -319,10 +172,6 @@ export const Audit = {
             <tbody>${rows}</tbody>
           </table>
         </div>
-        <div class="card-footer bg-white small text-muted">
-          <i class="bi bi-info-circle me-1"></i>
-          Insurance categories are assigned dynamically based on the DOH Dictionary mapping table.
-        </div>
       </div>`;
   },
 
@@ -332,95 +181,74 @@ export const Audit = {
       const fid = App.state.facilityId;
       const r = await fetch(`/api/audit/reconciliation?facility_id=${fid}&year=${App.state.year}&quarter=${App.state.quarter}`);
       const d = await r.json();
-      if (!r.ok || d.error) throw new Error(d.error || 'Reconciliation request failed');
+      if (!r.ok || d.error) throw new Error(d.error || 'Audit log request failed');
       this.state.reconciliation = d;
-      this._renderReconciliation(content, d);
+
+      const emrOnlyRows = d.emrOnly.map(r => `
+        <tr>
+          <td class="font-monospace small">${r.mrn}</td>
+          <td>${r.encounter_date}</td>
+          <td class="font-monospace small">${r.physician_id}</td>
+          <td>${r.physician_category}</td>
+          <td class="small">${r.icd10_primary || ''}</td>
+          <td>${r.patient_age || ''}</td>
+          <td>${r.gender || ''}</td>
+          <td class="text-danger small fw-semibold"><i class="bi bi-exclamation-circle me-1"></i>Missing RCM Claim</td>
+        </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted">No missing RCM claims</td></tr>`;
+
+      const rcmOnlyRows = d.rcmOnly.map(r => `
+        <tr>
+          <td class="font-monospace small">${r.claim_id}</td>
+          <td class="font-monospace small">${r.mrn}</td>
+          <td>${r.encounter_date}</td>
+          <td class="font-monospace small">${r.physician_id || ''}</td>
+          <td>${r.physician_category}</td>
+          <td class="font-monospace small">${r.ordering_physician_id || ''}</td>
+          <td>${r.ordering_physician_type || ''}</td>
+          <td class="small">${r.icd10_primary || ''}</td>
+          <td>${r.insurance_type}</td>
+          <td>${r.insurance_category}</td>
+          <td class="text-danger small fw-semibold"><i class="bi bi-exclamation-circle me-1"></i>Missing EMR Record</td>
+        </tr>`).join('') || `<tr><td colspan="11" class="text-center text-muted">No missing EMR records</td></tr>`;
+
+      content.innerHTML = `
+        <div class="alert alert-warning border-0 shadow-sm small">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Reconciliation Required:</strong> The following tables highlight records that exist in one system but are missing in the other. 
+          Unmatched claims will NOT be evaluated by the JAWDA KPI Engine. Please review and update your source systems if necessary before locking the quarter.
+        </div>
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-warning-subtle">
+            <strong><i class="bi bi-clipboard-x me-2"></i>EMR Visits Without Matching Claim (top 100)</strong>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
+              <thead class="table-light"><tr>
+                <th>MRN</th><th>Encounter Date</th><th>Physician ID</th><th>Physician Type</th>
+                <th>ICD-10</th><th>Age</th><th>Gender</th><th>Issue</th>
+              </tr></thead>
+              <tbody>${emrOnlyRows}</tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-danger-subtle">
+            <strong><i class="bi bi-receipt-cutoff me-2"></i>RCM Claims Without Matching EMR Visit (top 100)</strong>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
+              <thead class="table-light"><tr>
+                <th>Claim ID</th><th>MRN</th><th>Date</th><th>Physician ID</th><th>Physician Type</th>
+                <th>Ordering ID</th><th>Ordering Type</th><th>ICD-10</th><th>Payer Code</th><th>Category</th><th>Issue</th>
+              </tr></thead>
+              <tbody>${rcmOnlyRows}</tbody>
+            </table>
+          </div>
+        </div>`;
     } catch (e) {
-      content.innerHTML = `<div class="alert alert-danger">Failed to load reconciliation: ${e.message}</div>`;
+      content.innerHTML = `<div class="alert alert-danger">Failed to load reconciliation data: ${e.message}</div>`;
     }
-  },
-
-  _renderReconciliation(content, d) {
-    const emrOnlyRows = (d.emrOnly || []).map(r => `
-      <tr>
-        <td class="font-monospace small">${r.mrn || '—'}</td>
-        <td>${r.encounter_date || '—'}</td>
-        <td class="font-monospace small">${r.physician_id || '—'}</td>
-        <td>${r.physician_category || 'Other / Unknown'}</td>
-        <td class="small">${r.icd10_primary || '—'}</td>
-        <td>${r.patient_age || '—'}</td>
-        <td>${r.gender || '—'}</td>
-        <td><span class="badge bg-warning text-dark">No Claim Found</span></td>
-      </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted py-3">✅ No EMR-only records — all visits have matching claims</td></tr>`;
-
-    const rcmOnlyRows = (d.rcmOnly || []).map(r => `
-      <tr>
-        <td class="font-monospace small">${r.claim_id || '—'}</td>
-        <td class="font-monospace small">${r.mrn || '—'}</td>
-        <td>${r.encounter_date || '—'}</td>
-        <td class="font-monospace small">${r.physician_id || '—'}</td>
-        <td>${r.physician_category || 'Other / Unknown'}</td>
-        <td class="font-monospace small">${r.ordering_physician_id || '—'}</td>
-        <td>${r.ordering_physician_type || '—'}</td>
-        <td class="small">${r.icd10_primary || '—'}</td>
-        <td>${r.insurance_type || '—'}</td>
-        <td><span class="badge bg-secondary">${r.insurance_category || '—'}</span></td>
-        <td><span class="badge bg-danger">No EMR Record</span></td>
-      </tr>`).join('') || `<tr><td colspan="11" class="text-center text-muted py-3">✅ No RCM-only records — all claims have matching EMR visits</td></tr>`;
-
-    content.innerHTML = `
-      <div class="d-flex justify-content-between align-items-center mb-3">
-         <h6 class="mb-0 text-muted">Showing a preview of mismatches (Max 200 records)</h6>
-         <a href="/api/audit/download-gaps?facility_id=${App.state.facilityId}&year=${App.state.year}&quarter=${App.state.quarter}" target="_blank" class="btn btn-outline-primary btn-sm">
-           <i class="bi bi-download me-2"></i>Download Full Mismatch Report (CSV)
-         </a>
-      </div>
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <div class="alert alert-warning border-warning mb-0 py-2">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            <strong>EMR-Only (${d.emrOnly?.length || 0} records shown)</strong> — Visits with no matching claim.
-            Risk: unsubmitted claims, JAWDA KPI denominator gap.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="alert alert-danger border-danger mb-0 py-2">
-            <i class="bi bi-exclamation-diamond me-2"></i>
-            <strong>RCM-Only (${d.rcmOnly?.length || 0} records shown)</strong> — Claims with no clinical EMR record.
-            Risk: unverifiable KPI numerators, DOH audit exposure.
-          </div>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-warning-subtle">
-          <strong><i class="bi bi-clipboard-x me-2"></i>EMR Visits Without Matching Claim (top 100)</strong>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
-            <thead class="table-light"><tr>
-              <th>MRN</th><th>Encounter Date</th><th>Physician ID</th><th>Physician Type</th>
-              <th>ICD-10</th><th>Age</th><th>Gender</th><th>Issue</th>
-            </tr></thead>
-            <tbody>${emrOnlyRows}</tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger-subtle">
-          <strong><i class="bi bi-receipt-cutoff me-2"></i>RCM Claims Without Matching EMR Visit (top 100)</strong>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
-            <thead class="table-light"><tr>
-              <th>Claim ID</th><th>MRN</th><th>Date</th><th>Physician ID</th><th>Physician Type</th>
-              <th>Ordering ID</th><th>Ordering Type</th><th>ICD-10</th><th>Payer Code</th><th>Category</th><th>Issue</th>
-            </tr></thead>
-            <tbody>${rcmOnlyRows}</tbody>
-          </table>
-        </div>
-      </div>`;
   },
 
   async _loadAndRenderThiqa(content) {
@@ -434,135 +262,156 @@ export const Audit = {
         if (!r.ok || d.error) throw new Error(d.error || 'Audit log request failed');
         this.state.reconciliation = d;
       }
-      const records = d.thiqaRecords || [];
-      const matched = records.filter(r => r.emr_match === 'Matched').length;
-      const unmatched = records.filter(r => r.emr_match !== 'Matched').length;
-
-      const rows = records.map(r => `
-        <tr class="${r.emr_match !== 'Matched' ? 'table-warning' : ''}">
-          <td class="font-monospace small">${r.claim_id || '—'}</td>
-          <td class="font-monospace small">${r.mrn || '—'}</td>
-          <td>${r.encounter_date || '—'}</td>
-          <td class="font-monospace small">${r.physician_id || '—'}</td>
-          <td>${r.physician_category || 'Other / Unknown'}</td>
-          <td class="font-monospace small">${r.ordering_physician_id || '—'}</td>
-          <td>${r.ordering_physician_type || '—'}</td>
-          <td><span class="badge bg-secondary">${r.insurance_type || 'Self-Pay'}</span></td>
-          <td class="small">${r.icd10_primary || '—'}</td>
-          <td>${r.emr_match === 'Matched'
-            ? '<span class="badge bg-success">✅ Matched</span>'
-            : '<span class="badge bg-danger">⚠️ No EMR Record</span>'}
-          </td>
-        </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted py-4">No encounters found</td></tr>`;
-
-      content.innerHTML = `
-        <div class="row g-3 mb-3">
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center border-top border-primary border-3">
-              <div class="card-body py-3">
-                <i class="bi bi-shield-check fs-2 text-primary"></i>
-                <div class="fw-bold fs-4">${records.length}</div>
-                <div class="text-muted small">Total Encounters</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center border-top border-success border-3">
-              <div class="card-body py-3">
-                <i class="bi bi-check2-circle fs-2 text-success"></i>
-                <div class="fw-bold fs-4">${matched}</div>
-                <div class="text-muted small">EMR + RCM Matched</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center border-top border-danger border-3">
-              <div class="card-body py-3">
-                <i class="bi bi-exclamation-triangle fs-2 text-danger"></i>
-                <div class="fw-bold fs-4">${unmatched}</div>
-                <div class="text-muted small">No EMR Record</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center border-top border-info border-3">
-              <div class="card-body py-3">
-                <i class="bi bi-percent fs-2 text-info"></i>
-                <div class="fw-bold fs-4">${records.length ? Math.round((matched/records.length)*100) : 0}%</div>
-                <div class="text-muted small">Overall Match Rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="alert alert-info border-0 shadow-sm small">
-          <i class="bi bi-info-circle me-2"></i>
-          <strong>Data Audit Log:</strong> This table lists all uploaded claims. Every claim must have a corresponding EMR clinical record to be valid for JAWDA KPI calculation. Unmatched claims will be highlighted.
-        </div>
-          <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-              <strong><i class="bi bi-shield-check text-primary me-2"></i>All Claims Audit Log (Up to 500 records)</strong>
-            </div>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
-                <thead class="table-dark"><tr>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 0)">Claim ID</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 1)">MRN</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 2)">Encounter Date</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 3)">Physician ID</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 4)">Physician Type</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 5)">Ordering ID</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 6)">Ordering Type</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 7)">Insurance</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 8)">ICD-10 Primary</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 9)">EMR Match Status</th>
-                </tr></thead>
-              <tbody>${rows}</tbody>
-            </table>
-          </div>
-        </div>`;
+      this._renderPaginatedThiqaTable();
     } catch (e) {
-      content.innerHTML = `<div class="alert alert-danger">Failed to load THIQA data: ${e.message}</div>`;
+      document.getElementById('audit-tab-content').innerHTML = `<div class="alert alert-danger">Failed to load THIQA data: ${e.message}</div>`;
     }
   },
 
+  setThiqaPage(page) {
+    this.state.thiqaPage = page;
+    this._renderPaginatedThiqaTable();
+  },
+
+  _renderPaginatedThiqaTable() {
+    const content = document.getElementById('audit-tab-content');
+    const records = this.state.reconciliation?.thiqaRecords || [];
+    const matched = records.filter(r => r.emr_match === 'Matched').length;
+    const unmatched = records.filter(r => r.emr_match !== 'Matched').length;
+
+    // Pagination logic
+    const totalPages = Math.ceil(records.length / this.state.thiqaPageSize) || 1;
+    if (this.state.thiqaPage > totalPages) this.state.thiqaPage = totalPages;
+    const startIdx = (this.state.thiqaPage - 1) * this.state.thiqaPageSize;
+    const paginatedRecords = records.slice(startIdx, startIdx + this.state.thiqaPageSize);
+
+    const rows = paginatedRecords.map(r => `
+      <tr class="${r.emr_match !== 'Matched' ? 'table-warning' : ''}">
+        <td class="font-monospace small">${r.claim_id || '?"'}</td>
+        <td class="font-monospace small">${r.mrn || '?"'}</td>
+        <td>${r.encounter_date || '?"'}</td>
+        <td class="font-monospace small">${r.physician_id || '?"'}</td>
+        <td>${r.physician_category || 'Other / Unknown'}</td>
+        <td class="font-monospace small">${r.ordering_physician_id || '?"'}</td>
+        <td>${r.ordering_physician_type || '?"'}</td>
+        <td><span class="badge bg-secondary">${r.insurance_type || 'Self-Pay'}</span></td>
+        <td class="small">${r.icd10_primary || '?"'}</td>
+        <td>${r.emr_match === 'Matched' ? '<span class="badge bg-success">o. Matched</span>' : '<span class="badge bg-danger">s,? No EMR Record</span>'}</td>
+      </tr>`).join('') || `<tr><td colspan="10" class="text-center text-muted py-4">No encounters found</td></tr>`;
+
+    let paginationHtml = '';
+    if (totalPages > 1) {
+      paginationHtml = `
+        <nav aria-label="Table pagination" class="mt-3">
+          <ul class="pagination pagination-sm justify-content-center mb-0">
+            <li class="page-item ${this.state.thiqaPage === 1 ? 'disabled' : ''}">
+              <a class="page-link" href="#" onclick="event.preventDefault(); window.Audit.setThiqaPage(${this.state.thiqaPage - 1})">Previous</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">Page ${this.state.thiqaPage} of ${totalPages}</span></li>
+            <li class="page-item ${this.state.thiqaPage === totalPages ? 'disabled' : ''}">
+              <a class="page-link" href="#" onclick="event.preventDefault(); window.Audit.setThiqaPage(${this.state.thiqaPage + 1})">Next</a>
+            </li>
+          </ul>
+        </nav>`;
+    }
+
+    content.innerHTML = `
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm text-center border-top border-primary border-3">
+            <div class="card-body py-3">
+              <i class="bi bi-shield-check fs-2 text-primary"></i>
+              <div class="fw-bold fs-4">${records.length}</div>
+              <div class="text-muted small">Total Encounters</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm text-center border-top border-success border-3">
+            <div class="card-body py-3">
+              <i class="bi bi-check2-circle fs-2 text-success"></i>
+              <div class="fw-bold fs-4">${matched}</div>
+              <div class="text-muted small">EMR + RCM Matched</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm text-center border-top border-danger border-3">
+            <div class="card-body py-3">
+              <i class="bi bi-exclamation-triangle fs-2 text-danger"></i>
+              <div class="fw-bold fs-4">${unmatched}</div>
+              <div class="text-muted small">No EMR Record</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm text-center border-top border-info border-3">
+            <div class="card-body py-3">
+              <i class="bi bi-percent fs-2 text-info"></i>
+              <div class="fw-bold fs-4">${records.length ? Math.round((matched/records.length)*100) : 0}%</div>
+              <div class="text-muted small">Overall Match Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-info border-0 shadow-sm small">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>Data Audit Log:</strong> This table lists all uploaded claims. Every claim must have a corresponding EMR clinical record to be valid for JAWDA KPI calculation. Unmatched claims will be highlighted.
+      </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong><i class="bi bi-shield-check text-primary me-2"></i>All Claims Audit Log</strong>
+          <span class="badge bg-secondary text-white">Showing ${startIdx + 1}-${Math.min(startIdx + this.state.thiqaPageSize, records.length)} of ${records.length}</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
+            <thead class="table-light"><tr>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 0)">Claim ID</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 1)">MRN</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 2)">Encounter Date</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 3)">Physician ID</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 4)">Physician Type</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 5)">Ordering ID</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 6)">Ordering Type</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 7)">Insurance</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 8)">ICD-10 Primary</th>
+              <th style="cursor:pointer" onclick="window.sortAuditTable(this, 9)">EMR Match Status</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${paginationHtml ? `<div class="card-footer bg-white border-0 pt-0 pb-3">${paginationHtml}</div>` : ''}
+      </div>`;
+  },
+
   async _loadAndRenderBatches(content) {
-    content.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-hourglass-split fs-2"></i><p class="mt-2">Loading import history...</p></div>`;
+    content.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-hourglass-split fs-2"></i><p class="mt-2">Loading batch history...</p></div>`;
     try {
-      const r = await fetch(`/api/audit/batches?facility_id=${App.state.facilityId}`);
-      const batches = await r.json();
-      if (!r.ok || !Array.isArray(batches)) throw new Error(batches.error || 'Import batch request failed');
+      const fid = App.state.facilityId;
+      const r = await fetch(`/api/audit/batches?facility_id=${fid}`);
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Failed to fetch batches');
 
-      const rows = batches.map(b => {
-        const statusBadge = (b.status === 'completed' || b.status === 'done')
-          ? `<span class="badge bg-success">✅ Completed</span>`
-          : b.status === 'partial'
-          ? `<span class="badge bg-warning text-dark">⚠️ Partial</span>`
-          : b.status === 'error' || b.status === 'failed'
-          ? `<span class="badge bg-danger">❌ Error</span>`
-          : `<span class="badge bg-secondary">${b.status}</span>`;
-        const typeBadge = (b.file_type || '').toLowerCase().includes('rcm') || (b.file_type || '').toLowerCase().includes('shaf')
-          ? `<span class="badge bg-info text-dark">RCM/Shafafiya</span>`
-          : `<span class="badge bg-primary">EMR</span>`;
-        return `<tr>
-          <td class="text-muted small">#${b.id}</td>
-          <td>${typeBadge}</td>
-          <td class="small">${b.file_name || '—'}</td>
+      const rows = data.map(b => `
+        <tr>
+          <td class="font-monospace small">#${b.id}</td>
+          <td><span class="badge ${b.file_type==='emr'?'bg-primary':'bg-info text-dark'} text-uppercase">${b.file_type}</span></td>
+          <td class="small fw-semibold">${b.file_name}</td>
           <td class="text-center">Q${b.quarter} ${b.year}</td>
-          <td class="text-center fw-bold">${(b.row_count || 0).toLocaleString()}</td>
-          <td class="text-center ${b.error_count > 0 ? 'text-danger fw-bold' : 'text-muted'}">${b.error_count || 0}</td>
-          <td>${statusBadge}</td>
-          <td class="small text-muted">${b.imported_at ? b.imported_at.substring(0, 16).replace('T', ' ') : '—'}</td>
-        </tr>`;
-      }).join('') || `<tr><td colspan="8" class="text-center py-4 text-muted">No import batches found. Use Data Import to upload EMR or RCM files.</td></tr>`;
-
+          <td class="text-center">${b.row_count}</td>
+          <td class="text-center ${b.error_count > 0 ? 'text-danger fw-bold' : 'text-muted'}">${b.error_count}</td>
+          <td>${b.status === 'done' ? '<span class="badge bg-success">Complete</span>' : b.status === 'processing' ? '<span class="badge bg-warning text-dark">Processing</span>' : '<span class="badge bg-danger">Failed</span>'}</td>
+          <td class="small text-muted">${new Date(b.imported_at).toLocaleString()}</td>
+        </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted">No imports found</td></tr>`;
+      
       content.innerHTML = `
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white">
-            <strong><i class="bi bi-box-arrow-in-down me-2"></i>Import Batch History (Last 20)</strong>
+            <strong><i class="bi bi-cloud-arrow-up text-primary me-2"></i>Recent Import Batches</strong>
           </div>
           <div class="table-responsive">
-            <table class="table table-sm table-hover mb-0 align-middle">
-              <thead class="table-dark"><tr>
+            <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.85rem;">
+              <thead class="table-light"><tr>
                 <th>Batch</th><th>Type</th><th>File Name</th><th class="text-center">Quarter</th>
                 <th class="text-center">Records</th><th class="text-center">Errors</th>
                 <th>Status</th><th>Imported At</th>
@@ -581,10 +430,7 @@ export const Audit = {
     }
   },
 
-
-  
   async calculateKPIs() {
-    // Inject modal into DOM if it doesn't exist
     if (!document.getElementById('kpiProgressModal')) {
       const m = document.createElement('div');
       m.innerHTML = `<div class="modal fade" id="kpiProgressModal" data-bs-backdrop="static" tabindex="-1">
@@ -627,7 +473,6 @@ export const Audit = {
     log.innerHTML = '> Engine Locked & Ready.<br>> Executing batch KPI calculation...<br>';
     text.innerText = 'Scanning EMR & RCM Records...';
     
-    // Simulate some visual progress while waiting for the server
     let p = 10;
     const pTimer = setInterval(() => {
       if (p < 85) { p += 5; bar.style.width = p + '%'; }
@@ -662,7 +507,6 @@ export const Audit = {
       footer.classList.remove('d-none');
       
       window._forceDashboardReload = true;
-      // Also force comparison reload just in case
       window._forceComparisonReload = true; 
       
     } catch (err) {
@@ -688,11 +532,11 @@ export const Audit = {
       if (this.isLocked) {
         btnLock.innerHTML = '<i class="bi bi-unlock"></i> Unlock Data';
         btnLock.className = 'btn btn-outline-secondary btn-sm me-2';
-          document.getElementById('audit-calc-kpi-btn').classList.remove('d-none');
+        document.getElementById('audit-calc-kpi-btn').classList.remove('d-none');
       } else {
         btnLock.innerHTML = '<i class="bi bi-lock"></i> Save & Lock Audit';
         btnLock.className = 'btn btn-outline-danger btn-sm me-2';
-          document.getElementById('audit-calc-kpi-btn').classList.add('d-none');
+        document.getElementById('audit-calc-kpi-btn').classList.add('d-none');
       }
     } catch (e) {
       console.error(e);
@@ -712,7 +556,8 @@ export const Audit = {
         })
       });
       const data = await res.json();
-      if (data.success) { window._forceAuditReload = true; window._forceDashboardReload = true;
+      if (data.success) {
+        window._forceAuditReload = true; window._forceDashboardReload = true;
         App.toast(this.isLocked ? 'Audit Unlocked!' : 'Audit Saved & Locked! KPI Engine is now unlocked.', 'success');
         this.checkLock();
       }

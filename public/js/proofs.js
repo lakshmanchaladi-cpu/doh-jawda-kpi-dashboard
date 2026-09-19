@@ -295,30 +295,6 @@ export const Proofs = {
     this.checkLock();
   },
 
-  async checkLock() {},
-
-  async toggleLock() {
-    try {
-      const res = await fetch('/api/kpi/toggle-lock', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          facility_id: App.state.facilityId,
-          year: App.state.year,
-          quarter: App.state.quarter,
-          lock: !this.isLocked
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        App.toast(this.isLocked ? 'Data Unlocked!' : 'Data Saved & Locked!', 'success');
-        this.checkLock();
-      }
-    } catch (e) {
-      App.toast('Failed to toggle lock', 'danger');
-    }
-  },
-
   async showWaterfall(kpiCode) {
     const wfModal = new bootstrap.Modal(document.getElementById('waterfallModal'));
     wfModal.show();

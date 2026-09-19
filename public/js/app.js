@@ -4,16 +4,6 @@ import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
-import { Dashboard } from './dashboard.js';
-import { Import } from './import.js';
-import { Audit } from './audit.js';
-import { ManualEntry } from './manual.js';
-import { Reports } from './reports.js';
-import { Jdc } from './jdc.js';
-import { Facilities } from './facilities.js';
-import { Comparison } from './comparison.js';
-import { Settings } from './settings.js';
-import { Proofs } from './proofs.js';
 
 const App = {
   state: {
@@ -45,14 +35,53 @@ const App = {
   },
 
   setupEventListeners() {
-    // Sidebar navigation & brand link
-    document.addEventListener('click', (e) => {
-      const navLink = e.target.closest('[data-page]');
-      if (navLink) {
-        e.preventDefault();
-        this.navigate(navLink.dataset.page);
+      // Accessibility (Keyboard Navigation)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const focused = document.activeElement;
+          if (focused && (focused.hasAttribute('data-page') || focused.getAttribute('tabindex') === '0')) {
+            e.preventDefault();
+            focused.click();
+          }
+        }
+      });
+
+      // Mobile sidebar toggle
+      const mobileToggle = document.getElementById('mobileSidebarToggle');
+      const sidebar = document.querySelector('.sidebar');
+      if (mobileToggle && sidebar) {
+          mobileToggle.addEventListener('click', () => {
+              sidebar.classList.toggle('show-mobile');
+          });
       }
-    });
+
+    // Dark mode toggle
+    const dmBtn = document.getElementById('darkModeToggle');
+    if (dmBtn) {
+      dmBtn.addEventListener('click', () => {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-bs-theme') === 'dark';
+        html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+        dmBtn.innerHTML = isDark ? '<i class="bi bi-moon-stars"></i>' : '<i class="bi bi-sun"></i>';
+        localStorage.setItem('jawda-theme', isDark ? 'light' : 'dark');
+      });
+      // Initialize theme from local storage
+      const savedTheme = localStorage.getItem('jawda-theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+        dmBtn.innerHTML = '<i class="bi bi-sun"></i>';
+      }
+    }
+
+    // Sidebar navigation & brand link
+      document.addEventListener('click', (e) => {
+        const navLink = e.target.closest('[data-page]');
+        if (navLink) {
+          e.preventDefault();
+          this.navigate(navLink.dataset.page);
+          if (window.innerWidth <= 768 && sidebar) sidebar.classList.remove('show-mobile');
+        }
+      });
 
     // Facility selector
     document.getElementById('globalFacilitySelect').addEventListener('change', (e) => {
@@ -168,7 +197,7 @@ const App = {
 
     const content = document.getElementById('app-content');
     
-    if (!this.state.facilityId && ['dashboard', 'import', 'audit', 'manual', 'reports', 'jdc'].includes(page)) {
+    if (!this.state.facilityId && ['dashboard', 'data-manager', 'import', 'audit', 'manual', 'reports', 'jdc', 'proofs'].includes(page)) {
       content.innerHTML = `
         <div class="text-center mt-5 pt-5 text-muted">
           <i class="bi bi-building fs-1 mb-3"></i>
@@ -179,21 +208,34 @@ const App = {
       return;
     }
 
-    switch(page) {
-      case 'dashboard': Dashboard.render(content); break;
-      case 'import': Import.render(content); break;
-      case 'audit': Audit.render(content); break;
-      case 'manual': ManualEntry.render(content); break;
-      case 'reports': Reports.render(content); break;
-      case 'jdc': Jdc.render(content); break;
-      case 'facilities': Facilities.render(content); break;
-      case 'comparison': Comparison.render(content); break;
-      case 'settings-guidelines': Settings.render(content, 'guidelines'); break;
-      case 'settings-engine': Settings.render(content, 'engine'); break;
-      case 'settings-clinical': Settings.render(content, 'clinical'); break;
-      case 'settings-dicts': Settings.render(content, 'dicts'); break;
-      case 'proofs': Proofs.render(content); break;
-    }
+    // Lazy load mapping
+      const routeMap = {
+        'dashboard': () => import('./dashboard.js').then(m => m.Dashboard.render(content)),
+        'import': () => import('./import.js').then(m => m.Import.render(content)),
+        'audit': () => import('./audit.js').then(m => m.Audit.render(content)),
+        'data-manager': () => import('./data-manager.js').then(m => window.DataManager.render(content)),
+        'manual': () => import('./manual.js').then(m => m.ManualEntry.render(content)),
+        'reports': () => import('./reports.js').then(m => m.Reports.render(content)),
+        'jdc': () => import('./jdc.js').then(m => m.Jdc.render(content)),
+        'facilities': () => import('./facilities.js').then(m => m.Facilities.render(content)),
+        'comparison': () => import('./comparison.js').then(m => m.Comparison.render(content)),
+        'settings': () => import('./settings.js').then(m => m.Settings.render(content, 'guidelines')),
+        'settings-guidelines': () => import('./settings.js').then(m => m.Settings.render(content, 'guidelines')),
+        'settings-engine': () => import('./settings.js').then(m => m.Settings.render(content, 'engine')),
+        'settings-clinical': () => import('./settings.js').then(m => m.Settings.render(content, 'clinical')),
+        'settings-dicts': () => import('./settings.js').then(m => m.Settings.render(content, 'dicts')),
+        'settings-database': () => import('./settings.js').then(m => m.Settings.render(content, 'database')),
+        'proofs': () => import('./proofs.js').then(m => m.Proofs.render(content))
+      };
+      
+      const load = routeMap[page];
+      if (load) {
+        content.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+        load().catch(err => {
+          console.error(err);
+          content.innerHTML = '<div class="alert alert-danger">Error loading module: ' + err.message + '</div>';
+        });
+      }
   },
 
   refreshCurrentPage() {

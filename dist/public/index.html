@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <title>DOH JAWDA Dashboard — Consultant View</title>
   <link rel="icon" href="/assets/favicon-YVy68IhP.svg" type="image/svg+xml">
-  <script type="module" crossorigin src="/assets/main-BQ2RSoBR.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-R9Nbom16.css">
+  <script type="module" crossorigin src="/assets/main-q3P2gCcD.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-XEBgYSue.css">
 </head>
 <body>
 
   <!-- Top Navigation -->
   <nav class="navbar navbar-expand-lg top-nav shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="#" data-page="dashboard">
+    <div class="container-fluid flex-nowrap">
+      <button class="btn btn-sm btn-outline-light me-2 d-md-none" id="mobileSidebarToggle">
+        <i class="bi bi-list fs-5"></i>
+      </button>
+      <a class="navbar-brand d-flex align-items-center text-truncate" href="#" data-page="dashboard">
         <i class="bi bi-shield-check fs-4 me-2 text-warning"></i>
-        <span class="fw-bold">JAWDA <span class="fw-normal opacity-75">Consultant Portal</span></span>
+        <span class="fw-bold d-none d-sm-inline">JAWDA <span class="fw-normal opacity-75">Consultant Portal</span></span>
+        <span class="fw-bold d-inline d-sm-none">JAWDA</span>
       </a>
       
       <div class="d-flex align-items-center ms-auto gap-3">
@@ -39,6 +43,11 @@
         <select class="form-select form-select-sm w-auto" id="globalVersionSelect" title="KPI Registry Version">
           <option value="">Auto</option>
         </select>
+
+        <!-- Dark Mode Toggle -->
+        <button class="btn btn-sm btn-outline-secondary ms-2" id="darkModeToggle" title="Toggle Dark Mode">
+          <i class="bi bi-moon-stars"></i>
+        </button>
       </div>
     </div>
   </nav>
@@ -47,24 +56,22 @@
     <!-- Sidebar -->
     <div class="sidebar bg-white border-end pt-3">
       <div class="nav flex-column px-2">
-        <div class="text-uppercase text-muted small fw-bold mb-2 px-3">Facility View</div>
-        <a href="#" class="nav-link nav-btn active" data-page="dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
-        <a href="#" class="nav-link nav-btn py-1" data-page="proofs"><i class="bi bi-calculator"></i> KPI Calculations (Proofs)</a>
-        <a href="#" class="nav-link nav-btn" data-page="import"><i class="bi bi-cloud-arrow-up"></i> Data Import</a>
-        <a href="#" class="nav-link nav-btn" data-page="audit"><i class="bi bi-clipboard2-data"></i> Data Audit</a>
-        <a href="#" class="nav-link nav-btn" data-page="manual"><i class="bi bi-pencil-square"></i> Manual Entry</a>
-        <a href="#" class="nav-link nav-btn" data-page="reports"><i class="bi bi-file-earmark-pdf"></i> JAWDA Report</a>
+        <div class="text-uppercase text-muted small fw-bold mb-2 px-3">Clinical Dashboard</div>
+        <a href="#" class="nav-link nav-btn active" data-page="dashboard"><i class="bi bi-grid-1x2"></i> KPI Overview</a>
+        <a href="#" class="nav-link nav-btn py-1" data-page="proofs"><i class="bi bi-calculator"></i> KPI Drill-Down</a>
+        <a href="#" class="nav-link nav-btn" data-page="reports"><i class="bi bi-file-earmark-pdf"></i> Quarterly Report</a>
+
+        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">Data Management</div>
+        <a href="#" class="nav-link nav-btn" data-page="data-manager"><i class="bi bi-database-check"></i> Data Manager</a>
+        <a href="#" class="nav-link nav-btn" data-page="manual"><i class="bi bi-pencil-square"></i> Manual Override</a>
+
+        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">Export & Submission</div>
         <a href="#" class="nav-link nav-btn" data-page="jdc"><i class="bi bi-file-earmark-spreadsheet"></i> JDC Export</a>
-        
-        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">Analytics View</div>
-        <a href="#" class="nav-link nav-btn" data-page="comparison"><i class="bi bi-bar-chart-steps"></i> Quarterly Comparison</a>
-        <a href="#" class="nav-link nav-btn" data-page="facilities"><i class="bi bi-hospital"></i> Manage Facilities</a>
-        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">System Settings</div>
-        <a href="#" class="nav-link nav-btn py-1" data-page="settings-database"><i class="bi bi-hdd-network"></i> Database Backup</a>
-        <a href="#" class="nav-link nav-btn py-1" data-page="settings-guidelines"><i class="bi bi-journal-text"></i> DOH Guidelines</a>
-        <a href="#" class="nav-link nav-btn py-1" data-page="settings-engine"><i class="bi bi-cpu"></i> Engine Logic</a>
-        <a href="#" class="nav-link nav-btn py-1" data-page="settings-clinical"><i class="bi bi-diagram-3"></i> KPI Mappings</a>
-        <a href="#" class="nav-link nav-btn py-1" data-page="settings-dicts"><i class="bi bi-journal-medical"></i> DOH Dictionaries</a>
+        <a href="#" class="nav-link nav-btn" data-page="comparison"><i class="bi bi-bar-chart-steps"></i> Multi-Period View</a>
+
+        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">Administration</div>
+        <a href="#" class="nav-link nav-btn" data-page="facilities"><i class="bi bi-hospital"></i> Facilities</a>
+        <a href="#" class="nav-link nav-btn" data-page="settings"><i class="bi bi-gear"></i> Settings</a>
       </div>
     </div>
 
