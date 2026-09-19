@@ -1,4 +1,6 @@
-const Import = {
+import { App } from './app.js';
+
+export const Import = {
   activeBatchId: null,
   pollInterval: null,
 

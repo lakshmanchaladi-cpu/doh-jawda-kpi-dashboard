@@ -2,21 +2,86 @@ const express = require('express');
 const router = express.Router();
 const { initDb } = require('../database/db');
 const engine = require('../engine/kpi-calculator');
+const { registry } = require('../engine/kpi-registry');
+const { logKPICalculation, logQuarterLock } = require('../engine/audit');
+
+function parsePositiveInt(value, fallback = null) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
+}
+
+// Sanitize codes for safe use in SQL (insurance codes, physician codes, etc.)
+function sanitizeCode(code) {
+  if (!code) return null;
+  const sanitized = String(code).trim().toUpperCase();
+  // Allow only valid code characters: A-Z, 0-9, ., -, _
+  if (!/^[A-Z0-9.\-_]+$/.test(sanitized)) {
+    console.warn(`Rejected invalid code in CASE statement: ${code}`);
+    return null;
+  }
+  return sanitized;
+}
+
+function sqlLiteral(value) {
+  return String(value).replace(/'/g, "''");
+}
+
+function canonicalInsuranceCategory(value) {
+  const category = String(value || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+  if (category === 'thiqa') return 'THIQA';
+  if (category === 'abm_mandate' || category === 'abm') return 'ABM_Mandate';
+  if (category === 'self_pay' || category === 'selfpay') return 'Self-Pay';
+  return 'Commercial';
+}
+
+function validateFacilityQuarter(req, res, facilityId, year, quarter) {
+  const facility = parsePositiveInt(facilityId);
+  const yearNum = parsePositiveInt(year);
+  const quarterNum = parsePositiveInt(quarter);
+
+  if (!facility) {
+    res.status(400).json({ error: 'Valid facility_id is required' });
+    return null;
+  }
+
+  if (!yearNum || yearNum < 2000) {
+    res.status(400).json({ error: 'Valid year is required' });
+    return null;
+  }
+
+  if (!quarterNum || quarterNum < 1 || quarterNum > 4) {
+    res.status(400).json({ error: 'quarter must be between 1 and 4' });
+    return null;
+  }
+
+  return { facility, year: yearNum, quarter: quarterNum };
+}
 
 router.post('/calculate', async (req, res) => {
-  const { facility_id, year, quarter } = req.body;
-  if (!facility_id || !year || !quarter) {
-    return res.status(400).json({ error: 'facility_id, year, and quarter are required' });
-  }
+  const validated = validateFacilityQuarter(req, res, req.body.facility_id, req.body.year, req.body.quarter);
+  if (!validated) return;
+
+  const { facility, year, quarter } = validated;
+  const version = typeof req.body.version === 'string' && req.body.version.trim() ? req.body.version.trim() : null;
 
   try {
     const db = await initDb();
-    const lockRow = await db.get('SELECT is_locked FROM quarter_locks WHERE facility_id=? AND year=? AND quarter=?', [facility_id, year, quarter]);
+    const lockRow = await db.get('SELECT is_locked FROM quarter_locks WHERE facility_id=? AND year=? AND quarter=?', [facility, year, quarter]);
     if (!lockRow || !lockRow.is_locked) {
       return res.status(403).json({ error: 'Data Audit is not locked! You must review and Save & Lock the Data Audit for this quarter before the KPI Engine can recalculate.' });
     }
 
-    const results = await engine.calculateAllKPIs(facility_id, parseInt(year), parseInt(quarter));
+    const results = await engine.calculateAllKPIs(facility, year, quarter, version);
+    
+    // Audit log each KPI calculation
+    const userId = req.user?.id || 'local';
+    for (const result of results) {
+      await logKPICalculation(facility, year, quarter, result.code, result, userId);
+    }
+    
     res.json({ success: true, results });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -25,14 +90,22 @@ router.post('/calculate', async (req, res) => {
 
 
 router.get('/waterfall', async (req, res) => {
-  const { facility_id, year, quarter, kpi_code } = req.query;
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+  const { kpi_code } = req.query;
+
+  if (!facilityId || !year || !quarter) {
+    return res.status(400).json({ error: 'facility_id, year, and quarter are required' });
+  }
+
   try {
     const db = await initDb();
     if (!db._dynamicFilters) db._dynamicFilters = await engine.generateDynamicFilters(db);
     const f = db._dynamicFilters;
 
-    const lb9 = `${year-1}-07-01`; // Simplify for Q2 2026 -> 2025-07-01
-    const qStart = `${year}-04-01`; // Simplify for Q2
+    const lb9 = `${year-1}-07-01`;
+    const qStart = `${year}-04-01`;
 
     if (kpi_code === 'PC014' || kpi_code === 'PC009') {
       const ICD_FILTER = kpi_code === 'PC014' ? f.HTN_ICD_FILTER : f.DM_ICD_FILTER;
@@ -41,7 +114,7 @@ router.get('/waterfall', async (req, res) => {
         WHERE facility_id=? AND year=? AND quarter=?
           AND ABS(patient_age) >= 18 AND ABS(patient_age) <= 85
           AND ${ICD_FILTER} AND ${f.EM_CPT_FILTER} AND ${f.PC_PHY_FILTER}
-      `, [facility_id, year, quarter]);
+      `, [facilityId, year, quarter]);
       
       const row2Data = await db.all(`
         SELECT DISTINCT mrn FROM locked_audit_records
@@ -52,7 +125,7 @@ router.get('/waterfall', async (req, res) => {
             SELECT mrn FROM locked_audit_records WHERE facility_id=? AND encounter_date >= ? AND encounter_date < ?
             AND ${ICD_FILTER} GROUP BY mrn HAVING COUNT(DISTINCT encounter_date) >= 2
           )
-      `, [facility_id, year, quarter, facility_id, lb9, qStart]);
+      `, [facilityId, year, quarter, facilityId, lb9, qStart]);
 
       const isHTN = kpi_code === 'PC014';
       const excMap = isHTN ? 
@@ -78,7 +151,12 @@ router.get('/waterfall', async (req, res) => {
 router.get('/proof-mappings', async (req, res) => {
   try {
     const db = await initDb();
-    const mappings = await db.all("SELECT group_name, GROUP_CONCAT(code, ', ') as codes FROM code_mappings GROUP BY group_name");
+    const mappings = await db.all(`
+      SELECT group_name, GROUP_CONCAT(code, ', ') as codes
+      FROM code_mappings
+      WHERE mapping_type IN ('Disease_Group', 'Exclusion_Group', 'ICD-10', 'Category', 'Action_Table', 'Physician_Type')
+      GROUP BY group_name
+    `);
     const mapDict = {};
     mappings.forEach(m => mapDict[m.group_name] = m.codes);
     res.json(mapDict);
@@ -87,9 +165,49 @@ router.get('/proof-mappings', async (req, res) => {
   }
 });
 
+// GET available KPI registry versions + active resolution for a facility/quarter
+router.get('/versions', async (req, res) => {
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+
+  try {
+    const versions = await registry.getAllVersions();
+
+    // Resolve which version(s) would apply for the selected facility/quarter
+    let active = null;
+    if (facilityId && year && quarter) {
+      const db = await initDb();
+      const fac = await db.get('SELECT facility_type FROM facilities WHERE id = ?', [facilityId]);
+      if (fac) {
+        const type = fac.facility_type || 'Primary Care';
+        active = await registry.getRegistry(type, year, quarter);
+      }
+    }
+
+    res.json({
+      versions: versions.map(v => ({
+        version: v.version,
+        name: v.name,
+        effective_from: v.effective_from,
+        effective_to: v.effective_to,
+        facility_types: v.facility_types,
+        kpi_count: (() => { try { return JSON.parse(v.kpi_codes).length; } catch { return 0; } })(),
+        description: v.description
+      })),
+      active: active ? { version: active.version, name: active.name } : null
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/results', async (req, res) => {
-  const { facility_id, year, quarter } = req.query;
-  if (!facility_id) return res.status(400).json({ error: 'facility_id is required' });
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+
+  if (!facilityId) return res.status(400).json({ error: 'facility_id is required' });
 
   try {
     const db = await initDb();
@@ -100,7 +218,7 @@ router.get('/results', async (req, res) => {
       JOIN kpi_definitions d ON r.kpi_code = d.code
       WHERE r.facility_id = ?
     `;
-    const params = [facility_id];
+    const params = [facilityId];
 
     if (year) { sql += ' AND r.year = ?'; params.push(year); }
     if (quarter) { sql += ' AND r.quarter = ?'; params.push(quarter); }
@@ -115,8 +233,11 @@ router.get('/results', async (req, res) => {
 });
 
 router.get('/trends', async (req, res) => {
-  const { facility_id, year, quarter } = req.query;
-  if (!facility_id || !year || !quarter) return res.status(400).json({ error: 'Missing parameters' });
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+
+  if (!facilityId || !year || !quarter) return res.status(400).json({ error: 'facility_id, year, and quarter are required' });
 
   try {
     const db = await initDb();
@@ -126,7 +247,7 @@ router.get('/trends', async (req, res) => {
       JOIN kpi_definitions d ON r.kpi_code = d.code
       WHERE r.facility_id = ? 
       ORDER BY year DESC, quarter DESC
-    `, [facility_id]);
+    `, [facilityId]);
     res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -135,8 +256,12 @@ router.get('/trends', async (req, res) => {
 
 router.post('/manual', async (req, res) => {
   const { facility_id, kpi_code, year, quarter, value, numerator, denominator } = req.body;
-  if (!facility_id || !kpi_code || !year || !quarter || value === undefined) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  const facilityId = parsePositiveInt(facility_id);
+  const yearNum = parsePositiveInt(year);
+  const quarterNum = parsePositiveInt(quarter);
+
+  if (!facilityId || !kpi_code || !yearNum || !quarterNum || value === undefined) {
+    return res.status(400).json({ error: 'facility_id, kpi_code, year, quarter, and value are required' });
   }
 
   try {
@@ -146,9 +271,9 @@ router.post('/manual', async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(facility_id, kpi_code, year, quarter) DO UPDATE SET
         value=excluded.value, numerator=excluded.numerator, denominator=excluded.denominator
-    `, [facility_id, kpi_code, year, quarter, value, numerator || null, denominator || null]);
+    `, [facilityId, String(kpi_code).trim(), yearNum, quarterNum, value, numerator || null, denominator || null]);
     
-    await engine.calculateAllKPIs(facility_id, parseInt(year), parseInt(quarter));
+    await engine.calculateAllKPIs(facilityId, yearNum, quarterNum);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -157,12 +282,19 @@ router.post('/manual', async (req, res) => {
 
 // Lock Status
 router.get('/lock-status', async (req, res) => {
-  const { facility_id, year, quarter } = req.query;
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+
+  if (!facilityId || !year || !quarter) {
+    return res.status(400).json({ error: 'facility_id, year, and quarter are required' });
+  }
+
   try {
     const db = await initDb();
     const row = await db.get(
       'SELECT is_locked, locked_at FROM quarter_locks WHERE facility_id=? AND year=? AND quarter=?',
-      [facility_id, year, quarter]
+      [facilityId, year, quarter]
     );
     res.json({ is_locked: row ? !!row.is_locked : false, locked_at: row ? row.locked_at : null });
   } catch (err) {
@@ -173,6 +305,14 @@ router.get('/lock-status', async (req, res) => {
 // Toggle Lock & Generate Master Records
 router.post('/toggle-lock', async (req, res) => {
   const { facility_id, year, quarter, lock } = req.body;
+  const facilityId = parsePositiveInt(facility_id);
+  const yearNum = parsePositiveInt(year);
+  const quarterNum = parsePositiveInt(quarter);
+
+  if (!facilityId || !yearNum || !quarterNum || lock === undefined) {
+    return res.status(400).json({ error: 'facility_id, year, quarter, and lock are required' });
+  }
+
   try {
     const db = await initDb();
     const isLocked = lock ? 1 : 0;
@@ -186,21 +326,37 @@ router.post('/toggle-lock', async (req, res) => {
       VALUES (?, ?, ?, ?, ?)
       ON CONFLICT(facility_id, year, quarter) DO UPDATE SET
         is_locked=excluded.is_locked, locked_at=excluded.locked_at
-    `, [facility_id, year, quarter, isLocked, now]);
+    `, [facilityId, yearNum, quarterNum, isLocked, now]);
 
     // 2. Clear old locked records for this quarter
-    await db.run('DELETE FROM locked_audit_records WHERE facility_id=? AND year=? AND quarter=?', [facility_id, year, quarter]);
+    await db.run('DELETE FROM locked_audit_records WHERE facility_id=? AND year=? AND quarter=?', [facilityId, yearNum, quarterNum]);
 
     // 3. If locking, generate the merged records from EMR + RCM
     if (isLocked) {
       // Get the dynamic RCM_CASE_SQL from DB
       const mappings = await db.all("SELECT code, group_name FROM code_mappings WHERE mapping_type = 'Insurance'");
-      const cases = mappings.map(m => `WHEN UPPER(TRIM(s.insurance_type)) = '${String(m.code).toUpperCase()}' THEN '${m.group_name}'`).join(' ');
-      const rcmCaseSql = `CASE ${cases} WHEN s.insurance_type IS NULL OR TRIM(s.insurance_type) = '' THEN 'Self-Pay' ELSE 'Commercial' END`;
+      const insuranceCases = mappings
+        .map(m => {
+          const code = sanitizeCode(m.code);
+          const group = sanitizeCode(canonicalInsuranceCategory(m.group_name));
+          if (!code || !group) return null;
+          return `WHEN UPPER(TRIM(COALESCE(s.insurance_type, ''))) = '${sqlLiteral(code)}' THEN '${sqlLiteral(group)}'`;
+        })
+        .filter(Boolean)
+        .join(' ');
+      const rcmCaseSql = `CASE ${insuranceCases} WHEN UPPER(TRIM(COALESCE(s.insurance_type, ''))) = '' THEN 'Self-Pay' ELSE 'Commercial' END`;
       
-      const physicianMappings = await db.all("SELECT code, group_name FROM code_mappings WHERE mapping_type = 'Physician_Role'");
-      const physCases = physicianMappings.map(m => `WHEN UPPER(TRIM(COALESCE(s.physician_type, e.physician_type))) = '${String(m.code).toUpperCase()}' THEN '${m.group_name}'`).join(' ');
-      const physCaseSql = `CASE ${physCases} WHEN 1=0 THEN 'dummy' ELSE 'Other' END`;
+      const physicianMappings = await db.all("SELECT code, group_name FROM code_mappings WHERE mapping_type IN ('Physician_Type', 'Physician_Role')");
+      const physCases = physicianMappings
+        .map(m => {
+          const code = sanitizeCode(m.code);
+          const group = sanitizeCode(m.group_name);
+          if (!code || !group) return null;
+          return `WHEN UPPER(TRIM(COALESCE(s.physician_type, e.physician_type))) = '${sqlLiteral(code)}' THEN '${sqlLiteral(group)}'`;
+        })
+        .filter(Boolean)
+        .join(' ');
+      const physCaseSql = `CASE ${physCases} ELSE 'Other' END`;
 
       await db.run(`
         INSERT INTO locked_audit_records (
@@ -221,7 +377,7 @@ router.post('/toggle-lock', async (req, res) => {
           COALESCE(e.hba1c_value, s.hba1c_value) as hba1c_value, e.hba1c_date,
           e.patient_dob, e.month, e.visit_type,
           COALESCE(s.physician_type, e.physician_type) as physician_type,
-          COALESCE(cl.major, 'Other') as physician_category,
+          (${physCaseSql}) as physician_category,
           COALESCE(s.icd10_primary, e.icd10_primary) as icd10_primary,
           COALESCE(s.icd10_secondary, e.icd10_secondary) as icd10_secondary,
           COALESCE(s.icd10_all, e.icd10_all) as icd10_all,
@@ -239,10 +395,15 @@ router.post('/toggle-lock', async (req, res) => {
           ON cl.license_number = COALESCE(s.physician_type, e.physician_type)
           AND cl.facility_mf_no = fac.mf_no
         WHERE e.facility_id = ? AND e.year = ? AND e.quarter = ?
-      `, [facility_id, year, quarter]);
+      `, [facilityId, yearNum, quarterNum]);
     }
 
     await db.run('COMMIT');
+    
+    // Audit log the lock/unlock action
+    const userId = req.user?.id || 'local';
+    await logQuarterLock(facilityId, yearNum, quarterNum, lock, userId);
+    
     res.json({ success: true, is_locked: lock });
   } catch (err) {
     console.error('Lock Error:', err);
@@ -256,18 +417,25 @@ router.post('/toggle-lock', async (req, res) => {
 
 // View Claims (numerator/denominator breakdown)
 router.get('/claims', async (req, res) => {
-  const { facility_id, year, quarter, kpi_code } = req.query;
+  const facilityId = parsePositiveInt(req.query.facility_id);
+  const year = parsePositiveInt(req.query.year);
+  const quarter = parsePositiveInt(req.query.quarter);
+  const { kpi_code } = req.query;
+
+  if (!facilityId || !year || !quarter || !kpi_code) {
+    return res.status(400).json({ error: 'facility_id, year, quarter, and kpi_code are required' });
+  }
+
   try {
     const db = await initDb();
     const fn = engine.CALCULATORS[kpi_code];
     if (!fn) return res.status(400).json({ error: 'Unsupported KPI Code for drill-down' });
     
     if (!db._dynamicFilters) db._dynamicFilters = await engine.generateDynamicFilters(db);
-      const result = await fn(db, facility_id, year, quarter, db._dynamicFilters);
+      const result = await fn(db, facilityId, year, quarter, db._dynamicFilters);
     const num = result.num_list || [];
     const den = result.den_list || [];
     
-    // Gap = Denominator minus Numerator
     const gap = den.filter(mrn => !num.includes(mrn));
     
     res.json({

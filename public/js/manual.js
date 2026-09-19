@@ -1,4 +1,6 @@
-const ManualEntry = {
+import { App } from './app.js';
+
+export const ManualEntry = {
   render(container) {
     const facility = App.state.facilities.find(f => f.id === App.state.facilityId);
     

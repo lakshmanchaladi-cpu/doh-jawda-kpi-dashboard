@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOH JAWDA Dashboard — Consultant View</title>
+  <link rel="icon" href="/assets/favicon-YVy68IhP.svg" type="image/svg+xml">
+  <script type="module" crossorigin src="/assets/main-FUp7pQE4.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-R9Nbom16.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar navbar-expand-lg top-nav shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#" data-page="dashboard">
+        <i class="bi bi-shield-check fs-4 me-2 text-warning"></i>
+        <span class="fw-bold">JAWDA <span class="fw-normal opacity-75">Consultant Portal</span></span>
+      </a>
+      
+      <div class="d-flex align-items-center ms-auto gap-3">
+        <!-- Global Facility Selector -->
+        <div class="input-group input-group-sm w-auto">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-building text-muted"></i></span>
+          <select class="form-select border-start-0 shadow-none fw-semibold" id="globalFacilitySelect" style="max-width: 250px;">
+            <option value="">Select Facility...</option>
+          </select>
+        </div>
+
+        <!-- Global Year/Quarter Selector -->
+        <select class="form-select form-select-sm w-auto" id="globalYearSelect"></select>
+        <select class="form-select form-select-sm w-auto" id="globalQuarterSelect">
+          <option value="1">Q1 (Jan-Mar)</option>
+          <option value="2">Q2 (Apr-Jun)</option>
+          <option value="3">Q3 (Jul-Sep)</option>
+          <option value="4">Q4 (Oct-Dec)</option>
+        </select>
+
+        <!-- Global Version Selector -->
+        <select class="form-select form-select-sm w-auto" id="globalVersionSelect" title="KPI Registry Version">
+          <option value="">Auto</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <div class="d-flex app-container">
+    <!-- Sidebar -->
+    <div class="sidebar bg-white border-end pt-3">
+      <div class="nav flex-column px-2">
+        <div class="text-uppercase text-muted small fw-bold mb-2 px-3">Facility View</div>
+        <a href="#" class="nav-link nav-btn active" data-page="dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+        <a href="#" class="nav-link nav-btn py-1" data-page="proofs"><i class="bi bi-calculator"></i> KPI Calculations (Proofs)</a>
+        <a href="#" class="nav-link nav-btn" data-page="import"><i class="bi bi-cloud-arrow-up"></i> Data Import</a>
+        <a href="#" class="nav-link nav-btn" data-page="audit"><i class="bi bi-clipboard2-data"></i> Data Audit</a>
+        <a href="#" class="nav-link nav-btn" data-page="manual"><i class="bi bi-pencil-square"></i> Manual Entry</a>
+        <a href="#" class="nav-link nav-btn" data-page="reports"><i class="bi bi-file-earmark-pdf"></i> JAWDA Report</a>
+        <a href="#" class="nav-link nav-btn" data-page="jdc"><i class="bi bi-file-earmark-spreadsheet"></i> JDC Export</a>
+        
+        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">Analytics View</div>
+        <a href="#" class="nav-link nav-btn" data-page="comparison"><i class="bi bi-bar-chart-steps"></i> Quarterly Comparison</a>
+        <a href="#" class="nav-link nav-btn" data-page="facilities"><i class="bi bi-hospital"></i> Manage Facilities</a>
+        <div class="text-uppercase text-muted small fw-bold mb-2 mt-4 px-3">System Settings</div>
+        <a href="#" class="nav-link nav-btn py-1" data-page="settings-guidelines"><i class="bi bi-journal-text"></i> DOH Guidelines</a>
+        <a href="#" class="nav-link nav-btn py-1" data-page="settings-engine"><i class="bi bi-cpu"></i> Engine Logic</a>
+        <a href="#" class="nav-link nav-btn py-1" data-page="settings-clinical"><i class="bi bi-diagram-3"></i> KPI Mappings</a>
+        <a href="#" class="nav-link nav-btn py-1" data-page="settings-dicts"><i class="bi bi-journal-medical"></i> DOH Dictionaries</a>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content bg-light flex-grow-1 p-4 overflow-auto" id="app-content">
+      <!-- Dynamic pages loaded here -->
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+  <!-- Scripts -->
+</body>
+</html>

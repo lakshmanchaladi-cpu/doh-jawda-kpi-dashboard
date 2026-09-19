@@ -1,0 +1,8 @@
+version: 0.0.1
+models:
+  - name: qwen2.5-coder:7b
+    provider: ollama
+    model: qwen2.5-coder:7b
+  - name: llama3.1:8b
+    provider: ollama
+    model: llama3.1:8b

@@ -1,4 +1,6 @@
-const Reports = {
+import { App } from './app.js';
+
+export const Reports = {
   async render(container) {
     container.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';
     

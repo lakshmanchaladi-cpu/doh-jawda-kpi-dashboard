@@ -1,4 +1,6 @@
-const Proofs = {
+import { App } from './app.js';
+
+export const Proofs = {
   async render(container) {
     if (!App.state.facilityId) return;
     

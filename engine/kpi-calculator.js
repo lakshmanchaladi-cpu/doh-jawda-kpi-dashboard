@@ -1,5 +1,20 @@
 const { initDb } = require('../database/db');
 const { KPI_DEFINITIONS } = require('./kpi-definitions');
+const { registry } = require('./kpi-registry');
+const { buildExclusionClause, getExclusionDescriptions } = require('./exclusions');
+
+// ─── SQL Injection Prevention ─────────────────────────────────────────────────
+// Sanitize codes for safe use in SQL (ICD-10, CPT, etc. - alphanumeric, dots, dashes)
+function sanitizeCode(code) {
+  if (!code) return null;
+  const sanitized = String(code).trim().toUpperCase();
+  // Allow only valid medical code characters: A-Z, 0-9, ., -
+  if (!/^[A-Z0-9.\-]+$/.test(sanitized)) {
+    console.warn(`Rejected invalid code: ${code}`);
+    return null;
+  }
+  return sanitized;
+}
 
 // ─── Physician type filter — covers all facility free-text variants ────────────
 
@@ -8,11 +23,16 @@ const { KPI_DEFINITIONS } = require('./kpi-definitions');
 
 
 async function generateDynamicFilters(db) {
-  const mapRows = await db.all("SELECT group_name, code FROM code_mappings");
+  const mapRows = await db.all(`
+    SELECT group_name, code
+    FROM code_mappings
+    WHERE mapping_type IN ('Disease_Group', 'Exclusion_Group', 'ICD-10', 'Category', 'Action_Table')
+  `);
   const dict = {};
   for (let r of mapRows) {
     if(!dict[r.group_name]) dict[r.group_name] = [];
-    dict[r.group_name].push(r.code.toUpperCase().trim());
+    const sanitized = sanitizeCode(r.code);
+    if (sanitized) dict[r.group_name].push(sanitized.toUpperCase().trim());
   }
 
   function buildLikeOr(col, codes) {
@@ -50,21 +70,24 @@ async function generateDynamicFilters(db) {
 
   // ABM Exclusions
   filters.ABM_EXCL = ` AND (is_abm_mandate = 0 OR is_abm_mandate IS NULL) `;
+  filters.DEP_INC_FILTER = buildLikeOr('icd10_all', dict['Depression_Inc']);
   filters.DEP_EXCL_FILTER = buildLikeOr('icd10_all', dict['Depression_Exc']);
   filters.BIPOLAR_EXCL_FILTER = buildLikeOr('icd10_all', dict['Bipolar_Exc']);
 
   // EM CPT Filter
   filters.EM_CPT_FILTER = buildLikeOr('cpt_all', dict['Valid_EM']);
+  filters.FOOT_EXAM_FILTER = buildLikeOr('cpt_all', dict['Foot_Exam']);
+  filters.EYE_EXAM_FILTER = buildLikeOr('cpt_all', dict['Eye_Exam']);
+  filters.NEPHROPATHY_FILTER = buildLikeOr('cpt_all', dict['Nephropathy']);
 
   // PC_PHY_FILTER using clinician_licenses!
-  // If physician_type explicitly matches the string in PC_Valid, OR if it's a license number in clinician_licenses that maps to a PC profession
   filters.PC_PHY_FILTER = `(
-    UPPER(TRIM(physician_type)) IN (SELECT UPPER(TRIM(code)) FROM code_mappings WHERE group_name = 'PC_Valid')
+    UPPER(TRIM(physician_type)) IN (SELECT UPPER(TRIM(code)) FROM code_mappings WHERE mapping_type = 'Physician_Type' AND group_name = 'PC_Valid')
     OR physician_type IN (SELECT license_number FROM clinician_licenses WHERE category IN ('General Practitioner', 'Family Medicine', 'Internal Medicine') OR profession IN ('General Practitioner', 'Family Medicine', 'Internal Medicine'))
   )`;
 
   filters.PC_PHY_PAED_FILTER = `(
-    UPPER(TRIM(physician_type)) IN (SELECT UPPER(TRIM(code)) FROM code_mappings WHERE group_name IN ('PC_Valid', 'PC_Paed'))
+    UPPER(TRIM(physician_type)) IN (SELECT UPPER(TRIM(code)) FROM code_mappings WHERE mapping_type = 'Physician_Type' AND group_name IN ('PC_Valid', 'PC_Paed'))
     OR physician_type IN (SELECT license_number FROM clinician_licenses WHERE category IN ('General Practitioner', 'Family Medicine', 'Internal Medicine', 'Pediatrics') OR profession IN ('General Practitioner', 'Family Medicine', 'Internal Medicine', 'Pediatrics'))
   )`;
 
@@ -167,7 +190,7 @@ async function calc_PC005(db, facilityId, year, quarter, filters) {
       FROM locked_audit_records
       WHERE facility_id=? AND year=? AND quarter=? 
         AND phq9_score BETWEEN 5 AND 14
-        AND ${filters.DEP_EXCL_FILTER}
+        AND ${filters.DEP_INC_FILTER}
       GROUP BY mrn
     ),
     exclusions AS (
@@ -179,7 +202,7 @@ async function calc_PC005(db, facilityId, year, quarter, filters) {
       JOIN q2_dx q ON r.mrn = q.mrn
       WHERE r.facility_id=? 
         AND r.encounter_date < q.dx_date
-        AND ${filters.DEP_EXCL_FILTER}
+        AND ${filters.DEP_INC_FILTER}
     ),
     q2_data AS (
       SELECT mrn, MAX(patient_refused) as refused, MAX(is_abm_mandate) as abm
@@ -353,7 +376,7 @@ async function calc_PC011(db, facilityId, year, quarter, filters) {
       AND mrn IN (
         SELECT mrn FROM locked_audit_records
         WHERE facility_id=? AND encounter_date >= ? 
-          AND (foot_exam_done = 1 OR cpt_all LIKE '%2028F%')
+            AND (foot_exam_done = 1 OR ${filters.FOOT_EXAM_FILTER})
       )
   `;
   const num = await db.get(numSql, [facilityId, year, quarter, facilityId, lb9, qStart, facilityId, lb12]);
@@ -398,7 +421,7 @@ async function calc_PC012(db, facilityId, year, quarter, filters) {
       AND mrn IN (
         SELECT mrn FROM locked_audit_records
         WHERE facility_id=? AND encounter_date >= ? 
-          AND (eye_exam_done = 1 OR cpt_all LIKE '%2022F%' OR cpt_all LIKE '%2024F%' OR cpt_all LIKE '%2026F%' OR cpt_all LIKE '%3072F%')
+          AND (eye_exam_done = 1 OR ${filters.EYE_EXAM_FILTER})
       )
   `;
   const num = await db.get(numSql, [facilityId, year, quarter, facilityId, lb9, qStart, facilityId, lb12]);
@@ -443,7 +466,7 @@ async function calc_PC013(db, facilityId, year, quarter, filters) {
       AND mrn IN (
         SELECT mrn FROM locked_audit_records
         WHERE facility_id=? AND encounter_date >= ? 
-          AND (nephropathy_exam_done = 1 OR cpt_all LIKE '%3060F%' OR cpt_all LIKE '%82043%' OR cpt_all LIKE '%82570%')
+          AND (nephropathy_exam_done = 1 OR ${filters.NEPHROPATHY_FILTER})
       )
   `;
   const num = await db.get(numSql, [facilityId, year, quarter, facilityId, lb9, qStart, facilityId, lb12]);
@@ -517,21 +540,40 @@ const CALCULATORS = {
   PC009: calc_PC009, PC010: calc_PC010,
   PC011: calc_PC011, PC012: calc_PC012, PC013: calc_PC013,
   PC014: calc_PC014, PC016: calc_PC016,
+  // Missing KPIs (Phase 3)
+  PC021: calc_PC021, PC023: calc_PC023, PC024: calc_PC024,
+  PC025: calc_PC025, PC026: calc_PC026, PC027: calc_PC027,
+  PC028: calc_PC028, PC029: calc_PC029, PC030: calc_PC030,
   
 };
 
-async function calculateAllKPIs(facilityId, year, quarter) {
+async function calculateAllKPIs(facilityId, year, quarter, version = null) {
   const db = await initDb();
+  
+  // Get facility to determine type
+  const facility = await db.get('SELECT facility_type FROM facilities WHERE id = ?', [facilityId]);
+  const facilityType = facility?.facility_type || 'Primary Care';
+  
+  // Get applicable KPI codes from registry
+  const applicableCodes = await registry.getKPICodes(facilityType, year, quarter, version);
+  const applicableSet = new Set(applicableCodes);
+  
+  // Get KPI definitions, filtered by registry
   const kpiDefs = await db.all('SELECT * FROM kpi_definitions');
   const results = [];
 
   for (const kpi of kpiDefs) {
+    // Skip if not in applicable codes for this facility type/version
+    if (applicableCodes.length > 0 && !applicableSet.has(kpi.code)) {
+      continue;
+    }
+    
     const calc = CALCULATORS[kpi.code];
     if (!calc) continue;
 
     let num = null, den = null, value = null;
-    try {
-      
+try {
+       
         if(!db._dynamicFilters) db._dynamicFilters = await generateDynamicFilters(db);
         const r = await calc(db, facilityId, year, quarter, db._dynamicFilters);
       num = r.numerator;
@@ -572,4 +614,338 @@ async function calculateAllKPIs(facilityId, year, quarter) {
   return results;
 }
 
-module.exports = { calculateAllKPIs, kpiStatus, CALCULATORS, generateDynamicFilters };
+// =============================================================================
+// MISSING KPI CALCULATORS (Phase 3)
+// =============================================================================
+
+// PC021: Autism Screening in Children (18-24 months)
+async function calc_PC021(db, facilityId, year, quarter, filters) {
+  const qStart = `${year}-${String(quarter*3-2).padStart(2,'0')}-01`;
+  const qEnd = new Date(year, quarter*3, 0).toISOString().split('T')[0];
+  
+  const abmExcl = filters.ABM_EXCL || "AND (is_abm_mandate = 0 OR is_abm_mandate IS NULL)";
+  const pallExcl = "AND (is_palliative = 0 OR is_palliative IS NULL)";
+  const refusedExcl = "AND (patient_refused = 0 OR patient_refused IS NULL)";
+
+  // Denominator: Children 18-24 months with outpatient visit in quarter
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list 
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND patient_age_months >= 18 AND patient_age_months <= 24
+      ${abmExcl} ${pallExcl} ${refusedExcl}
+  `, [facilityId, year, quarter]);
+  
+  // Numerator: Children screened with M-CHAT-R (CPT 96110 or ICD Z13.4)
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND patient_age_months >= 18 AND patient_age_months <= 24
+      AND (cpt_all LIKE '%96110%' OR icd10_all LIKE '%Z13.4%')
+      ${abmExcl} ${pallExcl} ${refusedExcl}
+  `, [facilityId, year, quarter]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC023: Poorly Controlled HTN (≥130/80 ×2 separate encounters)
+async function calc_PC023(db, facilityId, year, quarter, filters) {
+  const lb9 = lookbackDate(year, quarter);
+  const qStart = `${year}-${String(quarter*3-2).padStart(2,'0')}-01`;
+  
+  // Denominator: HTN patients 18-85 with ≥2 visits in 9 months
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list 
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=? 
+      AND ABS(patient_age)>=18 AND ABS(patient_age)<=85
+      AND ${filters.HTN_ICD_FILTER} ${filters.HTN_EXCL} ${filters.ABM_EXCL}
+      AND ${filters.PC_PHY_FILTER}
+      AND mrn IN (
+        SELECT mrn FROM locked_audit_records 
+        WHERE facility_id=? AND encounter_date>=? AND encounter_date<?
+          AND ${filters.HTN_ICD_FILTER}
+        GROUP BY mrn HAVING COUNT(DISTINCT encounter_date)>=2
+      )
+  `, [facilityId, year, quarter, facilityId, lb9, qStart]);
+  
+  // Numerator: Patients with 2 separate encounters with BP ≥130/80 in quarter
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list FROM (
+      SELECT mrn, COUNT(DISTINCT encounter_date) as high_bp_visits
+      FROM locked_audit_records
+      WHERE facility_id=? AND year=? AND quarter=?
+        AND ABS(patient_age)>=18 AND ABS(patient_age)<=85
+        AND ${filters.HTN_ICD_FILTER} ${filters.HTN_EXCL} ${filters.ABM_EXCL}
+        AND ${filters.PC_PHY_FILTER}
+        AND bp_systolic IS NOT NULL AND bp_diastolic IS NOT NULL
+        AND (bp_systolic >= 130 OR bp_diastolic >= 80)
+      GROUP BY mrn
+      HAVING COUNT(DISTINCT encounter_date) >= 2
+    )
+  `, [facilityId, year, quarter]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC024: Dyslipidemia Screening High-Risk
+async function calc_PC024(db, facilityId, year, quarter, filters) {
+  const lb12 = lookback12Date(year, quarter);
+  const qStart = `${year}-${String(quarter*3-2).padStart(2,'0')}-01`;
+  
+  // High-risk conditions: DM, HTN, CVD (I20-I25), Obesity (E66)
+  const highRiskIcdFilter = `(${filters.DM_ICD_FILTER} OR ${filters.HTN_ICD_FILTER} 
+    OR icd10_all LIKE '%I20%' OR icd10_all LIKE '%I21%' OR icd10_all LIKE '%I22%' 
+    OR icd10_all LIKE '%I23%' OR icd10_all LIKE '%I24%' OR icd10_all LIKE '%I25%'
+    OR icd10_all LIKE '%E66%')`;
+  
+  // Denominator: High-risk patients ≥18 with ≥1 visit in quarter AND ≥1 visit in 9 months prior
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list 
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      AND ${highRiskIcdFilter}
+      AND mrn IN (
+        SELECT mrn FROM locked_audit_records 
+        WHERE facility_id=? AND encounter_date>=? AND encounter_date<?
+        GROUP BY mrn HAVING COUNT(*) >= 1
+      )
+  `, [facilityId, year, quarter, facilityId, lb12, qStart]);
+  
+  // Numerator: High-risk patients with complete lipid profile in past 12 months
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? 
+      AND mrn IN (
+        SELECT mrn FROM locked_audit_records
+        WHERE facility_id=? AND year=? AND quarter=?
+          AND ABS(patient_age)>=18
+          AND ${highRiskIcdFilter}
+          AND mrn IN (
+            SELECT mrn FROM locked_audit_records 
+            WHERE facility_id=? AND encounter_date>=? AND encounter_date<?
+            GROUP BY mrn HAVING COUNT(*) >= 1
+          )
+      )
+      AND encounter_date >= ?
+      AND (cpt_all LIKE '%80061%' OR cpt_all LIKE '%82465%' OR cpt_all LIKE '%83718%' 
+           OR cpt_all LIKE '%83721%' OR cpt_all LIKE '%84478%')
+  `, [facilityId, facilityId, year, quarter, facilityId, lb12, qStart, lb12]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC025: Overweight/Obese Rate (BMI≥25)
+async function calc_PC025(db, facilityId, year, quarter, filters) {
+  const abmExcl = filters.ABM_EXCL || "AND (is_abm_mandate = 0 OR is_abm_mandate IS NULL)";
+  const pallExcl = "AND (is_palliative = 0 OR is_palliative IS NULL)";
+  const refusedExcl = "AND (patient_refused = 0 OR patient_refused IS NULL)";
+
+  // Denominator: Adults ≥18 with visit in quarter
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list 
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      ${abmExcl} ${pallExcl} ${refusedExcl}
+  `, [facilityId, year, quarter]);
+  
+  // Numerator: BMI ≥25 OR ICD E66
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      AND (bmi >= 25 OR icd10_all LIKE '%E66%')
+      ${abmExcl} ${pallExcl} ${refusedExcl}
+  `, [facilityId, year, quarter]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC026: Depression Treatment Success (50% PHQ-9 reduction)
+async function calc_PC026(db, facilityId, year, quarter, filters) {
+  const { denYear, denQuarter } = pc026DenominatorQuarter(year, quarter);
+  const denQuarterStart = `${denYear}-${String(denQuarter*3-2).padStart(2,'0')}-01`;
+  const denQuarterEnd = new Date(denYear, denQuarter*3, 0).toISOString().split('T')[0];
+  
+  // Denominator: Adults ≥18 with positive PHQ-9 in denominator quarter
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      AND phq9_score >= 5
+      AND ${filters.DEP_INC_FILTER}
+  `, [facilityId, denYear, denQuarter]);
+  
+  // Numerator: Patients with ≥50% PHQ-9 improvement at 14-180 days follow-up
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      AND phq9_score IS NOT NULL
+      AND phq9_followup_score IS NOT NULL
+      AND phq9_followup_score <= (phq9_score * 0.5)
+      AND julianday(phq9_followup_date) - julianday(phq9_date) BETWEEN 14 AND 180
+  `, [facilityId, year, quarter]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC027: Asthma Medication Ratio (AMR ≥0.50)
+async function calc_PC027(db, facilityId, year, quarter, filters) {
+  // Age 5-64, persistent asthma (J45.40-J45.52)
+  const asthmaIcdFilter = `icd10_all LIKE '%J45.40%' OR icd10_all LIKE '%J45.41%' 
+    OR icd10_all LIKE '%J45.42%' OR icd10_all LIKE '%J45.50%' 
+    OR icd10_all LIKE '%J45.51%' OR icd10_all LIKE '%J45.52%'`;
+  const asthmaExclFilter = `AND NOT (icd10_all LIKE '%J43%' OR icd10_all LIKE '%J44%' 
+    OR icd10_all LIKE '%E84.0%' OR icd10_all LIKE '%J96.0%')`;
+  
+  // Denominator: Patients 5-64 with persistent asthma in quarter
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND patient_age >= 5 AND patient_age <= 64
+      AND (${asthmaIcdFilter})
+      ${asthmaExclFilter}
+  `, [facilityId, year, quarter]);
+  
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list FROM (
+      SELECT mrn,
+             asthma_controller_count,
+             asthma_reliever_count,
+             (COALESCE(asthma_controller_count,0) * 1.0 / NULLIF(COALESCE(asthma_controller_count,0) + COALESCE(asthma_reliever_count,0), 0)) as amr
+      FROM locked_audit_records
+      WHERE facility_id=? AND year=? AND quarter=?
+        AND patient_age >= 5 AND patient_age <= 64
+        AND (${asthmaIcdFilter})
+        ${asthmaExclFilter}
+        AND (asthma_controller_count + asthma_reliever_count) > 0
+    ) sub
+    WHERE amr >= 0.5
+  `, [facilityId, year, quarter]);
+  
+  return { 
+    numerator: num.cnt || 0, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC028: Wait Time ≤30 min (Manual entry)
+async function calc_PC028(db, facilityId, year, quarter, filters) {
+  // This is a manual entry KPI - check manual_kpi_entries table
+  const manual = await db.get(`
+    SELECT value, numerator, denominator
+    FROM manual_kpi_entries
+    WHERE facility_id=? AND kpi_code='PC028' AND year=? AND quarter=?
+  `, [facilityId, year, quarter]);
+  
+  if (manual) {
+    return { 
+      numerator: manual.numerator, 
+      denominator: manual.denominator, 
+      value: manual.value,
+      num_list: [], 
+      den_list: [] 
+    };
+  }
+  
+  return { numerator: null, denominator: null, value: null, num_list: [], den_list: [] };
+}
+
+// PC029: Kidney Function Evaluation (eGFR <90, tested q6mo)
+async function calc_PC029(db, facilityId, year, quarter, filters) {
+  const qEnd = new Date(year, quarter*3, 0).toISOString().split('T')[0];
+  const sixMonthsAgo = new Date(qEnd);
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+  const sixMonthsAgoStr = sixMonthsAgo.toISOString().split('T')[0];
+  
+  // Denominator: Patients ≥18 with eGFR <90 in quarter
+  const den = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? AND year=? AND quarter=?
+      AND ABS(patient_age)>=18
+      AND egfr_value IS NOT NULL AND egfr_value < 90
+  `, [facilityId, year, quarter]);
+  
+  // Numerator: Patients with eGFR+uACR test within last 6 months
+  const num = await db.get(`
+    SELECT COUNT(DISTINCT mrn) as cnt, GROUP_CONCAT(DISTINCT mrn) as mrn_list
+    FROM locked_audit_records
+    WHERE facility_id=? 
+      AND mrn IN (
+        SELECT mrn FROM locked_audit_records
+        WHERE facility_id=? AND year=? AND quarter=?
+          AND ABS(patient_age)>=18
+          AND egfr_value IS NOT NULL AND egfr_value < 90
+      )
+      AND encounter_date >= ?
+      AND egfr_value IS NOT NULL AND uacr_done = 1
+  `, [facilityId, facilityId, year, quarter, sixMonthsAgoStr]);
+  
+  return { 
+    numerator: num.cnt, 
+    denominator: den.cnt, 
+    num_list: num.mrn_list ? num.mrn_list.split(',') : [], 
+    den_list: den.mrn_list ? den.mrn_list.split(',') : [] 
+  };
+}
+
+// PC030: 3rd Next Available Appointment (Manual entry)
+async function calc_PC030(db, facilityId, year, quarter, filters) {
+  // This is a manual entry KPI - value is days (not percentage)
+  const manual = await db.get(`
+    SELECT value, numerator, denominator
+    FROM manual_kpi_entries
+    WHERE facility_id=? AND kpi_code='PC030' AND year=? AND quarter=?
+  `, [facilityId, year, quarter]);
+  
+  if (manual) {
+    return { 
+      numerator: manual.numerator, 
+      denominator: manual.denominator, 
+      value: manual.value, // days
+      num_list: [], 
+      den_list: [] 
+    };
+  }
+  
+  return { numerator: null, denominator: null, value: null, num_list: [], den_list: [] };
+}
+
+module.exports = { calculateAllKPIs, kpiStatus, CALCULATORS, generateDynamicFilters, sanitizeCode };

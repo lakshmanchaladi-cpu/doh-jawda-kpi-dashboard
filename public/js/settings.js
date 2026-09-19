@@ -166,7 +166,9 @@ const KPI_DETAILS = {
   },
 };
 
-const Settings = {
+import { App } from './app.js';
+
+export const Settings = {
   async render(container, activeTab = 'guidelines') {
     container.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';
     

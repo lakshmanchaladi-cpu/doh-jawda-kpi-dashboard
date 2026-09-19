@@ -3,6 +3,14 @@ const express = require('express');
 const router = express.Router();
 const { initDb } = require('../database/db');
 
+function parsePositiveInt(value, fallback) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
+}
+
 router.get('/', async (req, res) => {
   try {
     const db = await initDb();
@@ -15,13 +23,18 @@ router.get('/', async (req, res) => {
 
 router.put('/', async (req, res) => {
   const { company_name, active_year, active_quarter, active_facility_id } = req.body;
+
+  if (!company_name || String(company_name).trim() === '') {
+    return res.status(400).json({ error: 'company_name is required' });
+  }
+
   try {
     const db = await initDb();
     await db.run(`
       UPDATE app_settings 
       SET company_name = ?, active_year = ?, active_quarter = ?, active_facility_id = ?
       WHERE id = 1
-    `, [company_name, active_year, active_quarter, active_facility_id || null]);
+    `, [String(company_name).trim(), parsePositiveInt(active_year, new Date().getFullYear()), parsePositiveInt(active_quarter, Math.ceil((new Date().getMonth() + 1) / 3)), active_facility_id || null]);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

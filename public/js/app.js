@@ -1,9 +1,27 @@
+// Main App Module - ES Module
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
+import { Dashboard } from './dashboard.js';
+import { Import } from './import.js';
+import { Audit } from './audit.js';
+import { ManualEntry } from './manual.js';
+import { Reports } from './reports.js';
+import { Jdc } from './jdc.js';
+import { Facilities } from './facilities.js';
+import { Comparison } from './comparison.js';
+import { Settings } from './settings.js';
+import { Proofs } from './proofs.js';
+
 const App = {
   state: {
     activePage: 'dashboard',
     facilityId: null,
     year: new Date().getFullYear(),
     quarter: Math.ceil((new Date().getMonth() + 1) / 3),
+    version: null,
     facilities: []
   },
 
@@ -12,6 +30,7 @@ const App = {
     this.populateYearDropdown();
     document.getElementById('globalYearSelect').value = this.state.year;
     document.getElementById('globalQuarterSelect').value = this.state.quarter;
+    await this.loadVersions();
     
     // Check if facility selected
     if (this.state.facilities.length > 0) {
@@ -19,12 +38,53 @@ const App = {
       document.getElementById('globalFacilitySelect').value = this.state.facilityId;
     }
 
+    // Set up event delegation for navigation and controls
+    this.setupEventListeners();
+
     this.navigate(this.state.activePage);
+  },
+
+  setupEventListeners() {
+    // Sidebar navigation & brand link
+    document.addEventListener('click', (e) => {
+      const navLink = e.target.closest('[data-page]');
+      if (navLink) {
+        e.preventDefault();
+        this.navigate(navLink.dataset.page);
+      }
+    });
+
+    // Facility selector
+    document.getElementById('globalFacilitySelect').addEventListener('change', (e) => {
+      this.changeFacility(e.target.value);
+    });
+
+    // Year selector
+    document.getElementById('globalYearSelect').addEventListener('change', (e) => {
+      this.changeYear(e.target.value);
+    });
+
+    // Quarter selector
+    document.getElementById('globalQuarterSelect').addEventListener('change', (e) => {
+      this.changeQuarter(e.target.value);
+    });
+
+    // Version selector
+    document.getElementById('globalVersionSelect').addEventListener('change', (e) => {
+      this.changeVersion(e.target.value);
+    });
+
+    // Navbar brand link (data-page="dashboard")
+    document.querySelector('.navbar-brand[data-page]').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.navigate('dashboard');
+    });
   },
 
   async loadFacilities() {
     try {
       const res = await fetch('/api/facilities');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       this.state.facilities = await res.json();
       
       const select = document.getElementById('globalFacilitySelect');
@@ -34,6 +94,7 @@ const App = {
       });
     } catch (e) {
       this.toast('Error loading facilities', 'danger');
+      console.error('Failed to load facilities:', e);
     }
   },
 
@@ -50,6 +111,7 @@ const App = {
     window._forceDashboardReload = true;
     window._forceAuditReload = true;
     this.state.facilityId = id ? parseInt(id) : null;
+    this.loadVersions();
     this.refreshCurrentPage();
   },
 
@@ -57,6 +119,7 @@ const App = {
     window._forceDashboardReload = true;
     window._forceAuditReload = true;
     this.state.year = parseInt(y);
+    this.loadVersions();
     this.refreshCurrentPage();
   },
 
@@ -64,7 +127,37 @@ const App = {
     window._forceDashboardReload = true;
     window._forceAuditReload = true;
     this.state.quarter = parseInt(q);
+    this.loadVersions();
     this.refreshCurrentPage();
+  },
+
+  changeVersion(v) {
+    this.state.version = v ? String(v) : null;
+    this.refreshCurrentPage();
+  },
+
+  // Populate the KPI registry version dropdown; shows which version auto-applies
+  async loadVersions() {
+    const select = document.getElementById('globalVersionSelect');
+    if (!select) return;
+    const qs = `?facility_id=${this.state.facilityId || ''}&year=${this.state.year}&quarter=${this.state.quarter}`;
+    try {
+      const res = await fetch(`/api/kpi/versions${qs}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const activeLabel = data.active ? ` (Active: ${data.active.name})` : '';
+      const opts = [`<option value="">Auto${activeLabel}</option>`];
+      (data.versions || []).forEach(v => {
+        let types = '';
+        try { types = JSON.parse(v.facility_types || '[]').join(', '); } catch (e) {}
+        opts.push(`<option value="${v.version}">${v.name}${types ? ` — ${types}` : ''}</option>`);
+      });
+      const current = this.state.version || '';
+      select.innerHTML = opts.join('');
+      select.value = current;
+    } catch (e) {
+      console.error('Failed to load KPI versions:', e);
+    }
   },
 
   navigate(page) {
@@ -75,7 +168,7 @@ const App = {
 
     const content = document.getElementById('app-content');
     
-    if (!this.state.facilityId && ['dashboard', 'import', 'audit', 'manual', 'reports'].includes(page)) {
+    if (!this.state.facilityId && ['dashboard', 'import', 'audit', 'manual', 'reports', 'jdc'].includes(page)) {
       content.innerHTML = `
         <div class="text-center mt-5 pt-5 text-muted">
           <i class="bi bi-building fs-1 mb-3"></i>
@@ -92,6 +185,7 @@ const App = {
       case 'audit': Audit.render(content); break;
       case 'manual': ManualEntry.render(content); break;
       case 'reports': Reports.render(content); break;
+      case 'jdc': Jdc.render(content); break;
       case 'facilities': Facilities.render(content); break;
       case 'comparison': Comparison.render(content); break;
       case 'settings-guidelines': Settings.render(content, 'guidelines'); break;
@@ -121,3 +215,13 @@ const App = {
     setTimeout(() => toastEl.remove(), 4000);
   }
 };
+
+// Make App globally available for inline onclick handlers
+window.App = App;
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+});
+
+export { App };

@@ -1,4 +1,6 @@
-const Dashboard = {
+import { App } from './app.js';
+
+export const Dashboard = {
   
   _cache: {},
   _cacheKey() { return `${App.state.facilityId}-${App.state.year}-${App.state.quarter}`; },

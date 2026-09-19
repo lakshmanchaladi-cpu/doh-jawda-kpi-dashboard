@@ -1,27 +1,31 @@
-window.sortAuditTable = function(th, colIndex) {
+import { App } from './app.js';
+
+// Export sort function for use in inline handlers
+export function sortAuditTable(th, colIndex) {
   const table = th.closest('table');
   const tbody = table.querySelector('tbody');
   const rows = Array.from(tbody.querySelectorAll('tr'));
   let dir = th.dataset.dir || 'asc';
-  
+
   rows.sort((a, b) => {
-    let A = a.children[colIndex].textContent.trim();
-    let B = b.children[colIndex].textContent.trim();
-    return dir === 'asc' ? A.localeCompare(B) : B.localeCompare(A);
+    const aVal = a.cells[colIndex].textContent.trim();
+    const bVal = b.cells[colIndex].textContent.trim();
+    return dir === 'asc' ? aVal.localeCompare(bVal, undefined, { numeric: true }) : bVal.localeCompare(aVal, undefined, { numeric: true });
   });
-  
-  dir = dir === 'asc' ? 'desc' : 'asc';
-  th.dataset.dir = dir;
+
+  th.dataset.dir = dir === 'asc' ? 'desc' : 'asc';
+  rows.forEach(r => tbody.appendChild(r));
   
   // Add arrows for UI feedback
   table.querySelectorAll('th span').forEach(s => s.textContent = '');
   if (!th.querySelector('span')) th.innerHTML += ' <span class="ms-1"></span>';
   th.querySelector('span').innerHTML = dir === 'asc' ? '&uarr;' : '&darr;';
+}
 
-  rows.forEach(r => tbody.appendChild(r));
-};
+// Make globally available for inline onclick handlers
+window.sortAuditTable = sortAuditTable;
 
-const Audit = {
+export const Audit = {
 
   state: { monthlyData: [], activeTab: 'monthly', reconciliation: null },
 
@@ -106,6 +110,7 @@ const Audit = {
     try {
       const r = await fetch(`/api/audit/summary?facility_id=${fid}&year=${year}&quarter=${quarter}&_t=${Date.now()}`);
       const d = await r.json();
+      if (!r.ok || d.error) throw new Error(d.error || 'Audit summary request failed');
       this._renderSummaryCards(d);
       this._renderScoreRow(d);
       this._renderAlertBanner(d, quarter, year);
@@ -230,7 +235,9 @@ const Audit = {
   async _loadMonthly(fid) {
     try {
       const r = await fetch(`/api/audit/monthly?facility_id=${fid}`);
-      this.state.monthlyData = await r.json();
+      const data = await r.json();
+      if (!r.ok || !Array.isArray(data)) throw new Error(data.error || 'Monthly audit request failed');
+      this.state.monthlyData = data;
     } catch (e) {
       this.state.monthlyData = [];
     }
@@ -325,6 +332,7 @@ const Audit = {
       const fid = App.state.facilityId;
       const r = await fetch(`/api/audit/reconciliation?facility_id=${fid}&year=${App.state.year}&quarter=${App.state.quarter}`);
       const d = await r.json();
+      if (!r.ok || d.error) throw new Error(d.error || 'Reconciliation request failed');
       this.state.reconciliation = d;
       this._renderReconciliation(content, d);
     } catch (e) {
@@ -337,24 +345,28 @@ const Audit = {
       <tr>
         <td class="font-monospace small">${r.mrn || '—'}</td>
         <td>${r.encounter_date || '—'}</td>
-        <td>${r.physician_type || '—'}</td>
+        <td class="font-monospace small">${r.physician_id || '—'}</td>
+        <td>${r.physician_category || 'Other / Unknown'}</td>
         <td class="small">${r.icd10_primary || '—'}</td>
         <td>${r.patient_age || '—'}</td>
         <td>${r.gender || '—'}</td>
         <td><span class="badge bg-warning text-dark">No Claim Found</span></td>
-      </tr>`).join('') || `<tr><td colspan="7" class="text-center text-muted py-3">✅ No EMR-only records — all visits have matching claims</td></tr>`;
+      </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted py-3">✅ No EMR-only records — all visits have matching claims</td></tr>`;
 
     const rcmOnlyRows = (d.rcmOnly || []).map(r => `
       <tr>
         <td class="font-monospace small">${r.claim_id || '—'}</td>
         <td class="font-monospace small">${r.mrn || '—'}</td>
         <td>${r.encounter_date || '—'}</td>
-        <td>${r.physician_type || '—'}</td>
+        <td class="font-monospace small">${r.physician_id || '—'}</td>
+        <td>${r.physician_category || 'Other / Unknown'}</td>
+        <td class="font-monospace small">${r.ordering_physician_id || '—'}</td>
+        <td>${r.ordering_physician_type || '—'}</td>
         <td class="small">${r.icd10_primary || '—'}</td>
         <td>${r.insurance_type || '—'}</td>
         <td><span class="badge bg-secondary">${r.insurance_category || '—'}</span></td>
         <td><span class="badge bg-danger">No EMR Record</span></td>
-      </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted py-3">✅ No RCM-only records — all claims have matching EMR visits</td></tr>`;
+      </tr>`).join('') || `<tr><td colspan="11" class="text-center text-muted py-3">✅ No RCM-only records — all claims have matching EMR visits</td></tr>`;
 
     content.innerHTML = `
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -387,7 +399,7 @@ const Audit = {
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
             <thead class="table-light"><tr>
-              <th>MRN</th><th>Encounter Date</th><th>Physician Type</th>
+              <th>MRN</th><th>Encounter Date</th><th>Physician ID</th><th>Physician Type</th>
               <th>ICD-10</th><th>Age</th><th>Gender</th><th>Issue</th>
             </tr></thead>
             <tbody>${emrOnlyRows}</tbody>
@@ -402,8 +414,8 @@ const Audit = {
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0 align-middle" style="font-size:0.82rem;">
             <thead class="table-light"><tr>
-              <th>Claim ID</th><th>MRN</th><th>Date</th><th>Physician</th>
-              <th>ICD-10</th><th>Payer Code</th><th>Category</th><th>Issue</th>
+              <th>Claim ID</th><th>MRN</th><th>Date</th><th>Physician ID</th><th>Physician Type</th>
+              <th>Ordering ID</th><th>Ordering Type</th><th>ICD-10</th><th>Payer Code</th><th>Category</th><th>Issue</th>
             </tr></thead>
             <tbody>${rcmOnlyRows}</tbody>
           </table>
@@ -419,6 +431,7 @@ const Audit = {
       if (!d) {
         const r = await fetch(`/api/audit/reconciliation?facility_id=${fid}&year=${App.state.year}&quarter=${App.state.quarter}`);
         d = await r.json();
+        if (!r.ok || d.error) throw new Error(d.error || 'Audit log request failed');
         this.state.reconciliation = d;
       }
       const records = d.thiqaRecords || [];
@@ -430,14 +443,17 @@ const Audit = {
           <td class="font-monospace small">${r.claim_id || '—'}</td>
           <td class="font-monospace small">${r.mrn || '—'}</td>
           <td>${r.encounter_date || '—'}</td>
-          <td>${r.physician_type || '—'}</td>
+          <td class="font-monospace small">${r.physician_id || '—'}</td>
+          <td>${r.physician_category || 'Other / Unknown'}</td>
+          <td class="font-monospace small">${r.ordering_physician_id || '—'}</td>
+          <td>${r.ordering_physician_type || '—'}</td>
           <td><span class="badge bg-secondary">${r.insurance_type || 'Self-Pay'}</span></td>
           <td class="small">${r.icd10_primary || '—'}</td>
           <td>${r.emr_match === 'Matched'
             ? '<span class="badge bg-success">✅ Matched</span>'
             : '<span class="badge bg-danger">⚠️ No EMR Record</span>'}
           </td>
-        </tr>`).join('') || `<tr><td colspan="7" class="text-center text-muted py-4">No encounters found</td></tr>`;
+        </tr>`).join('') || `<tr><td colspan="8" class="text-center text-muted py-4">No encounters found</td></tr>`;
 
       content.innerHTML = `
         <div class="row g-3 mb-3">
@@ -492,10 +508,13 @@ const Audit = {
                   <th style="cursor:pointer" onclick="window.sortAuditTable(this, 0)">Claim ID</th>
                   <th style="cursor:pointer" onclick="window.sortAuditTable(this, 1)">MRN</th>
                   <th style="cursor:pointer" onclick="window.sortAuditTable(this, 2)">Encounter Date</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 3)">Physician Type</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 4)">Insurance</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 5)">ICD-10 Primary</th>
-                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 6)">EMR Match Status</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 3)">Physician ID</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 4)">Physician Type</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 5)">Ordering ID</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 6)">Ordering Type</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 7)">Insurance</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 8)">ICD-10 Primary</th>
+                  <th style="cursor:pointer" onclick="window.sortAuditTable(this, 9)">EMR Match Status</th>
                 </tr></thead>
               <tbody>${rows}</tbody>
             </table>
@@ -511,6 +530,7 @@ const Audit = {
     try {
       const r = await fetch(`/api/audit/batches?facility_id=${App.state.facilityId}`);
       const batches = await r.json();
+      if (!r.ok || !Array.isArray(batches)) throw new Error(batches.error || 'Import batch request failed');
 
       const rows = batches.map(b => {
         const statusBadge = (b.status === 'completed' || b.status === 'done')
@@ -622,7 +642,8 @@ const Audit = {
         body: JSON.stringify({
           facility_id: App.state.facilityId,
           year: App.state.year,
-          quarter: App.state.quarter
+          quarter: App.state.quarter,
+          version: App.state.version
         })
       });
       const data = await res.json();
@@ -719,7 +740,8 @@ const Audit = {
       m.emrStatus === 'received' ? 'Data Received' : 'MISSING',
       m.rcmStatus === 'received' ? 'Data Received' : 'MISSING'
     ]);
-    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const csvCell = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+    const csv = [headers, ...rows].map(r => r.map(csvCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

@@ -1,4 +1,6 @@
-const Facilities = {
+import { App } from './app.js';
+
+export const Facilities = {
   render(container) {
     let html = `
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -31,7 +33,7 @@ const Facilities = {
               <div class="col-md-6 mb-3">
                 <label class="form-label text-muted small fw-bold">Facility Type</label>
                 <select id="facType" class="form-select">
-                  <option value="Primary Care Center">Primary Care Center</option>
+                  <option value="Primary Care">Primary Care</option>
                   <option value="Medical Center">Medical Center</option>
                 </select>
               </div>
@@ -115,7 +117,7 @@ const Facilities = {
     document.getElementById('facId').value = f.id;
     document.getElementById('facName').value = f.name;
     document.getElementById('facMfNo').value = f.mf_no;
-    document.getElementById('facType').value = f.facility_type;
+    document.getElementById('facType').value = f.facility_type === 'Primary Care Center' ? 'Primary Care' : f.facility_type;
     document.getElementById('facCoord').value = f.coordinator || '';
     
     const card = document.getElementById('addFacilityCard');

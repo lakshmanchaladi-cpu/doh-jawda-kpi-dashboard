@@ -74,6 +74,14 @@ async function initDb() {
       facility_id INTEGER NOT NULL,
       batch_id INTEGER,
       mrn TEXT,
+      visit_id TEXT,
+      patient_name TEXT,
+      chief_complaints TEXT,
+      physician_plan TEXT,
+      narrative_diagnosis TEXT,
+      procedure_notes TEXT,
+      procedure_remarks TEXT,
+      clinical_notes TEXT,
       patient_age REAL,
       patient_age_months REAL,
       patient_dob TEXT,
@@ -82,6 +90,7 @@ async function initDb() {
       year INTEGER NOT NULL,
       quarter INTEGER NOT NULL,
       month INTEGER,
+      physician_id TEXT,
       physician_type TEXT,
       icd10_primary TEXT,
       icd10_secondary TEXT,
@@ -120,12 +129,14 @@ async function initDb() {
       is_palliative INTEGER DEFAULT 0,
       patient_refused INTEGER DEFAULT 0,
       visit_type TEXT,
+      physician_name TEXT,
       FOREIGN KEY (facility_id) REFERENCES facilities(id),
       FOREIGN KEY (batch_id) REFERENCES import_batches(id)
     );
 
     CREATE INDEX IF NOT EXISTS idx_emr_facility_quarter ON emr_data(facility_id, year, quarter);
     CREATE INDEX IF NOT EXISTS idx_emr_mrn ON emr_data(facility_id, mrn);
+    CREATE INDEX IF NOT EXISTS idx_emr_audit_match ON emr_data(facility_id, mrn, encounter_date);
 
     CREATE TABLE IF NOT EXISTS patients (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -144,6 +155,8 @@ async function initDb() {
       batch_id INTEGER,
       claim_id TEXT,
       mrn TEXT,
+      ordering_physician_id TEXT,
+      ordering_physician_type TEXT,
       patient_age REAL,
       patient_dob TEXT,
       gender TEXT,
@@ -151,13 +164,19 @@ async function initDb() {
       year INTEGER NOT NULL,
       quarter INTEGER NOT NULL,
       month INTEGER,
+      physician_id TEXT,
       physician_type TEXT,
       icd10_primary TEXT,
       icd10_secondary TEXT,
       icd10_all TEXT,
       cpt_all TEXT,
+      service_reference_ids TEXT,
       service_type TEXT,
       insurance_type TEXT,
+      insurance_company TEXT,
+      loinc_code TEXT,
+      loinc_value TEXT,
+      loinc_value_type TEXT,
       hba1c_value REAL,
       egfr_value REAL,
       row_hash TEXT UNIQUE,
@@ -166,15 +185,45 @@ async function initDb() {
     );
 
     CREATE INDEX IF NOT EXISTS idx_shafafiya_facility_quarter ON shafafiya_data(facility_id, year, quarter);
+    CREATE INDEX IF NOT EXISTS idx_shafafiya_audit_match ON shafafiya_data(facility_id, mrn, encounter_date);
+
+    CREATE TABLE IF NOT EXISTS shafafiya_claim_lines (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      facility_id INTEGER NOT NULL,
+      batch_id INTEGER,
+      claim_id TEXT,
+      mrn TEXT,
+      encounter_date TEXT NOT NULL,
+      service_line_no INTEGER,
+      cpt_code TEXT,
+      service_reference_id TEXT,
+      icd10_codes TEXT,
+      ordering_physician_id TEXT,
+      ordering_physician_type TEXT,
+      rendering_physician_id TEXT,
+      rendering_physician_type TEXT,
+      loinc_code TEXT,
+      loinc_value TEXT,
+      loinc_value_type TEXT,
+      insurance_type TEXT,
+      FOREIGN KEY (facility_id) REFERENCES facilities(id),
+      FOREIGN KEY (batch_id) REFERENCES import_batches(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_claim_lines_claim ON shafafiya_claim_lines(facility_id, claim_id);
 
     CREATE TABLE IF NOT EXISTS code_mappings (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       mapping_type TEXT NOT NULL,
-      code_value TEXT NOT NULL,
+      group_name TEXT,
+      code_type TEXT,
+      code TEXT,
+      description TEXT,
+      target_kpi TEXT,
+      code_value TEXT,
       code_desc TEXT,
       standard_category TEXT,
-      active INTEGER DEFAULT 1,
-      UNIQUE(mapping_type, code_value)
+      active INTEGER DEFAULT 1
     );
 
     CREATE TABLE IF NOT EXISTS kpi_data (
@@ -270,6 +319,23 @@ async function initDb() {
       UNIQUE(facility_id, kpi_code, year, quarter)
     );
 
+    CREATE TABLE IF NOT EXISTS jdc_submissions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      facility_id INTEGER NOT NULL,
+      year INTEGER NOT NULL,
+      quarter INTEGER NOT NULL,
+      status TEXT DEFAULT 'draft',
+      prepared_at TEXT,
+      validated_at TEXT,
+      submitted_at TEXT,
+      ceo_name TEXT,
+      ceo_designation TEXT DEFAULT 'Chief Executive Officer',
+      ceo_signature_date TEXT,
+      notes TEXT,
+      FOREIGN KEY (facility_id) REFERENCES facilities(id),
+      UNIQUE(facility_id, year, quarter)
+    );
+
     CREATE TABLE IF NOT EXISTS manual_kpi_entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       facility_id INTEGER NOT NULL,
@@ -317,6 +383,82 @@ async function initDb() {
   if (settCount.c === 0) {
     await db.run('INSERT INTO app_settings (id) VALUES (1)');
   }
+
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS app_meta (
+      key TEXT PRIMARY KEY,
+      value TEXT
+    );
+  `);
+  const schemaVersion = await db.get('SELECT value FROM app_meta WHERE key = ?', ['schema_version']);
+  if (!schemaVersion) {
+    await db.run('INSERT INTO app_meta (key, value) VALUES (?, ?)', ['schema_version', '1']);
+  }
+
+  const mappingColumns = await db.all('PRAGMA table_info(code_mappings)');
+  const mappingColumnNames = new Set(mappingColumns.map(col => col.name));
+  const requiredMappingColumns = [
+    ['group_name', 'TEXT'],
+    ['code_type', 'TEXT'],
+    ['code', 'TEXT'],
+    ['description', 'TEXT'],
+    ['target_kpi', 'TEXT'],
+    ['code_value', 'TEXT'],
+    ['code_desc', 'TEXT'],
+    ['standard_category', 'TEXT'],
+    ['active', 'INTEGER DEFAULT 1']
+  ];
+
+  for (const [columnName, columnDef] of requiredMappingColumns) {
+    if (!mappingColumnNames.has(columnName)) {
+      await db.exec(`ALTER TABLE code_mappings ADD COLUMN ${columnName} ${columnDef};`);
+    }
+  }
+
+  for (const tableName of ['emr_data', 'shafafiya_data']) {
+    const columns = await db.all(`PRAGMA table_info(${tableName})`);
+    if (!columns.some(column => column.name === 'physician_id')) {
+      await db.exec(`ALTER TABLE ${tableName} ADD COLUMN physician_id TEXT;`);
+      await db.run(`UPDATE ${tableName} SET physician_id = physician_type WHERE physician_id IS NULL OR TRIM(physician_id) = ''`);
+    }
+  }
+
+  const additionalColumns = {
+    emr_data: [
+      ['visit_id', 'TEXT'], ['patient_name', 'TEXT'], ['chief_complaints', 'TEXT'],
+      ['physician_plan', 'TEXT'], ['narrative_diagnosis', 'TEXT'], ['procedure_notes', 'TEXT'],
+      ['procedure_remarks', 'TEXT'], ['clinical_notes', 'TEXT'], ['physician_name', 'TEXT'], ['insurance_company', 'TEXT']
+    ],
+    shafafiya_data: [
+      ['ordering_physician_id', 'TEXT'], ['ordering_physician_type', 'TEXT'],
+      ['service_reference_ids', 'TEXT'], ['insurance_company', 'TEXT'],
+      ['loinc_code', 'TEXT'], ['loinc_value', 'TEXT'], ['loinc_value_type', 'TEXT']
+    ]
+  };
+  for (const [tableName, columns] of Object.entries(additionalColumns)) {
+    const existing = await db.all(`PRAGMA table_info(${tableName})`);
+    const names = new Set(existing.map(column => column.name));
+    for (const [columnName, columnDef] of columns) {
+      if (!names.has(columnName)) await db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDef};`);
+    }
+  }
+
+  const legacyIndexRows = await db.all("SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = 'code_mappings' AND name = 'idx_code_mappings_legacy_unique'");
+  if (legacyIndexRows.length > 0) {
+    await db.exec('DROP INDEX idx_code_mappings_legacy_unique;');
+  }
+
+  await db.exec(`
+    DELETE FROM code_mappings
+    WHERE id NOT IN (
+      SELECT MIN(id)
+      FROM code_mappings
+      GROUP BY mapping_type, COALESCE(group_name, ''), COALESCE(code, ''), COALESCE(code_value, '')
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_code_mappings_unique
+      ON code_mappings(mapping_type, COALESCE(group_name, ''), COALESCE(code, ''), COALESCE(code_value, ''));
+  `);
 
   dbInstance = db;
     // 16. Clinician Licenses Dictionary

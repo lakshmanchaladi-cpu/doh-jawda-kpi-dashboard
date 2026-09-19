@@ -111,3 +111,26 @@ body {
 .badge-not-applicable { background-color: #6c757d; color: white; }
 .status-not-applicable { border-top-color: #6c757d; border-top-width: 4px; }
 
+/* JDC workflow stepper */
+.step-circle {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.step-circle.step-active {
+  background: var(--doh-teal);
+  color: white;
+  border: 2px solid #b8d7d6;
+}
+.step-circle.step-done {
+  background: #198754;
+  color: white;
+}
+

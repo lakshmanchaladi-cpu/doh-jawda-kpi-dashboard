@@ -1,4 +1,6 @@
-const Comparison = {
+import { App } from './app.js';
+
+export const Comparison = {
   async render(container) {
     container.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';
     
@@ -10,7 +12,7 @@ const Comparison = {
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
             <h2 class="h4 mb-0">Quarterly KPI Comparison</h2>
-            <p class="text-muted mb-0">${App.state.facilityName} — Year ${App.state.year}</p>
+            <p class="text-muted mb-0">${App.state.facilityName} ï¿½ Year ${App.state.year}</p>
           </div>
           <button class="btn btn-outline-secondary" onclick="window.print()">
             <i class="bi bi-printer"></i> Print Report

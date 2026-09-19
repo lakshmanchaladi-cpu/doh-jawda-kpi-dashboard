@@ -10,7 +10,12 @@ router.get('/definitions', (req, res) => {
 
 // GET all clinical mappings to display dynamically in Proofs
 router.get('/proof-mappings', (req, res) => {
-  const mappings = db.prepare("SELECT group_name, GROUP_CONCAT(code, ', ') as codes FROM code_mappings GROUP BY group_name").all();
+  const mappings = db.prepare(`
+    SELECT group_name, GROUP_CONCAT(code, ', ') as codes
+    FROM code_mappings
+    WHERE mapping_type IN ('Disease_Group', 'Exclusion_Group', 'ICD-10', 'Category', 'Action_Table', 'Physician_Type')
+    GROUP BY group_name
+  `).all();
   const mapDict = {};
   mappings.forEach(m => mapDict[m.group_name] = m.codes);
   res.json(mapDict);
