@@ -316,6 +316,28 @@ async function initDb() {
     CREATE INDEX IF NOT EXISTS idx_locked_audit_mrn ON locked_audit_records(facility_id, mrn);
     CREATE INDEX IF NOT EXISTS idx_locked_audit_dates ON locked_audit_records(encounter_date);
 
+    CREATE TABLE IF NOT EXISTS reconciliation_log (
+      facility_id INTEGER NOT NULL,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      unique_patients INTEGER DEFAULT 0,
+      emr_count INTEGER DEFAULT 0,
+      rcm_count INTEGER DEFAULT 0,
+      matched INTEGER DEFAULT 0,
+      match_pct REAL DEFAULT 0.0,
+      unbilled INTEGER DEFAULT 0,
+      missing_notes INTEGER DEFAULT 0,
+      jawda_eligible INTEGER,
+      excluded INTEGER,
+      thiqa INTEGER DEFAULT 0,
+      abm INTEGER DEFAULT 0,
+      commercial INTEGER DEFAULT 0,
+      self_pay INTEGER DEFAULT 0,
+      last_import_at DATETIME,
+      last_kpi_calc_at DATETIME,
+      PRIMARY KEY (facility_id, year, month)
+    );
+
     CREATE TABLE IF NOT EXISTS kpi_results (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       facility_id INTEGER NOT NULL,
