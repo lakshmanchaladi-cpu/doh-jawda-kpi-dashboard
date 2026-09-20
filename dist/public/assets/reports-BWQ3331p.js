@@ -1,4 +1,4 @@
-import{A as a}from"./main-q3P2gCcD.js";const n={async render(s){s.innerHTML='<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';try{const e=await(await fetch(`/api/reports/quarterly?facility_id=${a.state.facilityId}&year=${a.state.year}&quarter=${a.state.quarter}`)).json();if(!e.data||e.data.length===0){s.innerHTML=`<div class="alert alert-warning">No data to report for Q${a.state.quarter} ${a.state.year}. Please calculate KPIs first.</div>`;return}let i=`
+import{A as a}from"./main-DHmSEy9Y.js";const n={async render(s){s.innerHTML='<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';try{const e=await(await fetch(`/api/reports/quarterly?facility_id=${a.state.facilityId}&year=${a.state.year}&quarter=${a.state.quarter}`)).json();if(!e.data||e.data.length===0){s.innerHTML=`<div class="alert alert-warning">No data to report for Q${a.state.quarter} ${a.state.year}. Please calculate KPIs first.</div>`;return}let i=`
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
             <h2 class="h4 mb-0">JAWDA Quarterly Report</h2>

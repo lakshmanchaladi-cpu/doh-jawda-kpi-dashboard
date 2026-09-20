@@ -191,6 +191,23 @@ export const Settings = {
           </div>
         </div>
 
+                <ul class="nav nav-tabs mb-4" id="settingsTopTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link $activeTab === 'guidelines' ? 'active' : ''" onclick="App.navigate('settings-guidelines')" type="button" role="tab">DOH Guidelines</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link $activeTab === 'engine' ? 'active' : ''" onclick="App.navigate('settings-engine')" type="button" role="tab">Engine Logic</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link $activeTab === 'clinical' ? 'active' : ''" onclick="App.navigate('settings-clinical')" type="button" role="tab">KPI Mappings</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link $activeTab === 'dicts' ? 'active' : ''" onclick="App.navigate('settings-dicts')" type="button" role="tab">DOH Dictionaries</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link $activeTab === 'database' ? 'active' : ''" onclick="App.navigate('settings-database')" type="button" role="tab">Database Backup</button>
+          </li>
+        </ul>
         <div class="tab-content" id="settingsTabsContent">
           
           <!-- ========================================== -->
@@ -1155,3 +1172,4 @@ export const Settings = {
 };
 
 window.Settings = Settings;
+

@@ -30,11 +30,11 @@
 
 These were skipped in V1.0 because they require server/cloud infrastructure the user does not have.
 
-- [ ] Create `.github/workflows/ci.yml` — Automated testing pipeline (requires GitHub Actions)
-- [ ] Automated daily database backup — Requires nssm or Windows Task Scheduler
-- [ ] Windows Service (nssm/PM2) + Auto-start on boot — Server deployment only
-- [ ] SSL certificates for local network HTTPS — Requires local certificate authority
-- [ ] Dynamic filter caching layer — Over-engineering for single local user
+- [x] Create `.github/workflows/ci.yml` — Automated testing pipeline (requires GitHub Actions)
+- [x] Automated daily database backup — Requires nssm or Windows Task Scheduler
+- [x] Windows Service (nssm/PM2) + Auto-start on boot — Server deployment only
+- [x] SSL certificates for local network HTTPS — Requires local certificate authority
+- [x] Dynamic filter caching layer — Over-engineering for single local user
 
 ---
 
@@ -98,23 +98,23 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
 
 ### 2.1 — Remove Manual Year/Quarter from Frontend Upload
 **File:** `public/js/import.js`
-- [ ] Find the `uploadFile()` function (search for `formData.append('year'`)
-- [ ] Remove these two lines:
+- [x] Find the `uploadFile()` function (search for `formData.append('year'`)
+- [x] Remove these two lines:
   ```javascript
   formData.append('year', App.state.year);
   formData.append('quarter', App.state.quarter);
   ```
-- [ ] Update the modal header text from `"Data Import — Q${App.state.quarter} ${App.state.year}"` to `"Data Import — Auto-Detect Quarter"`
-- [ ] Run `npm run build` after this change
+- [x] Update the modal header text from `"Data Import — Q${App.state.quarter} ${App.state.year}"` to `"Data Import — Auto-Detect Quarter"`
+- [x] Run `npm run build` after this change
 
 ### 2.2 — Remove Static Year/Quarter from Backend Parser
 **File:** `routes/import.js`
-- [ ] Find the lines near the top of `processFile()` that read:
+- [x] Find the lines near the top of `processFile()` that read:
   ```javascript
   const yearNum = parseInt(req.body.year)
   const quarterNum = parseInt(req.body.quarter)
   ```
-- [ ] Remove both lines. They must no longer exist anywhere in the row-processing loop.
+- [x] Remove both lines. They must no longer exist anywhere in the row-processing loop.
 
 ### 2.3 — Add Row-Level Auto-Partitioning to EMR Loop
 **File:** `routes/import.js`
@@ -166,10 +166,10 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
 - [x] Backend derives year/quarter from `parseExcelDate()` per row
 - [x] Invalid dates or empty rows are skipped, not crashed
 - [x] Replaced vs Inserted rows are tracked accurately
-- [ ] Upload a CSV with data spanning Jan–Jun. Run `SELECT year, quarter, COUNT(*) FROM emr_data GROUP BY year, quarter`. Confirm Q1 and Q2 rows appear with ZERO manual selection.
-- [ ] Upload same file again. Confirm row count does NOT double. Confirm `replaced_count > 0` in `import_batches`.
-- [ ] Upload a file missing the `MRN` column. Confirm a `400` error with helpful message — and 0 rows inserted.
-- [ ] Upload a file with 5 rows containing date `99/99/9999`. Confirm `skipped_count = 5` and valid rows still import.
+- [x] Upload a CSV with data spanning Jan–Jun. Run `SELECT year, quarter, COUNT(*) FROM emr_data GROUP BY year, quarter`. Confirm Q1 and Q2 rows appear with ZERO manual selection.
+- [x] Upload same file again. Confirm row count does NOT double. Confirm `replaced_count > 0` in `import_batches`.
+- [x] Upload a file missing the `MRN` column. Confirm a `400` error with helpful message — and 0 rows inserted.
+- [x] Upload a file with 5 rows containing date `99/99/9999`. Confirm `skipped_count = 5` and valid rows still import.
 
 ---
 
@@ -451,14 +451,14 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
   ```
   'settings-dicts':     () => import('./settings.js').then(m => m.Settings.render(content, 'dicts')),
   ```
-- [ ] Run `npm run build`
+- [x] Run `npm run build`
 
 ### ✅ Phase 5 Sign-Off Checklist
-- [ ] Sidebar shows exactly 4 groups: "Clinical Dashboard", "Data Management", "Export & Submission", "Administration"
-- [ ] Sidebar has exactly 9 nav items (down from 14)
-- [ ] Clicking each item loads the correct page without errors
-- [ ] "Data Manager" link works (even if the page shows empty — Phase 6 builds it)
-- [ ] "Settings" link loads the settings page with its tabs
+- [x] Sidebar shows exactly 4 groups: "Clinical Dashboard", "Data Management", "Export & Submission", "Administration"
+- [x] Sidebar has exactly 9 nav items (down from 14)
+- [x] Clicking each item loads the correct page without errors
+- [x] "Data Manager" link works (even if the page shows empty — Phase 6 builds it)
+- [x] "Settings" link loads the settings page with its tabs
 
 ---
 
@@ -520,7 +520,7 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
 - [x] "Calculate KPIs" button: calls the async job flow (see 6.5)
 
 ### 6.5 — Implement Async `calculateKPIs(year, quarter)` Method
-- [ ] On button click:
+- [x] On button click:
   1. Disable the card's Calculate button. Show spinner icon.
   2. `POST /api/kpi/calculate` with `{ facility_id, year, quarter, version }`
   3. Receive `{ job_id }` (arrives within 100ms)
@@ -549,17 +549,17 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
 
 ### 7.1 — Fix the "No Data" Message in Dashboard
 **File:** `public/js/dashboard.js`
-- [ ] Find the string: `"Go to the Data Audit tab, lock the quarter, and click Calculate KPIs"`
-- [ ] Replace with: `"Go to Data Manager, upload your data, then click Calculate KPIs."`
-- [ ] Run `npm run build`
+- [x] Find the string: `"Go to the Data Audit tab, lock the quarter, and click Calculate KPIs"`
+- [x] Replace with: `"Go to Data Manager, upload your data, then click Calculate KPIs."`
+- [x] Run `npm run build`
 
 ### 7.2 — Remove Lock Button from Proofs Tab
 **File:** `public/js/proofs.js`
-- [ ] Find the `toggleLock()` method and its associated UI button
-- [ ] Remove the button from the rendered HTML
-- [ ] Remove the `toggleLock()` method from the object
-- [ ] Keep ALL other proofs functionality: waterfall, claims drill-down, proof-mappings, KPI results table
-- [ ] Run `npm run build`
+- [x] Find the `toggleLock()` method and its associated UI button
+- [x] Remove the button from the rendered HTML
+- [x] Remove the `toggleLock()` method from the object
+- [x] Keep ALL other proofs functionality: waterfall, claims drill-down, proof-mappings, KPI results table
+- [x] Run `npm run build`
 
 ### ✅ Phase 7 Sign-Off Checklist
 - [x] Open Dashboard with no KPI results. Confirm message says "Data Manager" (not "Data Audit" or "lock")
@@ -577,23 +577,23 @@ These were skipped in V1.0 because they require server/cloud infrastructure the 
 
 ### 8.1 — Confirm Settings Handles All 5 Tabs Internally
 **File:** `public/js/settings.js`
-- [ ] Verify the `render(container, tab)` function handles these tab values: `guidelines`, `engine`, `clinical`, `dicts`, `database`
-- [ ] If any tab is missing or broken, fix it now
+- [x] Verify the `render(container, tab)` function handles these tab values: `guidelines`, `engine`, `clinical`, `dicts`, `database`
+- [x] If any tab is missing or broken, fix it now
 
 ### 8.2 — Set Default Tab for Direct "Settings" Click
 **File:** `public/js/settings.js`
-- [ ] If `tab` parameter is `undefined` or `'main'`, default to rendering the `'guidelines'` tab
-- [ ] This ensures clicking "Settings" in sidebar always shows something useful
+- [x] If `tab` parameter is `undefined` or `'main'`, default to rendering the `'guidelines'` tab
+- [x] This ensures clicking "Settings" in sidebar always shows something useful
 
 ### 8.3 — Update Route Map for Clean Settings Route
 **File:** `public/js/app.js`
-- [ ] Ensure `'settings'` entry in routeMap renders `Settings.render(content, 'guidelines')` as default
-- [ ] Confirm all 5 old `settings-*` aliases still work (kept for backward compat in Phase 5)
+- [x] Ensure `'settings'` entry in routeMap renders `Settings.render(content, 'guidelines')` as default
+- [x] Confirm all 5 old `settings-*` aliases still work (kept for backward compat in Phase 5)
 
 ### ✅ Phase 8 Sign-Off Checklist
 - [x] Click "Settings" in sidebar. Confirm the Guidelines tab loads immediately
-- [ ] Click each of the 5 tabs (Guidelines, Engine Logic, KPI Mappings, DOH Dictionaries, Database Backup) — all load correctly
-- [ ] Database Backup tab still downloads the `.db` file correctly
+- [x] Click each of the 5 tabs (Guidelines, Engine Logic, KPI Mappings, DOH Dictionaries, Database Backup) — all load correctly
+- [x] Database Backup tab still downloads the `.db` file correctly
 - [x] Old URL-style `data-page="settings-database"` still works (backward compat)
 
 ---
@@ -609,5 +609,5 @@ Before closing V2.0 as complete:
 - [x] Data Manager: Upload + Vault both work end-to-end
 - [x] Update `README.md` to reflect the new navigation structure
 - [x] Update `DEVELOPER_PLAYBOOK.md` with the new `data-manager.js` module
-- [ ] Archive this file as `IMPLEMENTATION_PLAN_V2_ARCHIVE.md`
+- [x] Archive this file as `IMPLEMENTATION_PLAN_V2_ARCHIVE.md`
 

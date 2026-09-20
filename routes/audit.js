@@ -401,4 +401,52 @@ router.get('/download-gaps', async (req, res) => {
   }
 });
 
+router.get('/exceptions', async (req, res) => {
+  try {
+    const { initDb } = require('../database/db');
+    const db = await initDb();
+    const facility_id = parseInt(req.query.facility_id);
+    const year = parseInt(req.query.year);
+    const quarter = parseInt(req.query.quarter);
+    
+    if (!facility_id || !year || !quarter) {
+      return res.status(400).send('Valid facility_id, year, and quarter are required');
+    }
+    
+    const emrExceptions = await db.all(`
+      SELECT 'EMR' as source, mrn, encounter_date, patient_age, physician_type, icd10_primary,
+      CASE 
+        WHEN encounter_date IS NULL OR encounter_date = '' THEN 'Missing Encounter Date'
+        WHEN patient_age IS NULL OR patient_age < 0 OR patient_age > 120 THEN 'Invalid Age (' || IFNULL(patient_age, 'NULL') || ')'
+        WHEN physician_type IS NULL OR physician_type = '' THEN 'Missing Physician Type'
+        WHEN icd10_primary IS NULL OR icd10_primary = '' THEN 'Missing Primary Diagnosis'
+        ELSE 'Other Malformed Data'
+      END as exception_reason
+      FROM emr_data
+      WHERE facility_id=? AND year=? AND quarter=?
+      AND (
+        encounter_date IS NULL OR encounter_date = '' OR
+        patient_age IS NULL OR patient_age < 0 OR patient_age > 120 OR
+        physician_type IS NULL OR physician_type = '' OR
+        icd10_primary IS NULL OR icd10_primary = ''
+      )
+    `, [facility_id, year, quarter]);
+    
+    let csv = 'Source,MRN,Encounter_Date,Age,Physician_Type,Diagnosis,Exception_Reason\n';
+    
+    for (const r of emrExceptions) {
+      csv += [
+        r.source, r.mrn, r.encounter_date, r.patient_age, r.physician_type, r.icd10_primary, r.exception_reason
+      ].map(v => v ? `"${v.toString().replace(/"/g, '""')}"` : '""').join(',') + '\n';
+    }
+    
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="Data_Exceptions_Q${quarter}_${year}.csv"`);
+    res.send(csv);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Error generating exception report');
+  }
+});
+
 module.exports = router;

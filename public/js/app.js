@@ -189,20 +189,21 @@ const App = {
     }
   },
 
-  navigate(page) {
+    navigate(page) {
     this.state.activePage = page;
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`.nav-btn[data-page="${page}"]`);
+    let activeBtnSelector = page.startsWith('settings') ? '.nav-btn[data-page="settings"]' : '.nav-btn[data-page="' + page + '"]';
+    const btn = document.querySelector(activeBtnSelector);
     if (btn) btn.classList.add('active');
 
     const content = document.getElementById('app-content');
     
-    if (!this.state.facilityId && ['dashboard', 'data-manager', 'import', 'audit', 'manual', 'reports', 'jdc', 'proofs'].includes(page)) {
+    if (!this.state.facilityId && ['dashboard', 'data-manager', 'import', 'audit', 'manual', 'reports', 'report-center', 'proofs'].includes(page)) {
       content.innerHTML = `
         <div class="text-center mt-5 pt-5 text-muted">
           <i class="bi bi-building fs-1 mb-3"></i>
-          <h4>Please select a facility</h4>
-          <p>You must select a medical center from the top dropdown to view this page.</p>
+          <h4>No Facility Selected</h4>
+          <p>Please select a facility from the top menu to view data.</p>
         </div>
       `;
       return;
@@ -211,12 +212,13 @@ const App = {
     // Lazy load mapping
       const routeMap = {
         'dashboard': () => import('./dashboard.js').then(m => m.Dashboard.render(content)),
-        'import': () => import('./import.js').then(m => m.Import.render(content)),
-        'audit': () => import('./audit.js').then(m => m.Audit.render(content)),
-        'data-manager': () => import('./data-manager.js').then(m => window.DataManager.render(content)),
+        'data-manager': () => import('./data-manager.js').then(m => m.DataManager.render(content)),
+        'import': () => import('./import.js').then(m => m.ImportView.render(content)),
+        'audit': () => import('./audit.js').then(m => m.AuditData.render(content)),
+        'proofs': () => import('./proofs.js').then(m => m.Proofs.render(content)),
         'manual': () => import('./manual.js').then(m => m.ManualEntry.render(content)),
         'reports': () => import('./reports.js').then(m => m.Reports.render(content)),
-        'jdc': () => import('./jdc.js').then(m => m.Jdc.render(content)),
+        'report-center': () => import('./report-center.js').then(m => m.ReportCenter.render(content)),
         'facilities': () => import('./facilities.js').then(m => m.Facilities.render(content)),
         'comparison': () => import('./comparison.js').then(m => m.Comparison.render(content)),
         'settings': () => import('./settings.js').then(m => m.Settings.render(content, 'guidelines')),
@@ -267,3 +269,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 export { App };
+
